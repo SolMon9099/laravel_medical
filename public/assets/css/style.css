@@ -1,0 +1,45 @@
+.login-error{
+    margin-top: 15px;    
+}
+
+/* #DataTables_Table_0_info, 
+#DataTables_Table_0_length{
+    margin-left: 14px;
+}
+
+#DataTables_Table_0_filter,
+#DataTables_Table_0_paginate{
+    margin-right: 14px;
+} */
+
+.navbar-brand img{
+    width: 100%;
+}
+
+.main-menu .main-menu-content{
+    margin-top: 55px;
+}
+
+div.dataTables_wrapper div.dataTables_length select,
+div.dataTables_wrapper div.dataTables_filter input{
+    padding: 9px;    
+}
+
+.demo-inline-spacing > *{
+    margin-top: 0.5rem;
+}
+
+.mb-10{
+    margin-bottom: 10px;
+}
+
+.form-label {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.reason_row{
+    padding-left: 15px;
+}
+
