@@ -13,9 +13,9 @@ class CalendarController extends Controller
      */
     public function index()
     {
-        $pending_patient_data = PatientTransaction::with(['patient'])
+        $patient_data = PatientTransaction::with(['patient'])
             ->where('office_id', auth()->user()->id)
-            ->where('status', 0)
+            // ->where('status', 0)
             ->orderBy('created_at','desc')
             ->get()->all();
 
@@ -24,7 +24,7 @@ class CalendarController extends Controller
             ->orderBy('created_at','desc')
             ->get()->all();
         return view('calendar.index')->with([
-            'pending_patient_data' => $pending_patient_data,
+            'patient_data' => $patient_data,
             'schedule_data' => $schedule_data
         ]);
     }

@@ -314,6 +314,14 @@ document.addEventListener('DOMContentLoaded', function () {
     eventClick: function (info) {
       eventClick(info);
     },
+    eventDidMount : function(arg) {
+        var patient_id = arg.event.extendedProps.guests;
+        var patient_element = '';
+        if (!isNaN(parseInt(patient_id)) && patient_object[patient_id] != undefined){
+            patient_element = '<div><li class="event-patient">' + patient_object[patient_id] + '</li></div>';
+        }
+        $(arg.el).append(patient_element);
+    },
     datesSet: function () {
       modifyToggler();
     },
@@ -425,30 +433,34 @@ document.addEventListener('DOMContentLoaded', function () {
   // Add new event
   $(addEventBtn).on('click', function () {
     if (eventForm.valid()) {
-      var newEvent = {
-        id: calendar.getEvents().length + 1,
-        title: eventTitle.val(),
-        start: startDate.val(),
-        end: endDate.val(),
-        startStr: startDate.val(),
-        endStr: endDate.val(),
-        display: 'block',
-        extendedProps: {
-          location: eventLocation.val(),
-          guests: eventGuests.val(),
-          calendar: eventLabel.val(),
-          description: calendarEditor.val()
+        var max_id = 0;
+        calendar.getEvents().map(event_item => {
+            if (max_id < parseInt(event_item.id)){
+                max_id = parseInt(event_item.id);
+            }
+        })
+        var newEvent = {
+            id: max_id + 1,
+            title: eventTitle.val(),
+            start: startDate.val(),
+            end: endDate.val(),
+            startStr: startDate.val(),
+            endStr: endDate.val(),
+            display: 'block',
+            extendedProps: {
+            location: eventLocation.val(),
+            guests: eventGuests.val(),
+            calendar: eventLabel.val(),
+            description: calendarEditor.val()
+            }
+        };
+        if (eventUrl.val().length) {
+            newEvent.url = eventUrl.val();
         }
-      };
-      if (eventUrl.val().length) {
-        newEvent.url = eventUrl.val();
-      }
-      if (allDaySwitch.prop('checked')) {
-        newEvent.allDay = true;
-      }
-      addEvent(newEvent);
-
-
+        if (allDaySwitch.prop('checked')) {
+            newEvent.allDay = true;
+        }
+        addEvent(newEvent);
     }
   });
 

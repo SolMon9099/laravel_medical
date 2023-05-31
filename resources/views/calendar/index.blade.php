@@ -9,7 +9,10 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/pages/app-calendar.css') }}">
 @endsection
 <?php
-    $schedule_data
+    $patient_object = array();
+    foreach($patient_data as $patient) {
+        $patient_object[$patient->patient_id] = $patient->patient->name;
+    }
 ?>
 <style>
     .avatar{
@@ -128,8 +131,10 @@
                         <div class="mb-1 select2-primary">
                             <label for="event-guests" class="form-label">Add Patients</label>
                             <select class="select2 select-add-guests form-select w-100" id="event-guests">
-                                @foreach ($pending_patient_data as $patient_item)
+                                @foreach ($patient_data as $patient_item)
+                                    @if ($patient_item->status == 0)
                                     <option value={{$patient_item->patient_id}}>{{$patient_item->patient->name}}</option>
+                                    @endif
                                 @endforeach
                                 {{-- <option data-avatar="1-small.png" value="Jane Foster">Jane Foster</option>
                                 <option data-avatar="3-small.png" value="Donna Frank">Donna Frank</option>
@@ -165,6 +170,7 @@
 @section('page-script')
 <script>
     var schedule_data = <?php echo json_encode($schedule_data);?>;
+    var patient_object = <?php echo json_encode($patient_object);?>;
 </script>
 <script src="{{ asset('app-assets/vendors/js/calendar/fullcalendar.min.js')}}"></script>
 <script src="{{ asset('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js')}}"></script>
