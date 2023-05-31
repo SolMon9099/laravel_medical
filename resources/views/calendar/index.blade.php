@@ -22,7 +22,8 @@
         <form action="{{route('calendar.store')}}" id = "calendar_form" method="post" name = "calendar_form">
             @csrf
             <input type="hidden" value="" name="booked_schedules" id = 'booked_schedules'/>
-            <button class="btn btn-primary btn-toggle-sidebar" type="submit">
+            <input type="hidden" value="" name="deleted_schedules" id = 'deleted_schedules'/>
+            <button class="btn btn-primary btn-toggle-sidebar" type="submit" style="margin-bottom:8px;">
                 <span class="align-middle">Save Schedule</span>
             </button>
             <div class="row g-0">

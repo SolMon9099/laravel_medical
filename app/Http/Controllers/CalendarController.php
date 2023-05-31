@@ -42,6 +42,13 @@ class CalendarController extends Controller
      */
     public function store(Request $request)
     {
+
+        $deleted_schedules = array();
+        if (!empty($request['deleted_schedules'])){
+            $deleted_schedules = json_decode($request['deleted_schedules']);
+        }
+        PatientSchedule::query()->whereIn('id', $deleted_schedules)->delete();
+
         $booked_schedules = array();
         if (!empty($request['booked_schedules'])){
             $booked_schedules = json_decode($request['booked_schedules']);

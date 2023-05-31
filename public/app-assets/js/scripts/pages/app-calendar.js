@@ -29,7 +29,7 @@ $(document).on('click', '.body-content-overlay', function (e) {
   $('.app-calendar-sidebar, .body-content-overlay').removeClass('show');
 });
 
-function set_form_schedules(events){
+function set_form_schedules(events, delete_event = null){
     var sch_data = [];
     events.map(event => {
         sch_data.push({
@@ -43,6 +43,16 @@ function set_form_schedules(events){
         })
     })
     $('#booked_schedules').val(JSON.stringify(sch_data));
+    if (delete_event != null){
+        var deleted_schedule_ids = $('#deleted_schedules').val();
+        if (deleted_schedule_ids != undefined && deleted_schedule_ids != null && deleted_schedule_ids != ''){
+            deleted_schedule_ids = JSON.parse(deleted_schedule_ids);
+        } else {
+            deleted_schedule_ids = [];
+        }
+        deleted_schedule_ids.push(delete_event);
+        $('#deleted_schedules').val(JSON.stringify(deleted_schedule_ids));
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -204,6 +214,7 @@ document.addEventListener('DOMContentLoaded', function () {
     //  Delete Event
     btnDeleteEvent.on('click', function () {
       eventToUpdate.remove();
+      set_form_schedules(calendar.getEvents(), eventToUpdate.id);
       // removeEvent(eventToUpdate.id);
       sidebar.modal('hide');
       $('.event-sidebar').removeClass('show');
@@ -374,7 +385,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // ------------------------------------------------
   function removeEvent(eventId) {
     removeEventInCalendar(eventId);
-    set_form_schedules(calendar.getEvents());
   }
 
   // ------------------------------------------------
