@@ -39,7 +39,7 @@ class ReferralController extends Controller
         $data = PatientTransaction::with(['patient', 'attorney', 'doctor'])
             ->where('office_id', auth()->user()->id)
             ->orderBy('created_at','desc')
-            ->get(); 
+            ->get();
 
         return view('referral.index', compact('data'));
     }
@@ -61,7 +61,7 @@ class ReferralController extends Controller
     {
         $patient_id = $attorney_id = $doctor_id = '';
         $welcomeMailData = [];
-        
+
         $referral_date = $request->input('referral_date');
         //patient info
         $patient_name = $request->input('patient_name');
@@ -75,10 +75,10 @@ class ReferralController extends Controller
         $patient_postal = $request->input('patient_postal');
         $patient_date_injury = $request->input('patient_date_injury');
         $genders = $request->input('genders');
-        $reason_referral = $request->input('reason_referral');  
+        $reason_referral = $request->input('reason_referral');
         $reason_referral = implode(',', $reason_referral);
-       
-        //patient insurance 
+
+        //patient insurance
         $patient_insurance_company = $request->input('patient_insurance_company');
         $patient_insurance_policy = $request->input('patient_insurance_policy');
         $patient_insurance_street_adderss = $request->input('patient_insurance_street_adderss');
@@ -108,7 +108,7 @@ class ReferralController extends Controller
         $law_firm_city = $request->input('law_firm_city');
         $law_firm_state = $request->input('law_firm_state');
         $law_firm_postal = $request->input('law_firm_postal');
-     
+
 
         //clinic info
         $clinic_name = $request->input('clinic_name');
@@ -117,16 +117,16 @@ class ReferralController extends Controller
         $doctor_phone = $request->input('doctor_phone');
         $doctor_notes = $request->input('doctor_notes');
 
-        
-        // if there isn't patient data, create a new patient with patient information and get ID. 
+
+        // if there isn't patient data, create a new patient with patient information and get ID.
         $isPatientExist = User::where('email', $patient_email)->first();
         if ($isPatientExist) {
             $patient_id = User::where('email', $patient_email)->value('id');
         }else{
             $patientObj = new User();
             $patientObj->name = $patient_name;
-            $patientObj->email = $patient_email;            
-            $patientObj->password = Hash::make('password');  
+            $patientObj->email = $patient_email;
+            $patientObj->password = Hash::make('password');
             $patientObj->phone = $patient_phone;
             $patientObj->date_of_birth = $patient_date_birth;
             $patientObj->address = $patient_street_adderss;
@@ -146,12 +146,12 @@ class ReferralController extends Controller
               'user_name'   => $patient_name,
               'password' => 'password'
             ];
-    
+
             Mail::to($patient_email)->send(new WelcomeEmail($welcomeMailData));
         }
 
-        
-        //if there isn't attorney data, create a new attorney with attorney information and get ID. 
+
+        //if there isn't attorney data, create a new attorney with attorney information and get ID.
         $isAttorneyExist = User::where('email', $attorney_email)->first();
         if ($isAttorneyExist) {
             $attorney_id = User::where('email', $attorney_email)->value('id');
@@ -159,7 +159,7 @@ class ReferralController extends Controller
             $attorneyObj = new User();
             $attorneyObj->name = $attorney_name;
             $attorneyObj->email = $attorney_email;
-            $attorneyObj->password = Hash::make('password');  
+            $attorneyObj->password = Hash::make('password');
             $attorneyObj->phone = $attorney_phone;
             $attorneyObj->address = $law_firm_adderss;
             $attorneyObj->address_line2 = $law_firm_adderss_line2;
@@ -177,11 +177,11 @@ class ReferralController extends Controller
                 'user_name'   => $attorney_name,
                 'password' => 'password'
               ];
-      
+
             Mail::to($doctor_email)->send(new WelcomeEmail($welcomeMailData));
         }
 
-        //if there isn't doctor data, create a new doctor with doctor information and get ID. 
+        //if there isn't doctor data, create a new doctor with doctor information and get ID.
         $isDoctorExist = User::where('email', $doctor_email)->first();
         if ($isDoctorExist) {
             $doctor_id = User::where('email', $doctor_email)->value('id');
@@ -189,8 +189,8 @@ class ReferralController extends Controller
             $doctorObj = new User();
             $doctorObj->name = $doctor_name;
             $doctorObj->email = $doctor_email;
-            $doctorObj->password = Hash::make('password');  
-            $doctorObj->phone = $doctor_phone;           
+            $doctorObj->password = Hash::make('password');
+            $doctorObj->phone = $doctor_phone;
             $doctorObj->save();
             $doctor_id = $doctorObj->id;
 
@@ -208,9 +208,9 @@ class ReferralController extends Controller
                 'user_name'   => $doctor_name,
                 'password' => 'password'
               ];
-      
+
             Mail::to($doctor_email)->send(new WelcomeEmail($welcomeMailData));
-        }    
+        }
 
         DB::beginTransaction();
 
@@ -244,19 +244,17 @@ class ReferralController extends Controller
             $patientTransactionObj->doctor_notes = $doctor_notes;
             $patientTransactionObj->save();
             $patientTransactionLatestID = $patientTransactionObj->id;
-            //file upload 
+            //file upload
             if ($request->hasFile('files')) {
                 $uploadedFiles = $request->file('files');
                 foreach ($uploadedFiles as $file) {
                     $patientTransactionUploadedFilesObj = new PatientTransactionUploadedFiles();
 
-                    //set the file name 
-                    $fileName = time().'_'.$file->getClientOriginalName();
+                    //set the file name
+                    $fileName = $file->getClientOriginalName();
 
                     //move the file into the desired folder
-                    // $file->move(storage_path('uploads'), $fileName);
-                    $file->store('uploads');
-
+                    $file->move(public_path('uploads'), $fileName);
 
                     // Save the upload result into the database
                     $patientTransactionUploadedFilesObj->transaction_id = $patientTransactionLatestID;
@@ -269,10 +267,10 @@ class ReferralController extends Controller
 
         }catch(Exception $ex){
             DB::rollBack();
-            
+
             return back()->with('flash_error', $ex->getMessage());
         }
-       
+
         return back()->with('flash_success', 'The form sent successfully');
     }
 
@@ -289,10 +287,10 @@ class ReferralController extends Controller
      */
     public function edit(string $id)
     {
-        $data = PatientTransaction::with(['patient', 'attorney', 'doctor', 'files'])->find($id); 
+        $data = PatientTransaction::with(['patient', 'attorney', 'doctor', 'files'])->find($id);
         $clinicData = Clinic::get();
-        $clinic_id = ClinicDoctor::where('doctor_id', $data->doctor_id)->value('clinic_id');  
-               
+        $clinic_id = ClinicDoctor::where('doctor_id', $data->doctor_id)->value('clinic_id');
+
         return view ('referral.edit', compact('data', 'clinicData', 'clinic_id'));
     }
 
@@ -316,10 +314,10 @@ class ReferralController extends Controller
         $patient_postal = $request->input('patient_postal');
         $patient_date_injury = $request->input('patient_date_injury');
         $genders = $request->input('genders');
-        $reason_referral = $request->input('reason_referral');  
+        $reason_referral = $request->input('reason_referral');
         $reason_referral = implode(',', $reason_referral);
-       
-        //patient insurance 
+
+        //patient insurance
         $patient_insurance_company = $request->input('patient_insurance_company');
         $patient_insurance_policy = $request->input('patient_insurance_policy');
         $patient_insurance_street_adderss = $request->input('patient_insurance_street_adderss');
@@ -349,7 +347,7 @@ class ReferralController extends Controller
         $law_firm_city = $request->input('law_firm_city');
         $law_firm_state = $request->input('law_firm_state');
         $law_firm_postal = $request->input('law_firm_postal');
-     
+
 
         //clinic info
         $clinic_name = $request->input('clinic_name');
@@ -357,7 +355,7 @@ class ReferralController extends Controller
         $doctor_email = $request->input('doctor_email');
         $doctor_phone = $request->input('doctor_phone');
         $doctor_notes = $request->input('doctor_notes');
-        
+
     }
 
     /**
@@ -370,9 +368,12 @@ class ReferralController extends Controller
     }
 
     /**
-     * 
+     *
      */
 
-     
+     public function deleteReferralFile(Request $request)
+     {
+        return response()->json(['msg' => 'success']);
+     }
 }
 

@@ -21,8 +21,8 @@ class ClinicController extends Controller
      */
     public function index()
     {
-        $data = Clinic::get();        
-        
+        $data = Clinic::get();
+
         return view('clinic.index', compact('data'));
     }
 
@@ -40,17 +40,17 @@ class ClinicController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',    
+            'name' => 'required',
             'clinic_adderss' => 'required',
             'clinic_city' => 'required',
             'clinic_state' => 'required',
             'clinic_postal' => 'required'
         ]);
-    
-        $input = $request->all();       
-    
+
+        $input = $request->all();
+
         $user = Clinic::create($input);
-    
+
         return redirect()->route('clinics.index')
                         ->with('flash_success','Clinic created successfully');
     }
@@ -68,7 +68,7 @@ class ClinicController extends Controller
      */
     public function edit(string $id)
     {
-    
+
     }
 
     /**
@@ -77,21 +77,21 @@ class ClinicController extends Controller
     public function update(Request $request, string $id)
     {
         $validatedData  = $this->validate($request, [
-            'name' => 'required',    
+            'name' => 'required',
             'clinic_adderss' => 'required',
             'clinic_adderss_line2' => '',
             'clinic_city' => 'required',
             'clinic_state' => 'required',
             'clinic_postal' => 'required'
         ]);
-    
+
         // Find the resource to be updated
         $data = Clinic::findorFail($id);
 
         // Update the resource with the validated data
         $data->fill($validatedData);
         $data->save();
-    
+
         return redirect()->route('clinics.index')
                         ->with('flash_success','Clinic updated successfully');
     }
@@ -117,6 +117,6 @@ class ClinicController extends Controller
         $item = Clinic::find($itemId);
 
         return response()->json($item);
-        
+
     }
 }

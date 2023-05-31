@@ -255,11 +255,11 @@
                                 <div class="demo-inline-spacing">
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="defendant_insure" id="defendant_insure_yes" value="yes" checked />
-                                        <label class="form-check-label" for="male">Yes</label>
+                                        <label class="form-check-label" for="defendant_insure_yes">Yes</label>
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="radio" name="defendant_insure" id="defendant_insure_no" value="no" />
-                                        <label class="form-check-label" for="female">No</label>
+                                        <label class="form-check-label" for="defendant_insure_no">No</label>
                                     </div>
                                 </div>
                             </div>

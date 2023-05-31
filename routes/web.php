@@ -32,10 +32,10 @@ Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware' => ['auth']], function() {
-    
+
     Route::resource('roles', RoleController::class);
 
-    Route::resource('users', UserController::class)->middleware('role:admin');   
+    Route::resource('users', UserController::class)->middleware('role:admin');
 
     Route::resource('profiles', ProfileController::class)->middleware('role:admin');
 
@@ -43,6 +43,12 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/get-clinic-data', [ClinicController::class, 'getClinicData'])->middleware('role:admin');
 
     Route::resource('referral', ReferralController::class)->middleware('role:office manager');
+    Route::delete('/delete-referral-file/{id}', [ReferralController::class, 'deleteReferralFile'])->middleware('role:office manager');
 
-    Route::resource('calendar', CalendarController::class)->middleware('role:office manager');
+    Route::group(['prefix' => 'calendar'], function () {
+        Route::get('/', [CalendarController::class, 'index'])->middleware('role:office manager')->name('calendar.index');
+        Route::post('/store', [CalendarController::class, 'store'])->middleware('role:office manager')->name('calendar.store');
+    });
+
+
 });

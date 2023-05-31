@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\PatientTransaction;
+use App\Models\PatientSchedule;
 
 class CalendarController extends Controller
 {
@@ -11,7 +13,20 @@ class CalendarController extends Controller
      */
     public function index()
     {
-        return view('calendar.index');
+        $pending_patient_data = PatientTransaction::with(['patient'])
+            ->where('office_id', auth()->user()->id)
+            ->where('status', 0)
+            ->orderBy('created_at','desc')
+            ->get()->all();
+
+        $schedule_data = PatientSchedule::with(['patient'])
+            ->where('office_id', auth()->user()->id)
+            ->orderBy('created_at','desc')
+            ->get()->all();
+        return view('calendar.index')->with([
+            'pending_patient_data' => $pending_patient_data,
+            'schedule_data' => $schedule_data
+        ]);
     }
 
     /**
@@ -27,7 +42,46 @@ class CalendarController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $booked_schedules = array();
+        if (!empty($request['booked_schedules'])){
+            $booked_schedules = json_decode($request['booked_schedules']);
+        }
+        foreach($booked_schedules as $schedule_item){
+            $schedule_item = (array)$schedule_item;
+            $this->validate(Request::create('/', 'POST', $schedule_item), [
+                'title' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required',
+                'patient_id' => 'required',
+            ]);
+            if (isset($schedule_item['is_new']) && $schedule_item['is_new'] == true){
+                $new_schedule = new PatientSchedule();
+                $new_schedule->patient_id = $schedule_item['patient_id'];
+                $new_schedule->office_id = auth()->user()->id;
+                $new_schedule->start_date = date('Y-m-d H:i:s', strtotime($schedule_item['start_date']));
+                $new_schedule->end_date = date('Y-m-d H:i:s', strtotime($schedule_item['end_date']));
+                $new_schedule->title = $schedule_item['title'];
+                if (isset($schedule_item['description']) && $schedule_item['description'] != ''){
+                    $new_schedule->description = $schedule_item['description'];
+                }
+                $new_schedule->created_at = date('Y-m-d H:i:s');
+                $new_schedule->updated_at = date('Y-m-d H:i:s');
+                $new_schedule->save();
+            } else {
+                $schedule_record = PatientSchedule::find((int)$schedule_item['id']);
+                $schedule_record->patient_id = $schedule_item['patient_id'];
+                $schedule_record->office_id = auth()->user()->id;
+                $schedule_record->start_date = date('Y-m-d H:i:s', strtotime($schedule_item['start_date']));
+                $schedule_record->end_date = date('Y-m-d H:i:s', strtotime($schedule_item['end_date']));
+                $schedule_record->title = $schedule_item['title'];
+                if (isset($schedule_item['description']) && $schedule_item['description'] != ''){
+                    $schedule_record->description = $schedule_item['description'];
+                }
+                $schedule_record->updated_at = date('Y-m-d H:i:s');
+                $schedule_record->save();
+            }
+        }
+        return redirect(route('calendar.index'))->with('flash_success','Schedule saved successfully');
     }
 
     /**

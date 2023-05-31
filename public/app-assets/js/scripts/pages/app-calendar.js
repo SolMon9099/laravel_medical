@@ -29,6 +29,22 @@ $(document).on('click', '.body-content-overlay', function (e) {
   $('.app-calendar-sidebar, .body-content-overlay').removeClass('show');
 });
 
+function set_form_schedules(events){
+    var sch_data = [];
+    events.map(event => {
+        sch_data.push({
+            id:event.id,
+            is_new:event.extendedProps.is_new,
+            title:event.title,
+            start_date:event._instance.range.start,
+            end_date:event._instance.range.end,
+            description:event.extendedProps.description,
+            patient_id:event.extendedProps.guests
+        })
+    })
+    $('#booked_schedules').val(JSON.stringify(sch_data));
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   var calendarEl = document.getElementById('calendar'),
     eventToUpdate,
@@ -237,11 +253,12 @@ document.addEventListener('DOMContentLoaded', function () {
     // We are reading event object from app-calendar-events.js file directly by including that file above app-calendar file.
     // You should make an API call, look into above commented API call for reference
     selectedEvents = events.filter(function (event) {
-      // console.log(event.extendedProps.calendar.toLowerCase());
       return calendars.includes(event.extendedProps.calendar.toLowerCase());
     });
+
     // if (selectedEvents.length > 0) {
-    successCallback(selectedEvents);
+    // successCallback(selectedEvents);
+    successCallback(events);
     // }
   }
 
@@ -334,8 +351,11 @@ document.addEventListener('DOMContentLoaded', function () {
   // addEvent
   // ------------------------------------------------
   function addEvent(eventData) {
+    eventData.extendedProps.calendar = 'Business';
+    eventData.is_new = true;
     calendar.addEvent(eventData);
-    calendar.refetchEvents();
+    // calendar.refetchEvents();
+    set_form_schedules(calendar.getEvents());
   }
 
   // ------------------------------------------------
@@ -344,8 +364,9 @@ document.addEventListener('DOMContentLoaded', function () {
   function updateEvent(eventData) {
     var propsToUpdate = ['id', 'title', 'url'];
     var extendedPropsToUpdate = ['calendar', 'guests', 'location', 'description'];
-
+    eventData.extendedProps.calendar = 'Business';
     updateEventInCalendar(eventData, propsToUpdate, extendedPropsToUpdate);
+    set_form_schedules(calendar.getEvents());
   }
 
   // ------------------------------------------------
@@ -353,6 +374,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // ------------------------------------------------
   function removeEvent(eventId) {
     removeEventInCalendar(eventId);
+    set_form_schedules(calendar.getEvents());
   }
 
   // ------------------------------------------------
@@ -415,6 +437,8 @@ document.addEventListener('DOMContentLoaded', function () {
         newEvent.allDay = true;
       }
       addEvent(newEvent);
+
+
     }
   });
 
@@ -477,7 +501,7 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
         calEventFilter.find('input').prop('checked', false);
       }
-      calendar.refetchEvents();
+    //   calendar.refetchEvents();
     });
   }
 
@@ -486,7 +510,7 @@ document.addEventListener('DOMContentLoaded', function () {
       $('.input-filter:checked').length < calEventFilter.find('input').length
         ? selectAll.prop('checked', false)
         : selectAll.prop('checked', true);
-      calendar.refetchEvents();
+    //   calendar.refetchEvents();
     });
   }
 });
