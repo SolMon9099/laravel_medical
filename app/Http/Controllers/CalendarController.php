@@ -7,7 +7,8 @@ use App\Models\PatientTransaction;
 use App\Models\PatientSchedule;
 use App\Models\User;
 use App\Service\SmsService;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\BookAlertEmail;
 class CalendarController extends Controller
 {
     /**
@@ -114,11 +115,20 @@ class CalendarController extends Controller
                     $new_schedule->updated_at = date('Y-m-d H:i:s');
                     $new_schedule->save();
 
-
+                    //SMS----------
                     $sms_service = new SmsService();
                     $user = User::find($request['patient_id']);
                     $message = $sms_service->makePatientMessage($user, $request, 'add');
                     $sms_service->sendSMS($message, $user->phone);
+
+                    //mail--------------
+                    $mailData = [
+                        'name'   => $user->name,
+                        'start_date' => date('m/d/Y H:i', strtotime($request['start_date'])),
+                        'end_date' => date('m/d/Y H:i', strtotime($request['end_date'])),
+                    ];
+                    Mail::to($user->email)->send(new BookAlertEmail($mailData));
+
                     break;
                 case 'edit':
                     if (isset($request['id'])){
@@ -138,6 +148,14 @@ class CalendarController extends Controller
                         $user = User::find($request['patient_id']);
                         $message = $sms_service->makePatientMessage($user, $request, 'edit');
                         $sms_service->sendSMS($message, $user->phone);
+
+                        //mail--------------
+                        $mailData = [
+                            'name'   => $user->name,
+                            'start_date' => date('m/d/Y H:i', strtotime($request['start_date'])),
+                            'end_date' => date('m/d/Y H:i', strtotime($request['end_date'])),
+                        ];
+                        Mail::to($user->email)->send(new BookAlertEmail($mailData));
                     }
                     break;
                 case 'delete':
@@ -153,6 +171,15 @@ class CalendarController extends Controller
                         $user = User::find($schedule_record->patient_id);
                         $message = $sms_service->makePatientMessage($user, $schedule_data, 'delete');
                         $sms_service->sendSMS($message, $user->phone);
+
+                        //mail--------------
+                        $mailData = [
+                            'name'   => $user->name,
+                            'start_date' => date('m/d/Y H:i', strtotime($schedule_data['start_date'])),
+                            'end_date' => date('m/d/Y H:i', strtotime($schedule_data['end_date'])),
+                            'type' => 'delete'
+                        ];
+                        Mail::to($user->email)->send(new BookAlertEmail($mailData));
 
                         PatientSchedule::query()->where('id', $request['id'])->delete();
                     }
