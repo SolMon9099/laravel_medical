@@ -10,14 +10,12 @@ use App\Models\PatientTransaction;
 use App\Models\PatientTransactionUploadedFiles;
 use App\Models\User;
 use Exception;
-use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Mail\Mailer;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Storage;
 
 use function Ramsey\Uuid\v1;
 
@@ -371,9 +369,18 @@ class ReferralController extends Controller
      *
      */
 
-     public function deleteReferralFile(Request $request)
+     public function deleteReferralFile(Request $request, $id)
      {
-        return response()->json(['msg' => 'success']);
+        // $obj = PatientTransactionUploadedFiles::findorFail($id);
+        // $fileName = $obj->files;
+
+        // if(File::exists(public_path('uploads/'.$fileName))){
+        //     File::delete(public_path('uploads/'.$fileName));
+        // }
+
+        // $obj->delete();
+        
+        return response()->json(['msg' => 'success' ]);
      }
 }
 

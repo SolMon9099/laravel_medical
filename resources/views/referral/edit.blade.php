@@ -507,8 +507,10 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },            
             success: function (response) {
-                
-                console.log(response.msg);
+                if(response.msg == 'success'){
+                    toastr.success( 'flash_success', 'Success!', { "showDuration": 500, positionClass: 'toast-top-right' });     
+                    $(this).parent().remove();
+                }
             }
         });
     })

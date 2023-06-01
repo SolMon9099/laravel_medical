@@ -180,12 +180,12 @@
         
                                     <div class="form-check col-md-4 mb-10">
                                         <input class="form-check-input" type="checkbox" id="reason17" name="reason_referral[]" value="Neck Pain" />
-                                        <label class="form-check-label" for="reason16">Neck Pain</label>
+                                        <label class="form-check-label" for="reason17">Neck Pain</label>
                                     </div>
         
                                     <div class="form-check col-md-4 mb-10">
                                         <input class="form-check-input" type="checkbox" id="reason18" name="reason_referral[]" value="Other" />
-                                        <label class="form-check-label" for="reason16">Other</label>
+                                        <label class="form-check-label" for="reason18">Other</label>
                                     </div>
                                 </div>
                             </div>
