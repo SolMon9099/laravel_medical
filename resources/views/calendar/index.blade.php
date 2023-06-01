@@ -22,13 +22,13 @@
 @section('content')
 <section>
     <div class="app-calendar overflow-hidden border">
-        <form action="{{route('calendar.store')}}" id = "calendar_form" method="post" name = "calendar_form">
+        {{-- <form action="{{route('calendar.store')}}" id = "calendar_form" method="post" name = "calendar_form">
             @csrf
             <input type="hidden" value="" name="booked_schedules" id = 'booked_schedules'/>
             <input type="hidden" value="" name="deleted_schedules" id = 'deleted_schedules'/>
             <button class="btn btn-primary btn-toggle-sidebar" type="submit" style="margin-bottom:8px;">
                 <span class="align-middle">Save Schedule</span>
-            </button>
+            </button> --}}
             <div class="row g-0">
                 <!-- Sidebar -->
                 {{-- <div class="col app-calendar-sidebar flex-grow-0 overflow-hidden d-flex flex-column" id="app-calendar-sidebar">
@@ -84,7 +84,7 @@
                 <!-- /Calendar -->
                 <div class="body-content-overlay"></div>
             </div>
-        </form>
+        {{-- </form> --}}
     </div>
     <!-- Calendar Add/Update/Delete event modal-->
     <div class="modal modal-slide-in event-sidebar fade" id="add-new-sidebar">
@@ -95,7 +95,7 @@
                     <h5 class="modal-title">Add Schedule</h5>
                 </div>
                 <div class="modal-body flex-grow-1 pb-sm-0 pb-3">
-                    <form class="event-form needs-validation" data-ajax="false" novalidate>
+                    <form class="event-form needs-validation" data-ajax="true" novalidate>
                         <div class="mb-1">
                             <label for="title" class="form-label">Title</label>
                             <input type="text" class="form-control" id="title" name="title" placeholder="Event Title" required />
@@ -124,13 +124,13 @@
                                 <label class="form-check-label" for="customSwitch3">All Day</label>
                             </div>
                         </div> --}}
-                        <div class="mb-1">
+                        {{-- <div class="mb-1">
                             <label for="event-url" class="form-label">Event URL</label>
                             <input type="url" class="form-control" id="event-url" placeholder="https://www.google.com" />
-                        </div>
+                        </div> --}}
                         <div class="mb-1 select2-primary">
                             <label for="event-guests" class="form-label">Add Patients</label>
-                            <select class="select2 select-add-guests form-select w-100" id="event-guests">
+                            <select class="select2 select-add-guests form-select w-100" required id="event-guests">
                                 @foreach ($patient_data as $patient_item)
                                     @if ($patient_item->status == 0)
                                     <option value={{$patient_item->patient_id}}>{{$patient_item->patient->name}}</option>
@@ -168,9 +168,16 @@
 @endsection
 
 @section('page-script')
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     var schedule_data = <?php echo json_encode($schedule_data);?>;
     var patient_object = <?php echo json_encode($patient_object);?>;
+
+    $.ajaxSetup({
+        headers:{
+            'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
+        }
+    });
 </script>
 <script src="{{ asset('app-assets/vendors/js/calendar/fullcalendar.min.js')}}"></script>
 <script src="{{ asset('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js')}}"></script>

@@ -94,9 +94,49 @@ class CalendarController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function action(Request $request)
     {
-        //
+        if (isset($request['type'])){
+            switch($request['type']){
+                case 'add':
+                    $new_schedule = new PatientSchedule();
+                    $new_schedule->patient_id = $request['patient_id'];
+                    $new_schedule->office_id = auth()->user()->id;
+                    $new_schedule->start_date = date('Y-m-d H:i:s', strtotime($request['start_date']));
+                    $new_schedule->end_date = date('Y-m-d H:i:s', strtotime($request['end_date']));
+                    $new_schedule->title = $request['title'];
+                    if (isset($request['description']) && $request['description'] != ''){
+                        $new_schedule->description = $request['description'];
+                    }
+                    $new_schedule->created_at = date('Y-m-d H:i:s');
+                    $new_schedule->updated_at = date('Y-m-d H:i:s');
+                    $new_schedule->save();
+                    break;
+                case 'edit':
+                    if (isset($request['id'])){
+                        $schedule_record = PatientSchedule::find((int)$request['id']);
+                        $schedule_record->patient_id = $request['patient_id'];
+                        $schedule_record->office_id = auth()->user()->id;
+                        $schedule_record->start_date = date('Y-m-d H:i:s', strtotime($request['start_date']));
+                        $schedule_record->end_date = date('Y-m-d H:i:s', strtotime($request['end_date']));
+                        $schedule_record->title = $request['title'];
+                        if (isset($request['description']) && $request['description'] != ''){
+                            $schedule_record->description = $request['description'];
+                        }
+                        $schedule_record->updated_at = date('Y-m-d H:i:s');
+                        $schedule_record->save();
+                    }
+                    break;
+                case 'delete':
+                    if (isset($request['id'])){
+                        PatientSchedule::query()->where('id', $request['id'])->delete();
+                    }
+                    break;
+            }
+            return json_encode(['message' => 'added successfully']);
+        } else {
+            return json_encode(['error' => 'no type selected']);
+        }
     }
 
     /**

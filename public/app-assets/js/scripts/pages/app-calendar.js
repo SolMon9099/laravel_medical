@@ -56,43 +56,43 @@ function set_form_schedules(events, delete_event = null){
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  var calendarEl = document.getElementById('calendar'),
-    eventToUpdate,
-    sidebar = $('.event-sidebar'),
-    calendarsColor = {
-      Business: 'primary',
-      Holiday: 'success',
-      Personal: 'danger',
-      Family: 'warning',
-      ETC: 'info'
-    },
-    eventForm = $('.event-form'),
-    addEventBtn = $('.add-event-btn'),
-    cancelBtn = $('.btn-cancel'),
-    updateEventBtn = $('.update-event-btn'),
-    toggleSidebarBtn = $('.btn-toggle-sidebar'),
-    eventTitle = $('#title'),
-    eventLabel = $('#select-label'),
-    startDate = $('#start-date'),
-    endDate = $('#end-date'),
-    eventUrl = $('#event-url'),
-    eventGuests = $('#event-guests'),
-    eventLocation = $('#event-location'),
-    allDaySwitch = $('.allDay-switch'),
-    selectAll = $('.select-all'),
-    calEventFilter = $('.calendar-events-filter'),
-    filterInput = $('.input-filter'),
-    btnDeleteEvent = $('.btn-delete-event'),
-    calendarEditor = $('#event-description-editor');
+    var calendarEl = document.getElementById('calendar'),
+        eventToUpdate,
+        sidebar = $('.event-sidebar'),
+        calendarsColor = {
+        Business: 'primary',
+        Holiday: 'success',
+        Personal: 'danger',
+        Family: 'warning',
+        ETC: 'info'
+        },
+        eventForm = $('.event-form'),
+        addEventBtn = $('.add-event-btn'),
+        cancelBtn = $('.btn-cancel'),
+        updateEventBtn = $('.update-event-btn'),
+        toggleSidebarBtn = $('.btn-toggle-sidebar'),
+        eventTitle = $('#title'),
+        eventLabel = $('#select-label'),
+        startDate = $('#start-date'),
+        endDate = $('#end-date'),
+        // eventUrl = $('#event-url'),
+        eventGuests = $('#event-guests'),
+        eventLocation = $('#event-location'),
+        allDaySwitch = $('.allDay-switch'),
+        selectAll = $('.select-all'),
+        calEventFilter = $('.calendar-events-filter'),
+        filterInput = $('.input-filter'),
+        btnDeleteEvent = $('.btn-delete-event'),
+        calendarEditor = $('#event-description-editor');
 
   // --------------------------------------------
   // On add new item, clear sidebar-right field fields
   // --------------------------------------------
-  $('.add-event button').on('click', function (e) {
-    $('.event-sidebar').addClass('show');
-    $('.sidebar-left').removeClass('show');
-    $('.app-calendar .body-content-overlay').addClass('show');
-  });
+    $('.add-event button').on('click', function (e) {
+        $('.event-sidebar').addClass('show');
+        $('.sidebar-left').removeClass('show');
+        $('.app-calendar .body-content-overlay').addClass('show');
+    });
 
   // Label  select
   if (eventLabel.length) {
@@ -213,12 +213,41 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //  Delete Event
     btnDeleteEvent.on('click', function () {
-      eventToUpdate.remove();
-      set_form_schedules(calendar.getEvents(), eventToUpdate.id);
-      // removeEvent(eventToUpdate.id);
-      sidebar.modal('hide');
-      $('.event-sidebar').removeClass('show');
-      $('.app-calendar .body-content-overlay').removeClass('show');
+        Swal.fire({
+            html: "<div class='mb-7'>Do you confirm to delete this schedule?</div>",
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-active-light"
+            }
+        }).then(function (res){
+            if (res.value){
+                eventToUpdate.remove();
+                //set_form_schedules(calendar.getEvents(), eventToUpdate.id);
+                //removeEvent(eventToUpdate.id);
+                sidebar.modal('hide');
+                // $('.event-sidebar').removeClass('show');
+                $('.app-calendar .body-content-overlay').removeClass('show');
+
+                $.ajax({
+                    url:"/calendar/action",
+                    method:"POST",
+                    data:{
+                        id:eventToUpdate.id,
+                        type: 'delete'
+                    },
+                    success:function()
+                    {
+                        // calendar.fullCalendar('refetchEvents');
+                        // alert("Event deleted Successfully");
+                    }
+                })
+            }
+        })
     });
   }
 
@@ -342,7 +371,7 @@ document.addEventListener('DOMContentLoaded', function () {
       submitHandler: function (form, event) {
         event.preventDefault();
         if (eventForm.valid()) {
-          sidebar.modal('hide');
+        //   sidebar.modal('hide');
         }
       },
       title: {
@@ -371,21 +400,55 @@ document.addEventListener('DOMContentLoaded', function () {
   // ------------------------------------------------
   function addEvent(eventData) {
     eventData.extendedProps.calendar = 'Business';
-    eventData.is_new = true;
     calendar.addEvent(eventData);
     // calendar.refetchEvents();
-    set_form_schedules(calendar.getEvents());
+    // set_form_schedules(calendar.getEvents());
+    $.ajax({
+        url:"/calendar/action",
+        method:"POST",
+        data:{
+            title: eventData.title,
+            start_date: eventData.start,
+            end_date: eventData.end,
+            patient_id:eventData.extendedProps.guests,
+            description:eventData.extendedProps.description,
+            type: 'add'
+        },
+        success:function()
+        {
+            // calendar.fullCalendar('refetchEvents');
+            // alert("Event Created Successfully");
+        }
+    })
   }
 
   // ------------------------------------------------
   // updateEvent
   // ------------------------------------------------
   function updateEvent(eventData) {
-    var propsToUpdate = ['id', 'title', 'url'];
+    var propsToUpdate = ['id', 'title'];
     var extendedPropsToUpdate = ['calendar', 'guests', 'location', 'description'];
     eventData.extendedProps.calendar = 'Business';
     updateEventInCalendar(eventData, propsToUpdate, extendedPropsToUpdate);
-    set_form_schedules(calendar.getEvents());
+    // set_form_schedules(calendar.getEvents());
+    $.ajax({
+        url:"/calendar/action",
+        method:"POST",
+        data:{
+            id:eventData.id,
+            title: eventData.title,
+            start_date: eventData.start,
+            end_date: eventData.end,
+            patient_id:eventData.extendedProps.guests,
+            description:eventData.extendedProps.description,
+            type: 'edit'
+        },
+        success:function()
+        {
+            // calendar.fullCalendar('refetchEvents');
+            // alert("Event Edited Successfully");
+        }
+    })
   }
 
   // ------------------------------------------------
@@ -433,65 +496,95 @@ document.addEventListener('DOMContentLoaded', function () {
   // Add new event
   $(addEventBtn).on('click', function () {
     if (eventForm.valid()) {
-        var max_id = 0;
-        calendar.getEvents().map(event_item => {
-            if (max_id < parseInt(event_item.id)){
-                max_id = parseInt(event_item.id);
+        Swal.fire({
+            html: "<div class='mb-7'>Do you confirm to add this schedule?</div>",
+            icon: "info",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-active-light"
+            }
+        }).then(function (res){
+            if (res.value){
+                var max_id = 0;
+                calendar.getEvents().map(event_item => {
+                    if (max_id < parseInt(event_item.id)){
+                        max_id = parseInt(event_item.id);
+                    }
+                })
+                var newEvent = {
+                    id: max_id + 1,
+                    title: eventTitle.val(),
+                    start: startDate.val(),
+                    end: endDate.val(),
+                    startStr: startDate.val(),
+                    endStr: endDate.val(),
+                    display: 'block',
+                    extendedProps: {
+                    location: eventLocation.val(),
+                    guests: eventGuests.val(),
+                    calendar: eventLabel.val(),
+                    description: calendarEditor.val()
+                    }
+                };
+                // if (eventUrl.val().length) {
+                //     newEvent.url = eventUrl.val();
+                // }
+                if (allDaySwitch.prop('checked')) {
+                    newEvent.allDay = true;
+                }
+                addEvent(newEvent);
+                sidebar.modal('hide');
             }
         })
-        var newEvent = {
-            id: max_id + 1,
-            title: eventTitle.val(),
-            start: startDate.val(),
-            end: endDate.val(),
-            startStr: startDate.val(),
-            endStr: endDate.val(),
-            display: 'block',
-            extendedProps: {
-            location: eventLocation.val(),
-            guests: eventGuests.val(),
-            calendar: eventLabel.val(),
-            description: calendarEditor.val()
-            }
-        };
-        if (eventUrl.val().length) {
-            newEvent.url = eventUrl.val();
-        }
-        if (allDaySwitch.prop('checked')) {
-            newEvent.allDay = true;
-        }
-        addEvent(newEvent);
     }
   });
 
   // Update new event
   updateEventBtn.on('click', function () {
     if (eventForm.valid()) {
-      var eventData = {
-        id: eventToUpdate.id,
-        title: sidebar.find(eventTitle).val(),
-        start: sidebar.find(startDate).val(),
-        end: sidebar.find(endDate).val(),
-        url: eventUrl.val(),
-        extendedProps: {
-          location: eventLocation.val(),
-          guests: eventGuests.val(),
-          calendar: eventLabel.val(),
-          description: calendarEditor.val()
-        },
-        display: 'block',
-        allDay: allDaySwitch.prop('checked') ? true : false
-      };
-
-      updateEvent(eventData);
-      sidebar.modal('hide');
+        Swal.fire({
+            html: "<div class='mb-7'>Do you confirm to update this schedule?</div>",
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-active-light"
+            }
+        }).then(function (res){
+            if (res.value){
+                var eventData = {
+                    id: eventToUpdate.id,
+                    title: sidebar.find(eventTitle).val(),
+                    start: sidebar.find(startDate).val(),
+                    end: sidebar.find(endDate).val(),
+                    // url: eventUrl.val(),
+                    extendedProps: {
+                        location: eventLocation.val(),
+                        guests: eventGuests.val(),
+                        calendar: eventLabel.val(),
+                        description: calendarEditor.val()
+                        },
+                    display: 'block',
+                    allDay: allDaySwitch.prop('checked') ? true : false
+                };
+                updateEvent(eventData);
+                sidebar.modal('hide');
+            }
+        })
     }
   });
 
   // Reset sidebar input values
   function resetValues() {
     endDate.val('');
-    eventUrl.val('');
+    // eventUrl.val('');
     startDate.val('');
     eventTitle.val('');
     eventLocation.val('');

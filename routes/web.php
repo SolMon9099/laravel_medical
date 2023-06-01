@@ -48,6 +48,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::group(['prefix' => 'calendar'], function () {
         Route::get('/', [CalendarController::class, 'index'])->middleware('role:office manager')->name('calendar.index');
         Route::post('/store', [CalendarController::class, 'store'])->middleware('role:office manager')->name('calendar.store');
+        Route::post('/action', [CalendarController::class, 'action'])->middleware('role:office manager')->name('calendar.action');
     });
 
 
