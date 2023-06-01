@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\PatientTransaction;
 use App\Models\PatientSchedule;
+use App\Models\User;
+use App\Service\SmsService;
 
 class CalendarController extends Controller
 {
@@ -111,6 +113,12 @@ class CalendarController extends Controller
                     $new_schedule->created_at = date('Y-m-d H:i:s');
                     $new_schedule->updated_at = date('Y-m-d H:i:s');
                     $new_schedule->save();
+
+
+                    $sms_service = new SmsService();
+                    $user = User::find($request['patient_id']);
+                    $message = $sms_service->makePatientMessage($user, $request, 'add');
+                    $sms_service->sendSMS($message, $user->phone);
                     break;
                 case 'edit':
                     if (isset($request['id'])){
@@ -125,10 +133,27 @@ class CalendarController extends Controller
                         }
                         $schedule_record->updated_at = date('Y-m-d H:i:s');
                         $schedule_record->save();
+
+                        $sms_service = new SmsService();
+                        $user = User::find($request['patient_id']);
+                        $message = $sms_service->makePatientMessage($user, $request, 'edit');
+                        $sms_service->sendSMS($message, $user->phone);
                     }
                     break;
                 case 'delete':
                     if (isset($request['id'])){
+                        $schedule_record = PatientSchedule::query()->where('id', (int)$request['id'])->get()->first();
+                        $schedule_data = [
+                            'start_date' => $schedule_record->start_date,
+                            'end_date' => $schedule_record->end_date,
+                            'id' => $schedule_record->id
+                        ];
+
+                        $sms_service = new SmsService();
+                        $user = User::find($schedule_record->patient_id);
+                        $message = $sms_service->makePatientMessage($user, $schedule_data, 'delete');
+                        $sms_service->sendSMS($message, $user->phone);
+
                         PatientSchedule::query()->where('id', $request['id'])->delete();
                     }
                     break;
