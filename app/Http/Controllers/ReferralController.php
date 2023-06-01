@@ -371,14 +371,14 @@ class ReferralController extends Controller
 
      public function deleteReferralFile(Request $request, $id)
      {
-        // $obj = PatientTransactionUploadedFiles::findorFail($id);
-        // $fileName = $obj->files;
+        $obj = PatientTransactionUploadedFiles::findorFail($id);
+        $fileName = $obj->files;
 
-        // if(File::exists(public_path('uploads/'.$fileName))){
-        //     File::delete(public_path('uploads/'.$fileName));
-        // }
+        if(File::exists(public_path('uploads/'.$fileName))){
+            File::delete(public_path('uploads/'.$fileName));
+        }
 
-        // $obj->delete();
+        $obj->delete();
         
         return response()->json(['msg' => 'success' ]);
      }
