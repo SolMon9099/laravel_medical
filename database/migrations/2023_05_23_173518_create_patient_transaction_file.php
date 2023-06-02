@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('transaction_id');
             $table->text('files');
             $table->timestamps();
-
+            
             $table->foreign('transaction_id')->references('id')->on('patient_transactions')->onDelete('cascade');
         });
     }
