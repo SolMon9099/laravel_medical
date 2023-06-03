@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         // alert("Event deleted Successfully");
                     }
                 })
-                location.reload();
+                // location.reload();
             }
         })
     });
@@ -449,7 +449,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // alert("Event Created Successfully");
         }
     })
-    location.reload();
+    // location.reload();
   }
 
   // ------------------------------------------------
@@ -480,7 +480,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // alert("Event Edited Successfully");
         }
     })
-    location.reload();
+    // location.reload();
   }
 
   // ------------------------------------------------
