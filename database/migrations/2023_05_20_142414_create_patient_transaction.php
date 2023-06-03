@@ -38,7 +38,7 @@ return new class extends Migration
             $table->unsignedBigInteger('attorney_id');
             $table->unsignedBigInteger('doctor_id');
             $table->text('doctor_notes')->nullable();
-            $table->string('status')->default(0)->comment('0:pending, 1: approved by funding company');
+            $table->string('status')->default(0)->comment('0:pending, 1: booked, 2:signed, 3: approved by funding company');
             $table->timestamps();
 
             $table->foreign('office_id')->references('id')->on('users')->onDelete('cascade');

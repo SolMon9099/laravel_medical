@@ -22,7 +22,7 @@ class CalendarController extends Controller
             ->orderBy('created_at','desc')
             ->get()->all();
 
-        $schedule_data = PatientSchedule::with(['patient'])
+        $schedule_data = PatientSchedule::with(['patient', 'patient_transaction'])
             ->where('office_id', auth()->user()->id)
             ->orderBy('created_at','desc')
             ->get()->all();
@@ -104,6 +104,7 @@ class CalendarController extends Controller
                 case 'add':
                     $new_schedule = new PatientSchedule();
                     $new_schedule->patient_id = $request['patient_id'];
+                    $new_schedule->patient_transaction_id = $request['patient_transaction_id'];
                     $new_schedule->office_id = auth()->user()->id;
                     $new_schedule->start_date = date('Y-m-d H:i:s', strtotime($request['start_date']));
                     $new_schedule->end_date = date('Y-m-d H:i:s', strtotime($request['end_date']));
@@ -114,6 +115,8 @@ class CalendarController extends Controller
                     $new_schedule->created_at = date('Y-m-d H:i:s');
                     $new_schedule->updated_at = date('Y-m-d H:i:s');
                     $new_schedule->save();
+
+                    PatientTransaction::query()->where('id', $request['patient_transaction_id'])->update(['status' => config('const.status_code.Booked')]);
 
                     //SMS----------
                     $sms_service = new SmsService();
@@ -133,7 +136,12 @@ class CalendarController extends Controller
                 case 'edit':
                     if (isset($request['id'])){
                         $schedule_record = PatientSchedule::find((int)$request['id']);
-                        $schedule_record->patient_id = $request['patient_id'];
+                        if (isset($request['patient_id']) && $request['patient_id'] > 0){
+                            $schedule_record->patient_id = $request['patient_id'];
+                            $schedule_record->patient_transaction_id = $request['patient_transaction_id'];
+                            PatientTransaction::query()->where('id', $schedule_record->patient_transaction_id)->update(['status' => config('const.status_code.Pending')]);
+                            PatientTransaction::query()->where('id', $request['patient_transaction_id'])->update(['status' => config('const.status_code.Booked')]);
+                        }
                         $schedule_record->office_id = auth()->user()->id;
                         $schedule_record->start_date = date('Y-m-d H:i:s', strtotime($request['start_date']));
                         $schedule_record->end_date = date('Y-m-d H:i:s', strtotime($request['end_date']));
@@ -144,8 +152,9 @@ class CalendarController extends Controller
                         $schedule_record->updated_at = date('Y-m-d H:i:s');
                         $schedule_record->save();
 
+
                         $sms_service = new SmsService();
-                        $user = User::find($request['patient_id']);
+                        $user = User::find($schedule_record->patient_id);
                         $message = $sms_service->makePatientMessage($user, $request, 'edit');
                         $sms_service->sendSMS($message, $user->phone);
 
@@ -166,6 +175,8 @@ class CalendarController extends Controller
                             'end_date' => $schedule_record->end_date,
                             'id' => $schedule_record->id
                         ];
+                        PatientSchedule::query()->where('id', $request['id'])->delete();
+                        PatientTransaction::query()->where('id', $schedule_record->patient_transaction_id)->update(['status' => config('const.status_code.Pending')]);
 
                         $sms_service = new SmsService();
                         $user = User::find($schedule_record->patient_id);
@@ -180,8 +191,6 @@ class CalendarController extends Controller
                             'type' => 'delete'
                         ];
                         Mail::to($user->email)->send(new BookAlertEmail($mailData));
-
-                        PatientSchedule::query()->where('id', $request['id'])->delete();
                     }
                     break;
             }

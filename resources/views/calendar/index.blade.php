@@ -11,7 +11,7 @@
 <?php
     $patient_object = array();
     foreach($patient_data as $patient) {
-        $patient_object[$patient->patient_id] = $patient->patient->name;
+        $patient_object[$patient->patient_id.'_'.$patient->id] = $patient->patient->name.' '. $patient->referral_date;
     }
 ?>
 <style>
@@ -98,7 +98,7 @@
                     <form class="event-form needs-validation" data-ajax="true" novalidate>
                         <div class="mb-1">
                             <label for="title" class="form-label">Title</label>
-                            <input type="text" class="form-control" id="title" name="title" placeholder="Event Title" required />
+                            <input type="text" class="form-control" id="title" name="title" placeholder="Event Title" />
                         </div>
                         {{-- <div class="mb-1">
                             <label for="select-label" class="form-label">Label</label>
@@ -130,11 +130,17 @@
                         </div> --}}
                         <div class="mb-1 select2-primary">
                             <label for="event-guests" class="form-label">Add Patients</label>
-                            <select class="select2 select-add-guests form-select w-100" required id="event-guests">
+                            <select class="select2 select-add-guests form-select w-100" id="event-guests" name="guests">
                                 @foreach ($patient_data as $patient_item)
-                                    @if ($patient_item->status == 0)
-                                    <option value={{$patient_item->patient_id}}>{{$patient_item->patient->name}}</option>
-                                    @endif
+                                @if($patient_item->status == config('const.status_code.Pending'))
+                                    <option value={{$patient_item->patient_id.'_'.$patient_item->id}}>
+                                        {{$patient_item->patient->name. ' '. $patient_item->referral_date}}
+                                    </option>
+                                @else
+                                    <option value={{$patient_item->patient_id.'_'.$patient_item->id}} disabled>
+                                        {{$patient_item->patient->name. ' '. $patient_item->referral_date}}
+                                    </option>
+                                @endif
                                 @endforeach
                                 {{-- <option data-avatar="1-small.png" value="Jane Foster">Jane Foster</option>
                                 <option data-avatar="3-small.png" value="Donna Frank">Donna Frank</option>

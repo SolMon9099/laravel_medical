@@ -39,7 +39,8 @@ function set_form_schedules(events, delete_event = null){
             start_date:event._instance.range.start,
             end_date:event._instance.range.end,
             description:event.extendedProps.description,
-            patient_id:event.extendedProps.guests
+            patient_id:eventData.extendedProps.guests.split('_')[0],
+            patient_transaction_id : eventData.extendedProps.guests.split('_')[1],
         })
     })
     $('#booked_schedules').val(JSON.stringify(sch_data));
@@ -204,10 +205,11 @@ document.addEventListener('DOMContentLoaded', function () {
       : end.setDate(eventToUpdate.start, true, 'Y-m-d');
     sidebar.find(eventLabel).val(eventToUpdate.extendedProps.calendar).trigger('change');
     eventToUpdate.extendedProps.location !== undefined ? eventLocation.val(eventToUpdate.extendedProps.location) : null;
+
     eventToUpdate.extendedProps.guests !== undefined
       ? eventGuests.val(eventToUpdate.extendedProps.guests).trigger('change')
       : null;
-    eventToUpdate.extendedProps.guests !== undefined
+    eventToUpdate.extendedProps.description !== undefined
       ? calendarEditor.val(eventToUpdate.extendedProps.description)
       : null;
 
@@ -246,6 +248,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         // alert("Event deleted Successfully");
                     }
                 })
+                location.reload();
             }
         })
     });
@@ -344,12 +347,21 @@ document.addEventListener('DOMContentLoaded', function () {
       eventClick(info);
     },
     eventDidMount : function(arg) {
-        var patient_id = arg.event.extendedProps.guests;
+        var patient_key = arg.event.extendedProps.guests;
         var patient_element = '';
-        if (!isNaN(parseInt(patient_id)) && patient_object[patient_id] != undefined){
-            patient_element = '<div><li class="event-patient">' + patient_object[patient_id] + '</li></div>';
+        if (!isNaN(parseInt(patient_key)) && patient_object[patient_key] != undefined){
+            patient_element = '<div><li class="event-patient">' + patient_object[patient_key] + '</li></div>';
         }
-        $(arg.el).append(patient_element);
+        if ($(arg.el).hasClass('fc-daygrid-dot-event')){
+            $(arg.el).css('display', 'block');
+            var new_sub_parent = $('<div style="display:flex">');
+            $(arg.el).children().appendTo(new_sub_parent);
+            new_sub_parent.appendTo($(arg.el));
+            $(arg.el).append(patient_element);
+        } else {
+            $(arg.el).append(patient_element);
+        }
+
     },
     datesSet: function () {
       modifyToggler();
@@ -366,6 +378,14 @@ document.addEventListener('DOMContentLoaded', function () {
   // updateEventClass();
 
   // Validate add new and update form
+  $.validator.addMethod("sepcRequired", function(value, element, arg){
+    if (eventToUpdate){
+        return true;
+    } else {
+        return value != null;
+    }
+   }, "This field is required.");
+
   if (eventForm.length) {
     eventForm.validate({
       submitHandler: function (form, event) {
@@ -374,16 +394,24 @@ document.addEventListener('DOMContentLoaded', function () {
         //   sidebar.modal('hide');
         }
       },
-      title: {
-        required: true
-      },
       rules: {
         'start-date': { required: true },
-        'end-date': { required: true }
+        'end-date': { required: true },
+        'title': { required: true },
+        'guests': { sepcRequired: 'default' },
       },
       messages: {
         'start-date': { required: 'Start Date is required' },
         'end-date': { required: 'End Date is required' }
+      },
+      errorElement : 'div',
+      errorPlacement: function(error, element) {
+        // var placement = $(element).data('error');
+        // if (placement) {
+        //   $(placement).append(error)
+        // } else {
+          error.insertBefore(element);
+        // }
       }
     });
   }
@@ -410,7 +438,8 @@ document.addEventListener('DOMContentLoaded', function () {
             title: eventData.title,
             start_date: eventData.start,
             end_date: eventData.end,
-            patient_id:eventData.extendedProps.guests,
+            patient_id:eventData.extendedProps.guests.split('_')[0],
+            patient_transaction_id : eventData.extendedProps.guests.split('_')[1],
             description:eventData.extendedProps.description,
             type: 'add'
         },
@@ -420,6 +449,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // alert("Event Created Successfully");
         }
     })
+    location.reload();
   }
 
   // ------------------------------------------------
@@ -439,7 +469,8 @@ document.addEventListener('DOMContentLoaded', function () {
             title: eventData.title,
             start_date: eventData.start,
             end_date: eventData.end,
-            patient_id:eventData.extendedProps.guests,
+            patient_id:eventData.extendedProps.guests != null ? eventData.extendedProps.guests.split('_')[0] : null,
+            patient_transaction_id : eventData.extendedProps.guests != null ? eventData.extendedProps.guests.split('_')[1] : null,
             description:eventData.extendedProps.description,
             type: 'edit'
         },
@@ -449,6 +480,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // alert("Event Edited Successfully");
         }
     })
+    location.reload();
   }
 
   // ------------------------------------------------

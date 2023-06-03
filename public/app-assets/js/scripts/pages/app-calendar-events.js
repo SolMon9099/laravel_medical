@@ -135,7 +135,7 @@ schedule_data.map((item) => {
             extendedProps: {
                 calendar: 'Business',
                 description:item.description,
-                guests:item.patient_id
+                guests:item.patient_id + '_' + item.patient_transaction_id
             }
         });
 })
