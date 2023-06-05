@@ -298,63 +298,152 @@ class ReferralController extends Controller
     public function update(Request $request, string $id)
     {
         $patientTransactionObj = PatientTransaction::findorFail($id);
+        switch($patientTransactionObj -> status){
+            case config('const.status_code.Pending'):
+                $referral_date = $request->input('referral_date');
+                //patient info
+                $patient_name = $request->input('patient_name');
+                $patient_email = $request->input('patient_email');
+                $patient_phone = $request->input('patient_phone');
+                $patient_date_birth = $request->input('patient_date_birth');
+                $patient_street_adderss = $request->input('patient_street_adderss');
+                $patient_street_adderss_line2 = $request->input('patient_street_adderss_line2');
+                $patient_city = $request->input('patient_city');
+                $patient_state = $request->input('patient_state');
+                $patient_postal = $request->input('patient_postal');
+                $patient_date_injury = $request->input('patient_date_injury');
+                $genders = $request->input('genders');
+                $reason_referral = $request->input('reason_referral');
+                $reason_referral = implode(',', $reason_referral);
 
-        $referral_date = $request->input('referral_date');
-        //patient info
-        $patient_name = $request->input('patient_name');
-        $patient_email = $request->input('patient_email');
-        $patient_phone = $request->input('patient_phone');
-        $patient_date_birth = $request->input('patient_date_birth');
-        $patient_street_adderss = $request->input('patient_street_adderss');
-        $patient_street_adderss_line2 = $request->input('patient_street_adderss_line2');
-        $patient_city = $request->input('patient_city');
-        $patient_state = $request->input('patient_state');
-        $patient_postal = $request->input('patient_postal');
-        $patient_date_injury = $request->input('patient_date_injury');
-        $genders = $request->input('genders');
-        $reason_referral = $request->input('reason_referral');
-        $reason_referral = implode(',', $reason_referral);
+                //patient insurance
+                $patient_insurance_company = $request->input('patient_insurance_company');
+                $patient_insurance_policy = $request->input('patient_insurance_policy');
+                $patient_insurance_street_adderss = $request->input('patient_insurance_street_adderss');
+                $patient_insurance_street_adderss_line2 = $request->input('patient_insurance_street_adderss_line2');
+                $patient_insurance_city = $request->input('patient_insurance_city');
+                $patient_insurance_state = $request->input('patient_insurance_state');
+                $patient_insurance_postal = $request->input('patient_insurance_postal');
 
-        //patient insurance
-        $patient_insurance_company = $request->input('patient_insurance_company');
-        $patient_insurance_policy = $request->input('patient_insurance_policy');
-        $patient_insurance_street_adderss = $request->input('patient_insurance_street_adderss');
-        $patient_insurance_street_adderss_line2 = $request->input('patient_insurance_street_adderss_line2');
-        $patient_insurance_city = $request->input('patient_insurance_city');
-        $patient_insurance_state = $request->input('patient_insurance_state');
-        $patient_insurance_postal = $request->input('patient_insurance_postal');
+                //defendant insuance
+                $defendant_insurance_hit = $request->input('defendant_insurance_hit');
+                $defendant_insure = $request->input('defendant_insure');
+                $defendant_insurance_company = $request->input('defendant_insurance_company');
+                $defendant_insurance_claim = $request->input('defendant_insurance_claim');
+                $defendant_policy_limit = $request->input('defendant_policy_limit');
+                $defendant_insurance_street_adderss = $request->input('defendant_insurance_street_adderss');
+                $defendant_insurance_street_adderss_line2 = $request->input('defendant_insurance_street_adderss_line2');
+                $defendant_insurance_city = $request->input('defendant_insurance_city');
+                $defendant_insurance_state = $request->input('defendant_insurance_state');
+                $defendant_insurance_postal = $request->input('defendant_insurance_postal');
 
-        //defendant insuance
-        $defendant_insurance_hit = $request->input('defendant_insurance_hit');
-        $defendant_insure = $request->input('defendant_insure');
-        $defendant_insurance_company = $request->input('defendant_insurance_company');
-        $defendant_insurance_claim = $request->input('defendant_insurance_claim');
-        $defendant_policy_limit = $request->input('defendant_policy_limit');
-        $defendant_insurance_street_adderss = $request->input('defendant_insurance_street_adderss');
-        $defendant_insurance_street_adderss_line2 = $request->input('defendant_insurance_street_adderss_line2');
-        $defendant_insurance_city = $request->input('defendant_insurance_city');
-        $defendant_insurance_state = $request->input('defendant_insurance_state');
-        $defendant_insurance_postal = $request->input('defendant_insurance_postal');
-
-        //Attorney
-        $attorney_name = $request->input('attorney_name');
-        $attorney_email = $request->input('attorney_email');
-        $attorney_phone = $request->input('attorney_phone');
-        $law_firm_adderss = $request->input('law_firm_adderss');
-        $law_firm_adderss_line2 = $request->input('law_firm_adderss_line2');
-        $law_firm_city = $request->input('law_firm_city');
-        $law_firm_state = $request->input('law_firm_state');
-        $law_firm_postal = $request->input('law_firm_postal');
+                //Attorney
+                $attorney_name = $request->input('attorney_name');
+                $attorney_email = $request->input('attorney_email');
+                $attorney_phone = $request->input('attorney_phone');
+                $law_firm_adderss = $request->input('law_firm_adderss');
+                $law_firm_adderss_line2 = $request->input('law_firm_adderss_line2');
+                $law_firm_city = $request->input('law_firm_city');
+                $law_firm_state = $request->input('law_firm_state');
+                $law_firm_postal = $request->input('law_firm_postal');
 
 
-        //clinic info
-        $clinic_name = $request->input('clinic_name');
-        $doctor_name = $request->input('doctor_name');
-        $doctor_email = $request->input('doctor_email');
-        $doctor_phone = $request->input('doctor_phone');
-        $doctor_notes = $request->input('doctor_notes');
+                //clinic info
+                $clinic_name = $request->input('clinic_name');
+                $doctor_name = $request->input('doctor_name');
+                $doctor_email = $request->input('doctor_email');
+                $doctor_phone = $request->input('doctor_phone');
+                $doctor_notes = $request->input('doctor_notes');
 
-        
+                $patient_user = User::where('id', $patientTransactionObj->patient_id)->first();
+                if ($patient_user){
+                    $patient_user->name = $patient_name;
+                    $patient_user->email = $patient_email;
+                    $patient_user->phone = $patient_phone;
+                    $patient_user->date_of_birth = $patient_date_birth;
+                    $patient_user->address = $patient_street_adderss;
+                    $patient_user->address_line2 = $patient_street_adderss_line2;
+                    $patient_user->city = $patient_city;
+                    $patient_user->state = $patient_state;
+                    $patient_user->postal = $patient_postal;
+                    $patient_user->gender = $genders;
+                    $patient_user->save();
+                }
+
+                $attorney_user = User::where('id', $patientTransactionObj->attorney_id)->first();
+                if ($attorney_user){
+                    $attorney_user->name = $attorney_name;
+                    $attorney_user->email = $attorney_email;
+                    $attorney_user->phone = $attorney_phone;
+                    $attorney_user->address = $law_firm_adderss;
+                    $attorney_user->address_line2 = $law_firm_adderss_line2;
+                    $attorney_user->city = $law_firm_city;
+                    $attorney_user->state = $law_firm_state;
+                    $attorney_user->postal = $law_firm_postal;
+                    $attorney_user->save();
+                }
+
+                $doctor_user = User::where('id', $patientTransactionObj->doctor_id)->first();
+                if ($doctor_user){
+                    $doctor_user->name = $doctor_name;
+                    $doctor_user->email = $doctor_email;
+                    $doctor_user->phone = $doctor_phone;
+                    $doctor_user->save();
+                }
+
+                $patientTransactionObj->referral_date = $referral_date;
+                $patientTransactionObj->office_id = auth()->user()->id;  //current logged in ID
+                $patientTransactionObj->patient_date_injury = $patient_date_injury;
+                $patientTransactionObj->reason_referral = $reason_referral;
+                $patientTransactionObj->patient_insurance_company = $patient_insurance_company;
+                $patientTransactionObj->patient_insurance_policy = $patient_insurance_policy;
+                $patientTransactionObj->patient_insurance_street_adderss = $patient_insurance_street_adderss;
+                $patientTransactionObj->patient_insurance_street_adderss_line2 = $patient_insurance_street_adderss_line2;
+                $patientTransactionObj->patient_insurance_city = $patient_insurance_city;
+                $patientTransactionObj->patient_insurance_state = $patient_insurance_state;
+                $patientTransactionObj->patient_insurance_postal = $patient_insurance_postal;
+                $patientTransactionObj->defendant_insurance_hit = $defendant_insurance_hit;
+                $patientTransactionObj->defendant_insure = $defendant_insure;
+                $patientTransactionObj->defendant_insurance_company = $defendant_insurance_company;
+                $patientTransactionObj->defendant_insurance_claim = $defendant_insurance_claim;
+                $patientTransactionObj->defendant_policy_limit = $defendant_policy_limit;
+                $patientTransactionObj->defendant_insurance_street_adderss = $defendant_insurance_street_adderss;
+                $patientTransactionObj->defendant_insurance_street_adderss_line2 = $defendant_insurance_street_adderss_line2;
+                $patientTransactionObj->defendant_insurance_city = $defendant_insurance_city;
+                $patientTransactionObj->defendant_insurance_state = $defendant_insurance_state;
+                $patientTransactionObj->defendant_insurance_postal = $defendant_insurance_postal;
+                $patientTransactionObj->doctor_notes = $doctor_notes;
+                $patientTransactionObj->save();
+
+                return back()->with('flash_success', 'The patient is updated successfully');
+                break;
+            case config('const.status_code.Booked'):
+                //file upload
+                if ($request->hasFile('files')) {
+                    PatientTransactionUploadedFiles::query()->where('transaction_id', $id)->delete();
+                    $uploadedFiles = $request->file('files');
+                    foreach ($uploadedFiles as $file) {
+                        $patientTransactionUploadedFilesObj = new PatientTransactionUploadedFiles();
+
+                        //set the file name
+                        $fileName = $file->getClientOriginalName();
+
+                        //move the file into the desired folder
+                        $file->move(public_path('uploads'), $fileName);
+
+                        // Save the upload result into the database
+                        $patientTransactionUploadedFilesObj->transaction_id = $id;
+                        $patientTransactionUploadedFilesObj->files = $fileName;
+                        $patientTransactionUploadedFilesObj->save();
+
+                        PatientTransaction::query()->where('id', $id)->update(['status' => config('const.status_code.Signed')]);
+                    }
+                }
+                return back()->with('flash_success', 'The sign document is uploaded successfully');
+                break;
+            default:
+                return back()->with('flash_success', 'The form sent successfully');
+        }
 
     }
 
@@ -381,7 +470,7 @@ class ReferralController extends Controller
         }
 
         $obj->delete();
-        
+
         return response()->json(['msg' => 'success' ]);
      }
 }

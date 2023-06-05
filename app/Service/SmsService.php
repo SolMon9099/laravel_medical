@@ -20,10 +20,12 @@ class SmsService{
                 $recipients,
                 ['from' => $this->twilio_number, 'body' => $message]
             );
-            return response()->json(['message' => 'SMS sent successfully']);
+            return true;
+            // return response()->json(['message' => 'SMS sent successfully']);
         } catch (Exception $e) {
             // Error occurred
-            return response()->json(['error' => $e->getMessage()], 500);
+            return $e->getMessage();
+            // return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 

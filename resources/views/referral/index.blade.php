@@ -8,10 +8,10 @@
         <table class="patients-referral-table table">
             <thead class="table-light">
                 <tr>
-                    <th>No</th>                        
-                    <th>Date</th>                 
+                    <th>No</th>
+                    <th>Date</th>
                     <th>Patient Name</th>
-                    <th>Patient Email</th>                    
+                    <th>Patient Email</th>
                     <th>Attorney Name</th>
                     <th>Doctor Name</th>
                     <th>Status</th>
@@ -28,7 +28,8 @@
                         <td>{{$value->attorney->name}}</td>
                         <td>{{$value->doctor->name}}</td>
                         <td>
-                            @if($value->status == 0)
+                            <span class="text-primary">{{config('const.status')[$value->status]}}</span>
+                            {{-- @if($value->status == 0)
                                 <span class="text-primary">Pending</span>
                             @elseif($value->status == 1)
                                 <span class="text-success"></span>
@@ -38,7 +39,7 @@
                                 <span class="text-info"></span>
                             @elseif($value->status == 4)
                                 <span class="text-danger"></span>
-                            @endif
+                            @endif --}}
                         </td>
                         <td>
                             <div class="d-inline-flex">
@@ -49,7 +50,7 @@
                                     <a href="{{ route('referral.edit', $value->id) }}" class="dropdown-item">
                                         <i data-feather="edit-2" class="me-50"></i>
                                         <span>Edit</span>
-                                    </a>                                   
+                                    </a>
                                     <a href="#" class="dropdown-item deleteBtn" data-id = {{$value->id}}>
                                         <i data-feather="trash" class="me-50"></i>
                                         <span>Delete</span>
@@ -70,7 +71,7 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 <script>
-   $('.deleteBtn').click(function (e) {     
+   $('.deleteBtn').click(function (e) {
         let id = $(this).data('id');
         var url = "{{ route('referral.destroy', ':id') }}".replace(':id', id);
 
@@ -91,7 +92,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
-                        toastr.success( response.message, 'Success!', { "showDuration": 500, positionClass: 'toast-top-right' });    
+                        toastr.success( response.message, 'Success!', { "showDuration": 500, positionClass: 'toast-top-right' });
                         location.reload();
                     },
                     error: function(xhr) {
@@ -101,7 +102,7 @@
                 });
             }
         });
-        
+
     });
 </script>
 @endsection
