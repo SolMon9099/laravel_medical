@@ -17,19 +17,19 @@
                     </div>
                 </div>
 
-                <div class="card-body">    
-                    <form action="{{ route('profiles.store') }}" method="POST" class="row gy-1 pt-75 editPasswordForm">       
-                        @csrf             
+                <div class="card-body">
+                    <form action="{{ route('profiles.store') }}" method="POST" class="row gy-1 pt-75 editPasswordForm">
+                        @csrf
                         <div class="col-12">
                             <label class="form-label" for="modalEditUserName">Current Password</label>
                             <input type="password" id="current_password" name="current_password" class="form-control" autofocus />
                         </div>
-                
+
                         <div class="col-12">
                             <label class="form-label" for="modalEditUserName">New Password</label>
                             <input type="password" id="new_password" name="new_password" class="form-control" />
                         </div>
-                
+
                         <div class="col-12">
                             <label class="form-label" for="modalEditUserName">Confirm Password</label>
                             <input type="password" id="confirm_password" name="confirm_password" class="form-control" />
@@ -38,8 +38,8 @@
                             <button type="submit" class="btn btn-primary me-1">Change Password</button>
                         </div>
                     </form>
-                </div>  
-            </div>         
+                </div>
+            </div>
         </div>
     </div>
 </section>

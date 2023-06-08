@@ -37,7 +37,11 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::resource('users', UserController::class)->middleware('role:admin');
 
-    Route::resource('profiles', ProfileController::class)->middleware('role:patient');;
+    Route::group(['prefix' => 'profiles'], function () {
+        Route::get('/', [ProfileController::class, 'index'])->name('profiles.index');
+        Route::post('/store', [ProfileController::class, 'store'])->name('profiles.store');
+        Route::get('/change_password', [ProfileController::class, 'change_password'])->name('profiles.change_password');
+    });
 
     Route::resource('clinics', ClinicController::class)->middleware('role:admin');
     Route::get('/get-clinic-data', [ClinicController::class, 'getClinicData'])->middleware('role:admin');
@@ -50,6 +54,5 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/store', [CalendarController::class, 'store'])->middleware('role:office manager')->name('calendar.store');
         Route::post('/action', [CalendarController::class, 'action'])->middleware('role:office manager')->name('calendar.action');
     });
-
 
 });

@@ -12,41 +12,41 @@
     </div>
     <div class="shadow-bottom"></div>
     <div class="main-menu-content">
-        <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">                              
+        <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
             @role(['admin'])
                 <li class="navigation-header">
-                    <span>Dashboard</span>               
+                    <span>Dashboard</span>
                 </li>
                 <li class="nav-item @if(request()->is('home')) active @endif">
                     <a class="d-flex align-items-center" href="{{ route('home') }}">
                         <i data-feather="home"></i>
                         <span class="menu-title text-truncate">Dashboard</span>
-                    </a> 
+                    </a>
                 </li>
-            
+
                 <li class="navigation-header">
-                    <span>User &amp Role management</span>               
+                    <span>User &amp Role management</span>
                 </li>
 
                 <li class="nav-item  @if(request()->is('users*')) active @endif">
                     <a class="d-flex align-items-center" href="{{ route('users.index') }}">
                         <i data-feather="user"></i>
                         <span class="menu-title text-truncate">User</span>
-                    </a> 
+                    </a>
                 </li>
 
                 <li class="nav-item @if(request()->is('roles*')) active @endif">
                     <a class="d-flex align-items-center" href="{{ route('roles.index') }}">
                         <i data-feather="shield"></i>
                         <span class="menu-title text-truncate">Role</span>
-                    </a> 
+                    </a>
                 </li>
 
                 <li class="nav-item @if(request()->is('clinics*')) active @endif">
                     <a class="d-flex align-items-center" href="{{ route('clinics.index') }}">
                         <i data-feather="clipboard"></i>
                         <span class="menu-title text-truncate">Clinic</span>
-                    </a> 
+                    </a>
                 </li>
             @endcan
 
@@ -55,25 +55,37 @@
                     <a class="d-flex align-items-center" href="{{ route('home') }}">
                         <i data-feather="home"></i>
                         <span class="menu-title text-truncate">Dashboard</span>
-                    </a> 
+                    </a>
                 </li>
 
                 <li class="nav-item @if(request()->is('referral*')) active @endif">
                     <a class="d-flex align-items-center" href="{{ route('referral.index') }}">
                         <i data-feather="copy"></i>
                         <span class="menu-title text-truncate">Patient Management</span>
-                    </a> 
+                    </a>
                 </li>
 
                 <li class="nav-item @if(request()->is('calendar*')) active @endif">
                     <a class="d-flex align-items-center" href="{{ route('calendar.index') }}">
                         <i data-feather="calendar"></i>
                         <span class="menu-title text-truncate">Calendar</span>
-                    </a> 
+                    </a>
                 </li>
             @endrole
-            
-
+            @role(['patient'])
+            <li class="nav-item @if(request()->is('home')) active @endif">
+                <a class="d-flex align-items-center" href="{{ route('home') }}">
+                    <i data-feather="home"></i>
+                    <span class="menu-title text-truncate">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item @if(request()->is('profiles*')) active @endif">
+                <a class="d-flex align-items-center" href="{{ route('profiles.index') }}">
+                    <i data-feather="copy"></i>
+                    <span class="menu-title text-truncate">Profile</span>
+                </a>
+            </li>
+            @endrole
         </ul>
     </div>
 </div>

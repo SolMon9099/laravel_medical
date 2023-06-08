@@ -19,12 +19,10 @@
                         </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-user">
-                    @role(['patient'])
-                    <a class="dropdown-item" href="{{route('profiles.index')}}">
-                        <i class="me-50" data-feather="user"></i> Profile
+                    <a class="dropdown-item" href="{{route('profiles.change_password')}}">
+                        <i class="me-50" data-feather="user"></i> Set Password
                     </a>
                     <div class="dropdown-divider"></div>
-                    @endrole
                     <a class="dropdown-item" href="{{ route('logout') }}"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="me-50" data-feather="power"></i>
                         Logout

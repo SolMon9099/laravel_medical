@@ -22,6 +22,10 @@ class ProfileController extends Controller
         ]);
     }
 
+    public function change_password(){
+        return view('profile.change_password');
+    }
+
     /**
      * Show the form for creating a new resource.
      */
