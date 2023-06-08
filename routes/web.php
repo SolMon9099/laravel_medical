@@ -37,7 +37,7 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::resource('users', UserController::class)->middleware('role:admin');
 
-    Route::resource('profiles', ProfileController::class)->middleware('role:admin');
+    Route::resource('profiles', ProfileController::class)->middleware('role:patient');;
 
     Route::resource('clinics', ClinicController::class)->middleware('role:admin');
     Route::get('/get-clinic-data', [ClinicController::class, 'getClinicData'])->middleware('role:admin');

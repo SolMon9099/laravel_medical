@@ -122,7 +122,10 @@ class CalendarController extends Controller
                     $sms_service = new SmsService();
                     $user = User::find($request['patient_id']);
                     $message = $sms_service->makePatientMessage($user, $request, 'add');
-                    $sms_service->sendSMS($message, $user->phone);
+                    $res = $sms_service->sendSMS($message, $user->phone);
+                    if ($res !== true){
+                        return json_encode(['error' => $res]);
+                    }
 
                     //mail--------------
                     $mailData = [

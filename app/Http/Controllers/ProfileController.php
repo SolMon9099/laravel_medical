@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-
+use App\Models\PatientSchedule;
+use App\Models\PatientTransaction;
 class ProfileController extends Controller
 {
     /**
@@ -13,9 +14,12 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        //
-        return view('profile.change-password');
-        
+        $transaction_data = PatientTransaction::with(['files', 'attorney', 'doctor'])->where('patient_id', auth()->user()->id)->get()->all();
+        $schedule_data = PatientSchedule::query()->where('patient_id', auth()->user()->id)->get()->all();
+        return view('profile.index')->with([
+            'transaction_data' => $transaction_data,
+            'schedule_data' => $schedule_data
+        ]);
     }
 
     /**
@@ -34,7 +38,7 @@ class ProfileController extends Controller
          // Verify the old password
         $user = Auth::user();
         $isPasswordValid = Hash::check($request->current_password, $user->password);
-       
+
         if (!$isPasswordValid) {
             return redirect()->back()->withErrors(['current_password' => 'The current password is invalid.']);
         }
@@ -44,7 +48,7 @@ class ProfileController extends Controller
 
         // Update the user's password
         $user = Auth::user();
-        $user->password = $hashedPassword;        
+        $user->password = $hashedPassword;
         $user->save();
 
         // Redirect the user to the dashboard or profile page
