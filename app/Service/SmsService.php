@@ -7,13 +7,13 @@ use App\Models\PatientTransaction;
 use App\Models\User;
 
 class SmsService{
-    private $account_sid  = 'AC239d97aee1e786d1bccbb8082cff2f9b';
-    private $auth_token  = '0ff53deee09381439b921007eecb128a';
-    private $twilio_number   = '+18667166761';
+    private $account_sid  = '';
+    private $auth_token  = '';
+    private $twilio_number   = '';
     public function __construct(){
-        $this->account_sid = env('TWILIO_ACCOUNT_SID', 'AC239d97aee1e786d1bccbb8082cff2f9b');
-        $this->auth_token = env('TWILIO_AUTH_TOKEN', '0ff53deee09381439b921007eecb128a');
-        $this->twilio_number = env('TWILIO_PHONE_NUMBER', '+18667166761');
+        $this->account_sid = env('TWILIO_ACCOUNT_SID', '');
+        $this->auth_token = env('TWILIO_AUTH_TOKEN', '');
+        $this->twilio_number = env('TWILIO_PHONE_NUMBER', '');
     }
 
     public function sendSMS($message, $recipients){
