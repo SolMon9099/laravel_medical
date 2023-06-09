@@ -93,7 +93,7 @@
                                                                             <div>{{$schedule_object[$value->id]->description}}</div>
                                                                         @endif
                                                                         @if(strtotime("now") > strtotime($schedule_object[$value->id]->start_date))
-                                                                            <div class="alert-info">Expired</div>
+                                                                            <div class="text-info">Expired</div>
                                                                         @endif
                                                                     @endif
                                                                 </td>

@@ -29,17 +29,6 @@
                         <td>{{$value->doctor->name}}</td>
                         <td>
                             <span class="text-primary">{{config('const.status')[$value->status]}}</span>
-                            {{-- @if($value->status == 0)
-                                <span class="text-primary">Pending</span>
-                            @elseif($value->status == 1)
-                                <span class="text-success"></span>
-                            @elseif($value->status == 2)
-                                <span class="text-warning"></span>
-                            @elseif($value->status == 3)
-                                <span class="text-info"></span>
-                            @elseif($value->status == 4)
-                                <span class="text-danger"></span>
-                            @endif --}}
                         </td>
                         <td>
                             <div class="d-inline-flex">
