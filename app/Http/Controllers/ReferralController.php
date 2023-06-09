@@ -16,8 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-
-use function Ramsey\Uuid\v1;
+use App\Service\SmsService;
 
 class ReferralController extends Controller
 {
@@ -437,6 +436,8 @@ class ReferralController extends Controller
                         $patientTransactionUploadedFilesObj->save();
 
                         PatientTransaction::query()->where('id', $id)->update(['status' => config('const.status_code.Signed')]);
+                        $sms_service = new SmsService();
+                        $sms_service->sendSignedSMS($id);
                     }
                 }
                 return back()->with('flash_success', 'The sign document is uploaded successfully');

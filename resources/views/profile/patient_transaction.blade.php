@@ -63,7 +63,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="table-responsive">
-                                                <table class="referral-table table">
+                                                <table class="patients-referral-table table">
                                                     <thead class="table-light">
                                                         <tr>
                                                             <th>No</th>
@@ -100,11 +100,16 @@
                                                                             <div><a href="{{ asset('uploads/'.$val->files) }}">{{$val->files}}</a></div>
                                                                         @endforeach
                                                                     @else
-                                                                        {{-- <input type="file" name="files[]" accept="application/pdf"/> --}}
-                                                                        <button>Upload Docs</button>
+                                                                        @if($value->status == config('const.status_code.Booked'))
+                                                                            <form action="{{route('profiles.upload_sign_docs')}}" method="POST" enctype="multipart/form-data">
+                                                                                @csrf
+                                                                                <input type="hidden" value = {{$value->id}} name="transaction_id" />
+                                                                                <input type="file" required name="files[]" accept="application/pdf" /><br/>
+                                                                                <button style="margin-top:10px;" type="submit" class="btn btn-sm btn-outline-secondary waves-effect">Upload Docs</button>
+                                                                            </form>
+                                                                        @endif
                                                                     @endif
                                                                 </td>
-
                                                             </tr>
                                                         @endforeach
                                                     </tbody>
@@ -133,5 +138,10 @@
         </div>
     </div>
 </section>
+<style>
+    .dt-buttons{
+        display:none;
+    }
+</style>
 @endsection
 

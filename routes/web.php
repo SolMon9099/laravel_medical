@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/store_password', [ProfileController::class, 'store_password'])->name('profiles.store_password');
         Route::get('/change_password', [ProfileController::class, 'change_password'])->name('profiles.change_password');
         Route::get('/patient_transaction', [ProfileController::class, 'patient_transaction'])->name('profiles.patient_transaction');
+        Route::post('/upload_sign_docs', [ProfileController::class, 'upload_sign_docs'])->name('profiles.upload_sign_docs');
     });
 
     Route::resource('clinics', ClinicController::class)->middleware('role:admin');

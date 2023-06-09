@@ -3,6 +3,9 @@
 namespace App\Service;
 use Twilio\Rest\Client;
 use Exception;
+use App\Models\PatientTransaction;
+use App\Models\User;
+
 class SmsService{
     private $account_sid  = 'AC239d97aee1e786d1bccbb8082cff2f9b';
     private $auth_token  = '5d3ccd2a345d21fd9eafcc05233c90bd';
@@ -63,5 +66,36 @@ class SmsService{
         return $message;
     }
 
+    public function sendSignedSMS($transaction_id)
+    {
+        $transaction_record = PatientTransaction::find($transaction_id);
+        if ($transaction_record){
+            $message = "Medical Lien Form with sign is uploaded\n";
+            $patient_user = User::find($transaction_record->patient_id);
+            $message .="Patient Name : ". $patient_user->name ."\n";
+            $message .="Patient Email : ". $patient_user->email ."\n";
+            $message .="Patient Phone : ". $patient_user->phone ."\n";
+
+            $offic_user = User::find($transaction_record->office_id);
+            $attorney_user = User::find($transaction_record->attorney_id);
+            $doctor_user = User::find($transaction_record->doctor_id);
+            try{
+                if ($offic_user && $offic_user->phone){
+                    $res = $this->sendSMS($message, $offic_user->phone);
+                }
+                if ($attorney_user && $attorney_user->phone){
+                    $res = $this->sendSMS($message, $attorney_user->phone);
+                }
+                if ($doctor_user && $doctor_user->phone){
+                    $res = $this->sendSMS($message, $doctor_user->phone);
+                }
+            } catch (Exception $e) {
+                // Error occurred
+                var_dump($e->getMessage());exit;
+                // return response()->json(['error' => $e->getMessage()], 500);
+            }
+            return true;
+        }
+    }
 }
 ?>

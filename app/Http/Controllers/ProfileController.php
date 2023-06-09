@@ -6,7 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\PatientSchedule;
+use App\Models\PatientTransactionUploadedFiles;
 use App\Models\PatientTransaction;
+use App\Service\SmsService;
+use App\Service\MailService;
+
 class ProfileController extends Controller
 {
     /**
@@ -28,6 +32,41 @@ class ProfileController extends Controller
 
     public function change_password(){
         return view('profile.change_password');
+    }
+
+    public function upload_sign_docs(Request $request)
+    {
+        if ($request->hasFile('files')) {
+            $uploadedFiles = $request->file('files');
+            $transaction_id = $request->transaction_id;
+            foreach ($uploadedFiles as $file) {
+                $patientTransactionUploadedFilesObj = new PatientTransactionUploadedFiles();
+
+                //set the file name
+                $fileName = $file->getClientOriginalName();
+
+                //move the file into the desired folder
+                $file->move(public_path('uploads'), $fileName);
+
+                // Save the upload result into the database
+                $patientTransactionUploadedFilesObj->transaction_id = $transaction_id;
+                $patientTransactionUploadedFilesObj->files = $fileName;
+                $patientTransactionUploadedFilesObj->save();
+
+                PatientTransaction::query()->where('id', $transaction_id)->update(['status' => config('const.status_code.Signed')]);
+
+                $sms_service = new SmsService();
+                $sms_service->sendSignedSMS($transaction_id);
+
+                // $mail_service = new MailService();
+                // $mail_service->sendSignedMail($transaction_id);
+            }
+            return redirect()->back()->with('flash_success', 'Your have uploaded docs successfully.');
+        } else {
+            return redirect()->back()->with('flash_error', 'Please choose files');
+        }
+
+
     }
 
     /**
