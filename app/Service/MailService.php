@@ -1,34 +1,41 @@
 <?php
 
 namespace App\Service;
-use Twilio\Rest\Client;
 use Exception;
 use App\Models\PatientTransaction;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\SignedAlertEmail;
 
 class MailService{
 
     public function __construct(){
     }
 
-    public function sendSignedMail($transaction_id)
+    public function sendSignedMail($transaction_id, $filename)
     {
         $transaction_record = PatientTransaction::find($transaction_id);
         if ($transaction_record){
+            $patient_user = User::find($transaction_record->patient_id);
+            $mailData = [
+                'name' => $patient_user->name,
+                'email' => $patient_user->email,
+                'phone' => $patient_user->phone,
+                'filename' => $filename
+            ];
 
             $offic_user = User::find($transaction_record->office_id);
             $attorney_user = User::find($transaction_record->attorney_id);
             $doctor_user = User::find($transaction_record->doctor_id);
             try{
-                if ($offic_user && $offic_user->phone){
-
+                if ($offic_user && $offic_user->email){
+                    Mail::to($offic_user->email)->send(new SignedAlertEmail($mailData));
                 }
-                if ($attorney_user && $attorney_user->phone){
-
+                if ($attorney_user && $attorney_user->email){
+                    Mail::to($attorney_user->email)->send(new SignedAlertEmail($mailData));
                 }
-                if ($doctor_user && $doctor_user->phone){
-
+                if ($doctor_user && $doctor_user->email){
+                    Mail::to($doctor_user->email)->send(new SignedAlertEmail($mailData));
                 }
             } catch (Exception $e) {
                 // Error occurred

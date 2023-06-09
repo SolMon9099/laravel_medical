@@ -58,8 +58,8 @@ class ProfileController extends Controller
                 $sms_service = new SmsService();
                 $sms_service->sendSignedSMS($transaction_id);
 
-                // $mail_service = new MailService();
-                // $mail_service->sendSignedMail($transaction_id);
+                $mail_service = new MailService();
+                $mail_service->sendSignedMail($transaction_id, $fileName);
             }
             return redirect()->back()->with('flash_success', 'Your have uploaded docs successfully.');
         } else {

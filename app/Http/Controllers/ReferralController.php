@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\PatientTransactionEmail;
 use App\Mail\WelcomeEmail;
 use App\Models\Clinic;
 use App\Models\ClinicDoctor;
@@ -17,6 +16,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Service\SmsService;
+use App\Service\MailService;
 
 class ReferralController extends Controller
 {
@@ -438,6 +438,9 @@ class ReferralController extends Controller
                         PatientTransaction::query()->where('id', $id)->update(['status' => config('const.status_code.Signed')]);
                         $sms_service = new SmsService();
                         $sms_service->sendSignedSMS($id);
+
+                        $mail_service = new MailService();
+                        $mail_service->sendSignedMail($id, $fileName);
                     }
                 }
                 return back()->with('flash_success', 'The sign document is uploaded successfully');
