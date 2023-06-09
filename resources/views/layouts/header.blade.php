@@ -24,7 +24,7 @@
                     </a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{route('profiles.change_password')}}">
-                        <i class="me-50" data-feather="user"></i> Set Password
+                        <i class="me-50" data-feather="lock"></i> Set Password
                     </a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{ route('logout') }}"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

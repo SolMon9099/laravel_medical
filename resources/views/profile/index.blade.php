@@ -28,7 +28,7 @@
                             </div>
                             <div class="col-12 col-sm-6 mb-1">
                                 <label class="form-label" for="date_of_birth">Date of Birth</label>
-                                <input type="date" class="form-control flatpickr_dates" id="date_of_birth" name="date_of_birth" placeholder=""
+                                <input type="text" class="form-control flatpickr_dates" id="date_of_birth" name="date_of_birth" placeholder=""
                                     value="{{Auth::user()->date_of_birth}}" data-msg="Please enter your birthday"/>
                             </div>
                             <div class="col-12 col-sm-6 mb-1">
@@ -86,5 +86,14 @@
     <script src="{{ asset('app-assets/vendors/js/forms/cleave/addons/cleave-phone.us.js') }}"></script>
     <script src="{{ asset('app-assets/vendors/js/file-uploaders/dropzone.min.js') }}"></script>
     <script src="{{ asset('app-assets/js/scripts/pages/page-account-settings-account.js') }}"></script>
+
+    <script>
+        $(document).ready(function() {
+            var flatpickrInstance = flatpickr(".flatpickr_dates", {
+                altInput: true,
+                allowInput: true
+            });
+        });
+    </script>
 @endsection
 

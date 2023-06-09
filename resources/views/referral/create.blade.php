@@ -427,6 +427,8 @@
 
         //Birthday
         var flatpickrInstance = flatpickr(".flatpickr_dates", {
+            altInput: true,
+            allowInput: true
         });
     });
 
