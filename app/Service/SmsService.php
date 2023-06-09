@@ -8,11 +8,11 @@ use App\Models\User;
 
 class SmsService{
     private $account_sid  = 'AC239d97aee1e786d1bccbb8082cff2f9b';
-    private $auth_token  = '5d3ccd2a345d21fd9eafcc05233c90bd';
+    private $auth_token  = '0ff53deee09381439b921007eecb128a';
     private $twilio_number   = '+18667166761';
     public function __construct(){
         $this->account_sid = env('TWILIO_ACCOUNT_SID', 'AC239d97aee1e786d1bccbb8082cff2f9b');
-        $this->auth_token = env('TWILIO_AUTH_TOKEN', '5d3ccd2a345d21fd9eafcc05233c90bd');
+        $this->auth_token = env('TWILIO_AUTH_TOKEN', '0ff53deee09381439b921007eecb128a');
         $this->twilio_number = env('TWILIO_PHONE_NUMBER', '+18667166761');
     }
 
