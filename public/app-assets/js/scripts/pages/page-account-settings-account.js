@@ -68,7 +68,7 @@ $(function () {
         }
       });
       $this.on('submit', function (e) {
-        e.preventDefault();
+        // e.preventDefault();
       });
     });
   }
