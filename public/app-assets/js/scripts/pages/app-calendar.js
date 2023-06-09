@@ -363,6 +363,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
     },
+    validRange:function(nowDate){
+        console.log('now', nowDate);
+        return {
+            start:nowDate,
+            end:'9999-12-31'
+        }
+    },
     datesSet: function () {
       modifyToggler();
     },
