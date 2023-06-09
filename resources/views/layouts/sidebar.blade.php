@@ -80,9 +80,9 @@
                 </a>
             </li>
             <li class="nav-item @if(request()->is('profiles*')) active @endif">
-                <a class="d-flex align-items-center" href="{{ route('profiles.index') }}">
+                <a class="d-flex align-items-center" href="{{ route('profiles.patient_transaction') }}">
                     <i data-feather="copy"></i>
-                    <span class="menu-title text-truncate">Profile</span>
+                    <span class="menu-title text-truncate">Transactions</span>
                 </a>
             </li>
             @endrole

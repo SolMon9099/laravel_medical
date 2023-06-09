@@ -40,7 +40,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::group(['prefix' => 'profiles'], function () {
         Route::get('/', [ProfileController::class, 'index'])->name('profiles.index');
         Route::post('/store', [ProfileController::class, 'store'])->name('profiles.store');
+        Route::post('/store_password', [ProfileController::class, 'store_password'])->name('profiles.store_password');
         Route::get('/change_password', [ProfileController::class, 'change_password'])->name('profiles.change_password');
+        Route::get('/patient_transaction', [ProfileController::class, 'patient_transaction'])->name('profiles.patient_transaction');
     });
 
     Route::resource('clinics', ClinicController::class)->middleware('role:admin');

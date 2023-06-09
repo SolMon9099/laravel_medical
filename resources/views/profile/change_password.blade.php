@@ -18,7 +18,7 @@
                 </div>
 
                 <div class="card-body">
-                    <form action="{{ route('profiles.store') }}" method="POST" class="row gy-1 pt-75 editPasswordForm">
+                    <form action="{{ route('profiles.store_password') }}" method="POST" class="row gy-1 pt-75 editPasswordForm">
                         @csrf
                         <div class="col-12">
                             <label class="form-label" for="modalEditUserName">Current Password</label>

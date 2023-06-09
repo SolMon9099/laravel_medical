@@ -14,9 +14,13 @@ class ProfileController extends Controller
      */
     public function index()
     {
+        return view('profile.index');
+    }
+
+    public function patient_transaction(){
         $transaction_data = PatientTransaction::with(['files', 'attorney', 'doctor'])->where('patient_id', auth()->user()->id)->get()->all();
         $schedule_data = PatientSchedule::query()->where('patient_id', auth()->user()->id)->get()->all();
-        return view('profile.index')->with([
+        return view('profile.patient_transaction')->with([
             'transaction_data' => $transaction_data,
             'schedule_data' => $schedule_data
         ]);
@@ -39,7 +43,23 @@ class ProfileController extends Controller
      */
     public function store(Request $request)
     {
-         // Verify the old password
+        $user = Auth::user();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->date_of_birth =date('Y-m-d', strtotime($request->date_of_birth));
+        $user->address = $request->address;
+        $user->address_line2 = isset($request->address_line2) ? $request->address_line2 : null;
+        $user->city = $request->city;
+        $user->state = $request->state;
+        $user->postal = $request->postal;
+        $user->save();
+        return redirect()->back()->with('flash_success', 'Your profile has been updated.');
+    }
+
+    public function store_password(Request $request)
+    {
+        // Verify the old password
         $user = Auth::user();
         $isPasswordValid = Hash::check($request->current_password, $user->password);
 

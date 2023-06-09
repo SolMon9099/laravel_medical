@@ -43,7 +43,7 @@
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="patient_name">Patient Name</label>
                                 @if($is_pending)
-                                    <input type="text" id="patient_name" name="patient_name" class="form-control"  value= "{{ $data->patient->name}}" />
+                                    <input type="text" id="patient_name----" name="patient_name" class="form-control"  value= "{{ $data->patient->name}}" />
                                 @else
                                     <input disabled type="text" id="patient_name" name="patient_name" class="form-control"  value= "{{ $data->patient->name}}" />
                                 @endif

@@ -1,138 +1,90 @@
 @extends('layouts.master')
 
 @section('title', 'Profile')
-<?php
-    $schedule_object = [];
-    foreach($schedule_data as $sch_item){
-        $schedule_object[$sch_item->patient_transaction_id ] = $sch_item;
-    }
-?>
+
+@section('page-style')
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/vendors/css/pickers/flatpickr/flatpickr.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/plugins/forms/pickers/form-flat-pickr.css') }}">
+    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/plugins/forms/form-file-uploader.css') }}">   --}}
+@endsection
+
 @section('content')
 <section>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-12">
             <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">Patient Profile</h4>
+                <div class="card-header border-bottom">
+                    <h4 class="card-title">Profile Details</h4>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        @include('layouts.error')
-                    </div>
-                </div>
-                <div class="content-body">
-                    <div id="user-profile">
-                        <!-- profile info section -->
-                        <section id="profile-info">
-                            <div class="row">
-                                <!-- left profile info section -->
-                                <div class="col-lg-3 col-12 order-2 order-lg-1">
-                                    <!-- about -->
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h3 class="sub-title">About</h3>
-                                            <div class="mt-2">
-                                                <h5 class="mb-75">Name:</h5>
-                                                <p class="card-text">{{Auth::user()->name}}</p>
-                                            </div>
-                                            <div class="mt-2">
-                                                <h5 class="mb-75">Gender:</h5>
-                                                <p class="card-text">{{Auth::user()->gender}}</p>
-                                            </div>
-                                            <div class="mt-2">
-                                                <h5 class="mb-75">Email:</h5>
-                                                <p class="card-text">{{Auth::user()->email}}</p>
-                                            </div>
-                                            <div class="mt-2">
-                                                <h5 class="mb-75">Phone:</h5>
-                                                <p class="card-text">{{Auth::user()->phone}}</p>
-                                            </div>
-                                            <div class="mt-2">
-                                                <h5 class="mb-75">Address:</h5>
-                                                <p class="card-text">{{Auth::user()->address. (Auth::user()->address_line2 != null? ', '. Auth::user()->address_line2:'' )}}, {{Auth::user()->city}}, {{Auth::user()->state}}, {{Auth::user()->postal}}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/ about -->
-                                </div>
-                                <!--/ left profile info section -->
-
-                                <!-- center profile info section -->
-                                <div class="col-lg-9 col-12 order-1 order-lg-2">
-                                    <!-- post 1 -->
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h3 class="sub-title">Referal</h3>
-                                            <div class="table-responsive">
-                                                <table class="referral-table table">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>No</th>
-                                                            <th>Date</th>
-                                                            <th>Attorney Name</th>
-                                                            <th>Doctor Name</th>
-                                                            <th>Status</th>
-                                                            <th>Schedule</th>
-                                                            <th>Signed doc</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($transaction_data as $key=>$value)
-                                                            <tr>
-                                                                <td>{{++$key}}</td>
-                                                                <td>{{$value->referral_date}}</td>
-                                                                <td>{{$value->attorney->name}}</td>
-                                                                <td>{{$value->doctor->name}}</td>
-                                                                <td>
-                                                                    <span class="text-primary">{{config('const.status')[$value->status]}}</span>
-                                                                </td>
-                                                                <td>
-                                                                    @if(isset($schedule_object[$value->id]))
-                                                                        <div>{{date('m/d/y H:i', strtotime($schedule_object[$value->id]->start_date))}} ～ {{date('H:i', strtotime($schedule_object[$value->id]->end_date))}}</div>
-                                                                        <div>{{$schedule_object[$value->id]->title}}</div>
-                                                                        @if ($schedule_object[$value->id]->description)
-                                                                            <div>{{$schedule_object[$value->id]->description}}</div>
-                                                                        @endif
-                                                                    @endif
-                                                                </td>
-                                                                <td>
-                                                                    @if(isset($value->files) && count($value->files) > 0)
-                                                                        @foreach ($value->files as $val)
-                                                                            <div><a href="{{ asset('uploads/'.$val->files) }}">{{$val->files}}</a></div>
-                                                                        @endforeach
-                                                                    @else
-                                                                        {{-- <input type="file" name="files[]" accept="application/pdf"/> --}}
-                                                                        <button>Upload Docs</button>
-                                                                    @endif
-                                                                </td>
-
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <!--/ comments -->
-                                        </div>
-                                    </div>
-                                    <!--/ post 1 -->
-                                </div>
-                                <!--/ center profile info section -->
-
+                <div class="card-body py-2 my-25">
+                    <!-- form -->
+                    <form class="validate-form mt-2 pt-50" action="{{ route('profiles.store') }}" method="POST">
+                        @csrf
+                        <div class="row">
+                            <div class="col-12 col-sm-6 mb-1">
+                                <label class="form-label" for="name">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Your Name"
+                                    value="{{Auth::user()->name}}" data-msg="Please enter  your name" />
                             </div>
-                                <!-- reload button -->
-                                {{-- <div class="row">
-                                    <div class="col-12 text-center">
-                                        <button type="button" class="btn btn-sm btn-primary block-element border-0 mb-1">Load More</button>
-                                    </div>
-                                </div> --}}
-                                <!--/ reload button -->
-                        </section>
-                        <!--/ profile info section -->
-                    </div>
+                            <div class="col-12 col-sm-6 mb-1">
+                                <label class="form-label" for="date_of_birth">Date of Birth</label>
+                                <input type="date" class="form-control flatpickr_dates" id="date_of_birth" name="date_of_birth" placeholder=""
+                                    value="{{Auth::user()->date_of_birth}}" data-msg="Please enter your birthday"/>
+                            </div>
+                            <div class="col-12 col-sm-6 mb-1">
+                                <label class="form-label" for="accountEmail">Email</label>
+                                <input type="email" class="form-control" id="accountEmail" name="email" placeholder="Email"
+                                    value="{{Auth::user()->email}}" />
+                            </div>
+                            <div class="col-12 col-sm-6 mb-1">
+                                <label class="form-label" for="accountPhoneNumber">Phone Number</label>
+                                <input type="text" class="form-control account-number-mask" id="accountPhoneNumber" name="phone" placeholder="Phone Number"
+                                    value="{{Auth::user()->phone}}" data-msg="Please enter  your phone number"/>
+                            </div>
+                            <div class="col-12 col-sm-6 mb-1">
+                                <label class="form-label" for="accountAddress">Address</label>
+                                <input type="text" class="form-control" id="accountAddress" name="address" placeholder="Your Address"
+                                    value="{{Auth::user()->address}}" data-msg="Please enter your address" />
+                            </div>
+                            <div class="col-12 col-sm-6 mb-1">
+                                <label class="form-label" for="accountAddress2">Address Line2</label>
+                                <input type="text" class="form-control" id="accountAddress2"
+                                    name="address_line2" placeholder="Your Address2"
+                                    value="{{Auth::user()->address_line2}}" />
+                            </div>
+                            <div class="col-12 col-sm-6 mb-1">
+                                <label class="form-label" for="accountCity">City</label>
+                                <input type="text" class="form-control" id="accountCity" name="city" placeholder="City"
+                                    value="{{Auth::user()->city}}" data-msg="Please enter your city" />
+                            </div>
+                            <div class="col-12 col-sm-6 mb-1">
+                                <label class="form-label" for="accountState">State/Province</label>
+                                <input type="text" class="form-control" id="accountState" name="state" placeholder="State/Province"
+                                    value="{{Auth::user()->state}}" data-msg="Please enter your State" />
+                            </div>
+                            <div class="col-12 col-sm-6 mb-1">
+                                <label class="form-label" for="accountZipCode">Postal/Zip Code</label>
+                                <input type="text" class="form-control account-zip-code" id="accountZipCode" name="postal" placeholder="Postal/Zip Code" maxlength="6"
+                                    value="{{Auth::user()->postal}}" data-msg="Please enter your Postal"/>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary mt-1 me-1">Save changes</button>
+                                <button type="reset" class="btn btn-outline-secondary mt-1">Discard</button>
+                            </div>
+                        </div>
+                    </form>
+                    <!--/ form -->
                 </div>
             </div>
         </div>
     </div>
 </section>
+@endsection
+@section('page-script')
+    <script src="{{ asset('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/forms/cleave/cleave.min.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/forms/cleave/addons/cleave-phone.us.js') }}"></script>
+    <script src="{{ asset('app-assets/vendors/js/file-uploaders/dropzone.min.js') }}"></script>
+    <script src="{{ asset('app-assets/js/scripts/pages/page-account-settings-account.js') }}"></script>
 @endsection
 

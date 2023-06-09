@@ -19,6 +19,10 @@
                         </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-user">
+                    <a class="dropdown-item" href="{{route('profiles.index')}}">
+                        <i class="me-50" data-feather="user"></i> Account
+                    </a>
+                    <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{route('profiles.change_password')}}">
                         <i class="me-50" data-feather="user"></i> Set Password
                     </a>
