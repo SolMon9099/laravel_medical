@@ -82,12 +82,21 @@ class SmsService{
             try{
                 if ($offic_user && $offic_user->phone){
                     $res = $this->sendSMS($message, $offic_user->phone);
+                    if ($res !== true){
+                        var_dump($res);exit;
+                    }
                 }
                 if ($attorney_user && $attorney_user->phone){
                     $res = $this->sendSMS($message, $attorney_user->phone);
+                    if ($res !== true){
+                        var_dump($res);exit;
+                    }
                 }
                 if ($doctor_user && $doctor_user->phone){
                     $res = $this->sendSMS($message, $doctor_user->phone);
+                    if ($res !== true){
+                        var_dump($res);exit;
+                    }
                 }
             } catch (Exception $e) {
                 // Error occurred

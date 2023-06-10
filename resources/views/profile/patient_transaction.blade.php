@@ -83,7 +83,7 @@
                                                                 <td>{{$value->attorney->name}}</td>
                                                                 <td>{{$value->doctor->name}}</td>
                                                                 <td>
-                                                                    <span class="text-primary">{{config('const.status')[$value->status]}}</span>
+                                                                    <span class="{{config('const.status_class')[$value->status]}}">{{config('const.status')[$value->status]}}</span>
                                                                 </td>
                                                                 <td>
                                                                     @if(isset($schedule_object[$value->id]))
@@ -100,7 +100,7 @@
                                                                 <td>
                                                                     @if(isset($value->files) && count($value->files) > 0)
                                                                         @foreach ($value->files as $val)
-                                                                            <div><a href="{{ asset('uploads/'.$val->files) }}">{{$val->files}}</a></div>
+                                                                            <div><a target="_blank" href="{{ asset('uploads/'.$val->files) }}">{{$val->files}}</a></div>
                                                                         @endforeach
                                                                     @else
                                                                         @if($value->status == config('const.status_code.Booked'))
@@ -108,7 +108,7 @@
                                                                                 @csrf
                                                                                 <input type="hidden" value = {{$value->id}} name="transaction_id" />
                                                                                 <input type="file" required name="files[]" accept="application/pdf" /><br/>
-                                                                                <button style="margin-top:10px;" type="submit" class="btn btn-sm btn-outline-secondary waves-effect">Upload Docs</button>
+                                                                                <button style="margin-top:10px;" type="submit" class="btn btn-sm btn-primary waves-effect">Upload Docs</button>
                                                                             </form>
                                                                         @endif
                                                                     @endif

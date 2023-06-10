@@ -32,6 +32,10 @@
                                     <input disabled type="text" id="referral_date" name="referral_date" value="{{$data->referral_date}}" class="form-control flatpickr_date" />
                                 @endif
                             </div>
+                            <div class="mb-1 col-md-3">
+                                <label class="form-label" for="patient_name">Status</label>
+                                <div class="{{config('const.status_class')[$data->status]}}">{{config('const.status')[$data->status]}}</div>
+                            </div>
                         </div>
                     </div>
 
@@ -689,7 +693,7 @@
                                         @foreach ($data->files as $val)
                                             <tr>
                                                 <td>
-                                                    <a href="{{ asset('uploads/'.$val->files) }}">{{$val->files}}</a>
+                                                    <a target="_blank" href="{{ asset('uploads/'.$val->files) }}">{{$val->files}}</a>
                                                 </td>
                                                 {{-- <td>
                                                     <a href="#" class="text-danger btn_trash_file" id="trash_{{$val->id}}"><i data-feather='trash-2'></i></a>

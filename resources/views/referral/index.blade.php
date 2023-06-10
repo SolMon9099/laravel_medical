@@ -28,7 +28,7 @@
                         <td>{{$value->attorney->name}}</td>
                         <td>{{$value->doctor->name}}</td>
                         <td>
-                            <span class="text-primary">{{config('const.status')[$value->status]}}</span>
+                            <span class="{{config('const.status_class')[$value->status]}}">{{config('const.status')[$value->status]}}</span>
                         </td>
                         <td>
                             <div class="d-inline-flex">

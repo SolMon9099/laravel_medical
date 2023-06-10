@@ -84,6 +84,7 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $user->name = $request->name;
+        $user->gender = $request->gender;
         $user->email = $request->email;
         $user->phone = $request->phone;
         $user->date_of_birth =date('Y-m-d', strtotime($request->date_of_birth));

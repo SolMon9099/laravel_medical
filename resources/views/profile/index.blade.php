@@ -27,6 +27,21 @@
                                     value="{{Auth::user()->name}}" data-msg="Please enter  your name" />
                             </div>
                             <div class="col-12 col-sm-6 mb-1">
+                                <label class="form-label" for="gender">Gender</label>
+                                <div class="demo-inline-spacing">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="inlineRadio1" value="male"
+                                        @if (Auth::user()->gender == 'male') checked @endif />
+                                        <label class="form-check-label" for="inlineRadio1">Male</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gender" id="inlineRadio2" value="female"
+                                        @if (Auth::user()->gender == 'female') checked @endif />
+                                        <label class="form-check-label" for="inlineRadio2">Female</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 mb-1">
                                 <label class="form-label" for="date_of_birth">Date of Birth</label>
                                 <input type="text" class="form-control flatpickr_dates" id="date_of_birth" name="date_of_birth" placeholder=""
                                     value="{{Auth::user()->date_of_birth}}" data-msg="Please enter your birthday"/>
