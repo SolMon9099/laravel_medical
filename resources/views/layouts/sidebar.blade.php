@@ -86,6 +86,34 @@
                 </a>
             </li>
             @endrole
+            @role(['doctor'])
+            <li class="nav-item @if(request()->is('home')) active @endif">
+                <a class="d-flex align-items-center" href="{{ route('home') }}">
+                    <i data-feather="home"></i>
+                    <span class="menu-title text-truncate">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item @if(request()->is('profiles/patient_transaction')) active @endif">
+                <a class="d-flex align-items-center" href="{{ route('profiles.patient_transaction') }}">
+                    <i data-feather="copy"></i>
+                    <span class="menu-title text-truncate">Transactions</span>
+                </a>
+            </li>
+            @endrole
+            @role(['attorney'])
+            <li class="nav-item @if(request()->is('home')) active @endif">
+                <a class="d-flex align-items-center" href="{{ route('home') }}">
+                    <i data-feather="home"></i>
+                    <span class="menu-title text-truncate">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item @if(request()->is('profiles/patient_transaction')) active @endif">
+                <a class="d-flex align-items-center" href="{{ route('profiles.patient_transaction') }}">
+                    <i data-feather="copy"></i>
+                    <span class="menu-title text-truncate">Transactions</span>
+                </a>
+            </li>
+            @endrole
         </ul>
     </div>
 </div>

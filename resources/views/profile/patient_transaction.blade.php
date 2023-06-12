@@ -1,12 +1,6 @@
 @extends('layouts.master')
 
 @section('title', 'Profile')
-<?php
-    $schedule_object = [];
-    foreach($schedule_data as $sch_item){
-        $schedule_object[$sch_item->patient_transaction_id ] = $sch_item;
-    }
-?>
 @section('content')
 <section>
     <div class="row">
@@ -25,38 +19,6 @@
                         <!-- profile info section -->
                         <section id="profile-info">
                             <div class="row">
-                                <!-- left profile info section -->
-                                {{-- <div class="col-lg-3 col-12 order-2 order-lg-1">
-                                    <!-- about -->
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h3 class="sub-title">About</h3>
-                                            <div class="mt-2">
-                                                <h5 class="mb-75">Name:</h5>
-                                                <p class="card-text">{{Auth::user()->name}}</p>
-                                            </div>
-                                            <div class="mt-2">
-                                                <h5 class="mb-75">Gender:</h5>
-                                                <p class="card-text">{{Auth::user()->gender}}</p>
-                                            </div>
-                                            <div class="mt-2">
-                                                <h5 class="mb-75">Email:</h5>
-                                                <p class="card-text">{{Auth::user()->email}}</p>
-                                            </div>
-                                            <div class="mt-2">
-                                                <h5 class="mb-75">Phone:</h5>
-                                                <p class="card-text">{{Auth::user()->phone}}</p>
-                                            </div>
-                                            <div class="mt-2">
-                                                <h5 class="mb-75">Address:</h5>
-                                                <p class="card-text">{{Auth::user()->address. (Auth::user()->address_line2 != null? ', '. Auth::user()->address_line2:'' )}}, {{Auth::user()->city}}, {{Auth::user()->state}}, {{Auth::user()->postal}}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--/ about -->
-                                </div> --}}
-                                <!--/ left profile info section -->
-
                                 <!-- center profile info section -->
                                 <div class="col-lg-12 col-12 order-1 order-lg-2">
                                     <!-- post 1 -->
@@ -68,6 +30,7 @@
                                                         <tr>
                                                             <th>No</th>
                                                             <th>Date</th>
+                                                            <th>Patient Name</th>
                                                             <th>Attorney Name</th>
                                                             <th>Doctor Name</th>
                                                             <th>Status</th>
@@ -80,19 +43,20 @@
                                                             <tr>
                                                                 <td>{{++$key}}</td>
                                                                 <td>{{$value->referral_date}}</td>
+                                                                <td>{{$value->patient->name}}</td>
                                                                 <td>{{$value->attorney->name}}</td>
                                                                 <td>{{$value->doctor->name}}</td>
                                                                 <td>
                                                                     <span class="{{config('const.status_class')[$value->status]}}">{{config('const.status')[$value->status]}}</span>
                                                                 </td>
                                                                 <td>
-                                                                    @if(isset($schedule_object[$value->id]))
-                                                                        <div>{{date('m/d/y H:i', strtotime($schedule_object[$value->id]->start_date))}} ～ {{date('H:i', strtotime($schedule_object[$value->id]->end_date))}}</div>
-                                                                        <div>{{$schedule_object[$value->id]->title}}</div>
-                                                                        @if ($schedule_object[$value->id]->description)
-                                                                            <div>{{$schedule_object[$value->id]->description}}</div>
+                                                                    @if(isset($value->schedule))
+                                                                        <div>{{date('m/d/y H:i', strtotime($value->schedule->start_date))}} ～ {{date('H:i', strtotime($value->schedule->end_date))}}</div>
+                                                                        <div>{{$value->schedule->title}}</div>
+                                                                        @if ($value->schedule->description)
+                                                                            <div>{{$value->schedule->description}}</div>
                                                                         @endif
-                                                                        @if(strtotime("now") > strtotime($schedule_object[$value->id]->start_date))
+                                                                        @if(strtotime("now") > strtotime($value->schedule->start_date))
                                                                             <div class="text-info">Expired</div>
                                                                         @endif
                                                                     @endif

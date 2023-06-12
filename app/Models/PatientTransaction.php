@@ -30,5 +30,8 @@ class PatientTransaction extends Model
         return $this->hasOne(User::class,'id', 'doctor_id');
     }
 
-   
+    public function schedule()
+    {
+        return $this->hasOne(PatientSchedule::class,'patient_transaction_id', 'id');
+    }
 }

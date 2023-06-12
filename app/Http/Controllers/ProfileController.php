@@ -22,11 +22,27 @@ class ProfileController extends Controller
     }
 
     public function patient_transaction(){
-        $transaction_data = PatientTransaction::with(['files', 'attorney', 'doctor'])->where('patient_id', auth()->user()->id)->get()->all();
-        $schedule_data = PatientSchedule::query()->where('patient_id', auth()->user()->id)->get()->all();
+        switch(auth()->user()->roles[0]->id){
+            case config('const.role_codes')['office manager']:
+                $transaction_data = PatientTransaction::with(['patient', 'files', 'attorney', 'doctor', 'schedule'])->where('office_id', auth()->user()->id)->get()->all();
+                break;
+            case config('const.role_codes')['patient']:
+                $transaction_data = PatientTransaction::with(['patient','files', 'attorney', 'doctor', 'schedule'])->where('patient_id', auth()->user()->id)->get()->all();
+                break;
+            case config('const.role_codes')['doctor']:
+                $transaction_data = PatientTransaction::with(['patient','files', 'attorney', 'doctor', 'schedule'])->where('doctor_id', auth()->user()->id)->get()->all();
+                break;
+            case config('const.role_codes')['attorney']:
+                $transaction_data = PatientTransaction::with(['patient','files', 'attorney', 'doctor', 'schedule'])->where('attorney_id', auth()->user()->id)->get()->all();
+                break;
+            case config('const.role_codes')['funding company']:
+                break;
+        }
+
+
         return view('profile.patient_transaction')->with([
             'transaction_data' => $transaction_data,
-            'schedule_data' => $schedule_data
+            // 'schedule_data' => $schedule_data
         ]);
     }
 
