@@ -15,7 +15,8 @@ class Clinic extends Model
         'clinic_adderss_line2',
         'clinic_city',
         'clinic_state',
-        'clinic_postal'
+        'clinic_postal',
+        'technician_id'
     ];
 
     public function doctors()

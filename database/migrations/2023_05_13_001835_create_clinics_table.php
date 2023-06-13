@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('clinic_city');
             $table->string('clinic_state');
             $table->string('clinic_postal');
+            $table->unsignedBigInteger('technician_id')->nullable();
             $table->timestamps();
         });
     }

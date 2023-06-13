@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Clinic;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ClinicController extends Controller
@@ -10,10 +11,10 @@ class ClinicController extends Controller
 
     function __construct()
     {
-         $this->middleware('permission:clinic-list|clinic-create|clinic-edit|clinic-delete', ['only' => ['index','store']]);
-         $this->middleware('permission:clinic-create', ['only' => ['create','store']]);
-         $this->middleware('permission:clinic-edit', ['only' => ['edit','update']]);
-         $this->middleware('permission:clinic-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:clinic-list|clinic-create|clinic-edit|clinic-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:clinic-create', ['only' => ['create','store']]);
+        $this->middleware('permission:clinic-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:clinic-delete', ['only' => ['destroy']]);
     }
 
     /**
@@ -22,8 +23,12 @@ class ClinicController extends Controller
     public function index()
     {
         $data = Clinic::get();
-
-        return view('clinic.index', compact('data'));
+        $technicians = User::whereHas(
+            'roles', function($q){
+                $q->where('name', 'technician');
+            }
+        )->get()->all();
+        return view('clinic.index', compact('data', 'technicians'));
     }
 
     /**
@@ -82,7 +87,8 @@ class ClinicController extends Controller
             'clinic_adderss_line2' => '',
             'clinic_city' => 'required',
             'clinic_state' => 'required',
-            'clinic_postal' => 'required'
+            'clinic_postal' => 'required',
+            'technician_id' => '',
         ]);
 
         // Find the resource to be updated
