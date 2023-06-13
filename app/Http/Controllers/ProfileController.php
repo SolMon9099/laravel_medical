@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Clinic;
+use App\Models\ClinicDoctor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -23,6 +25,7 @@ class ProfileController extends Controller
     }
 
     public function patient_transaction(){
+        $transaction_data = array();
         switch(auth()->user()->roles[0]->id){
             case config('const.role_codes')['office manager']:
                 $transaction_data = PatientTransaction::with(['patient', 'files', 'result_files', 'attorney', 'doctor', 'schedule'])->where('office_id', auth()->user()->id)->get()->all();
@@ -36,7 +39,13 @@ class ProfileController extends Controller
             case config('const.role_codes')['attorney']:
                 $transaction_data = PatientTransaction::with(['patient','files','result_files', 'attorney', 'doctor', 'schedule'])->where('attorney_id', auth()->user()->id)->get()->all();
                 break;
+            case config('const.role_codes')['technician']:
+                $clinics = Clinic::query()->where('technician_id', auth()->user()->id)->pluck('id');
+                $doctors = ClinicDoctor::query()->whereIn('clinic_id', $clinics)->pluck('doctor_id');
+                $transaction_data = PatientTransaction::with(['patient','files','result_files', 'attorney', 'doctor', 'schedule'])->whereIn('doctor_id', $doctors)->get()->all();
+                break;
             case config('const.role_codes')['funding company']:
+                $transaction_data = PatientTransaction::with(['patient','files','result_files', 'attorney', 'doctor', 'schedule'])->get()->all();
                 break;
         }
 
@@ -83,6 +92,20 @@ class ProfileController extends Controller
             return redirect()->back()->with('flash_error', 'Please choose files');
         }
 
+    }
+
+    public function set_advanced_paid(Request $request)
+    {
+        $transaction_id = $request->transaction_id;
+        PatientTransaction::query()->where('id', $transaction_id)->update(['status' => config('const.status_code')['Advance Paid']]);
+        return redirect()->back()->with('flash_success', 'Checkmark as Advanced Paid successfully.');
+    }
+
+    public function set_settled(Request $request)
+    {
+        $transaction_id = $request->transaction_id;
+        PatientTransaction::query()->where('id', $transaction_id)->update(['status' => config('const.status_code')['Settled']]);
+        return redirect()->back()->with('flash_success', 'Checkmark as Settled successfully.');
     }
 
     public function upload_result_docs(Request $request)

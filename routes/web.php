@@ -45,6 +45,8 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/patient_transaction', [ProfileController::class, 'patient_transaction'])->name('profiles.patient_transaction');
         Route::post('/upload_sign_docs', [ProfileController::class, 'upload_sign_docs'])->name('profiles.upload_sign_docs');
         Route::post('/upload_result_docs', [ProfileController::class, 'upload_result_docs'])->name('profiles.upload_result_docs');
+        Route::post('/set_advanced_paid', [ProfileController::class, 'set_advanced_paid'])->name('profiles.set_advanced_paid');
+        Route::post('/set_settled', [ProfileController::class, 'set_settled'])->name('profiles.set_settled');
     });
 
     Route::resource('clinics', ClinicController::class)->middleware('role:admin');

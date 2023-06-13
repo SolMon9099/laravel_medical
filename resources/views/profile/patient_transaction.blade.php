@@ -37,6 +37,9 @@
                                                             <th>Schedule</th>
                                                             <th>Signed doc</th>
                                                             <th>Result</th>
+                                                            @if(Auth::user()->roles[0]->name == 'funding company')
+                                                            <th>Paid</th>
+                                                            @endif
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -84,7 +87,7 @@
                                                                             <div><a target="_blank" href="{{ asset('uploads/results/'.$val->result_file) }}">{{$val->result_file}}</a></div>
                                                                         @endforeach
                                                                     @else
-                                                                        @if($value->status == config('const.status_code.Signed') && Auth::user()->roles[0]->name == 'doctor')
+                                                                        @if($value->status == config('const.status_code.Signed') && (Auth::user()->roles[0]->name == 'doctor' || Auth::user()->roles[0]->name == 'technician'))
                                                                         <form action="{{route('profiles.upload_result_docs')}}" method="POST" enctype="multipart/form-data">
                                                                             @csrf
                                                                             <input type="hidden" value = {{$value->id}} name="transaction_id" />
@@ -93,8 +96,25 @@
                                                                         </form>
                                                                         @endif
                                                                     @endif
-
                                                                 </td>
+                                                                @if(Auth::user()->roles[0]->name == 'funding company')
+                                                                <td>
+                                                                    @if($value->status == config('const.status_code')['Test Done'])
+                                                                    <form action="{{route('profiles.set_advanced_paid')}}" method="POST" enctype="multipart/form-data">
+                                                                        @csrf
+                                                                        <input type="hidden" value = {{$value->id}} name="transaction_id" />
+                                                                        <button type="submit" class="btn btn-sm btn-primary waves-effect">Advance Paid</button>
+                                                                    </form>
+                                                                    @endif
+                                                                    @if($value->status == config('const.status_code')['Advance Paid'])
+                                                                    <form action="{{route('profiles.set_settled')}}" method="POST" enctype="multipart/form-data">
+                                                                        @csrf
+                                                                        <input type="hidden" value = {{$value->id}} name="transaction_id" />
+                                                                        <button type="submit" class="btn btn-sm btn-primary waves-effect">Settled</button>
+                                                                    </form>
+                                                                    @endif
+                                                                </td>
+                                                                @endif
                                                             </tr>
                                                         @endforeach
                                                     </tbody>

@@ -18,10 +18,11 @@
         ],
         'status_class' => [
             0 => 'text-primary',
-            1 => 'text-info',
-            2 => 'text-success',
-            3 => 'text-success',
-            4 => 'text-warning',
+            1 => '.text-secondary',
+            2 => 'text-warning',
+            3 => 'text-info',
+            4 => 'text-success',
+            5 => 'text-success',
         ],
         'roles' => [
             1 => 'office manager',
