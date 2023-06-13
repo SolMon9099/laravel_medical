@@ -4,13 +4,17 @@
             0 => 'Pending',
             1 => 'Booked',
             2 => 'Signed',
-            3 => 'Approved',
+            3 => 'Test Done',
+            4 => 'Advance Paid',
+            5 => 'Settled',
         ],
         'status_code' => [
             'Pending'  => 0,
             'Booked' => 1,
             'Signed' => 2,
-            'Approved' => 3,
+            'Test Done' => 3,
+            'Advance Paid' => 4,
+            'Settled' => 5,
         ],
         'status_class' => [
             0 => 'text-primary',
@@ -25,6 +29,7 @@
             3 => 'doctor',
             4 => 'attorney',
             5 => 'funding company',
+            6 => 'technician'
         ],
         'role_codes' => [
             'office manager' => 1,
@@ -32,6 +37,7 @@
             'doctor' => 3,
             'attorney' => 4,
             'funding company' => 5,
+            'technician' => 6
         ]
     ]
 ?>

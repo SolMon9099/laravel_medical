@@ -83,24 +83,72 @@ class SmsService{
                 if ($offic_user && $offic_user->phone){
                     $res = $this->sendSMS($message, $offic_user->phone);
                     if ($res !== true){
-                        var_dump($res);exit;
+                        var_dump($res);
                     }
                 }
                 if ($attorney_user && $attorney_user->phone){
                     $res = $this->sendSMS($message, $attorney_user->phone);
                     if ($res !== true){
-                        var_dump($res);exit;
+                        var_dump($res);
                     }
                 }
                 if ($doctor_user && $doctor_user->phone){
                     $res = $this->sendSMS($message, $doctor_user->phone);
                     if ($res !== true){
-                        var_dump($res);exit;
+                        var_dump($res);
                     }
                 }
             } catch (Exception $e) {
                 // Error occurred
-                var_dump($e->getMessage());exit;
+                var_dump($e->getMessage());
+                // return response()->json(['error' => $e->getMessage()], 500);
+            }
+            return true;
+        }
+    }
+
+    public function sendResultSMS($transaction_id, $fileName)
+    {
+        $transaction_record = PatientTransaction::find($transaction_id);
+        if ($transaction_record){
+            $message = "Patient Result is is uploaded\n";
+            $patient_user = User::find($transaction_record->patient_id);
+            $message .="Patient Name : ". $patient_user->name ."\n";
+            $message .="Patient Email : ". $patient_user->email ."\n";
+            $message .="Patient Phone : ". $patient_user->phone ."\n";
+            $message .="Result : ".public_path('uploads/results/'.$fileName);
+
+            $offic_user = User::find($transaction_record->office_id);
+            $attorney_user = User::find($transaction_record->attorney_id);
+            $doctor_user = User::find($transaction_record->doctor_id);
+            try{
+                if ($patient_user && $patient_user->phone){
+                    $res = $this->sendSMS($message, $patient_user->phone);
+                    if ($res !== true){
+                        var_dump($res);
+                    }
+                }
+                if ($offic_user && $offic_user->phone){
+                    $res = $this->sendSMS($message, $offic_user->phone);
+                    if ($res !== true){
+                        var_dump($res);
+                    }
+                }
+                if ($attorney_user && $attorney_user->phone){
+                    $res = $this->sendSMS($message, $attorney_user->phone);
+                    if ($res !== true){
+                        var_dump($res);
+                    }
+                }
+                if ($doctor_user && $doctor_user->phone){
+                    $res = $this->sendSMS($message, $doctor_user->phone);
+                    if ($res !== true){
+                        var_dump($res);
+                    }
+                }
+            } catch (Exception $e) {
+                // Error occurred
+                var_dump($e->getMessage());
                 // return response()->json(['error' => $e->getMessage()], 500);
             }
             return true;

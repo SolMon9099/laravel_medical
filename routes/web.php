@@ -44,6 +44,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/change_password', [ProfileController::class, 'change_password'])->name('profiles.change_password');
         Route::get('/patient_transaction', [ProfileController::class, 'patient_transaction'])->name('profiles.patient_transaction');
         Route::post('/upload_sign_docs', [ProfileController::class, 'upload_sign_docs'])->name('profiles.upload_sign_docs');
+        Route::post('/upload_result_docs', [ProfileController::class, 'upload_result_docs'])->name('profiles.upload_result_docs');
     });
 
     Route::resource('clinics', ClinicController::class)->middleware('role:admin');

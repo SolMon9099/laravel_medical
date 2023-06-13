@@ -12,7 +12,12 @@ class PatientTransaction extends Model
 
     public function files()
     {
-       return $this->hasMany(PatientTransactionUploadedFiles::class, 'transaction_id', 'id');
+        return $this->hasMany(PatientTransactionUploadedFiles::class, 'transaction_id', 'id');
+    }
+
+    public function result_files()
+    {
+        return $this->hasMany(PatientResultFiles::class, 'transaction_id', 'id');
     }
 
     public function patient()

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\PatientSchedule;
 use App\Models\PatientTransactionUploadedFiles;
+use App\Models\PatientResultFiles;
 use App\Models\PatientTransaction;
 use App\Service\SmsService;
 use App\Service\MailService;
@@ -24,16 +25,16 @@ class ProfileController extends Controller
     public function patient_transaction(){
         switch(auth()->user()->roles[0]->id){
             case config('const.role_codes')['office manager']:
-                $transaction_data = PatientTransaction::with(['patient', 'files', 'attorney', 'doctor', 'schedule'])->where('office_id', auth()->user()->id)->get()->all();
+                $transaction_data = PatientTransaction::with(['patient', 'files', 'result_files', 'attorney', 'doctor', 'schedule'])->where('office_id', auth()->user()->id)->get()->all();
                 break;
             case config('const.role_codes')['patient']:
-                $transaction_data = PatientTransaction::with(['patient','files', 'attorney', 'doctor', 'schedule'])->where('patient_id', auth()->user()->id)->get()->all();
+                $transaction_data = PatientTransaction::with(['patient','files','result_files', 'attorney', 'doctor', 'schedule'])->where('patient_id', auth()->user()->id)->get()->all();
                 break;
             case config('const.role_codes')['doctor']:
-                $transaction_data = PatientTransaction::with(['patient','files', 'attorney', 'doctor', 'schedule'])->where('doctor_id', auth()->user()->id)->get()->all();
+                $transaction_data = PatientTransaction::with(['patient','files','result_files', 'attorney', 'doctor', 'schedule'])->where('doctor_id', auth()->user()->id)->get()->all();
                 break;
             case config('const.role_codes')['attorney']:
-                $transaction_data = PatientTransaction::with(['patient','files', 'attorney', 'doctor', 'schedule'])->where('attorney_id', auth()->user()->id)->get()->all();
+                $transaction_data = PatientTransaction::with(['patient','files','result_files', 'attorney', 'doctor', 'schedule'])->where('attorney_id', auth()->user()->id)->get()->all();
                 break;
             case config('const.role_codes')['funding company']:
                 break;
@@ -62,7 +63,7 @@ class ProfileController extends Controller
                 $fileName = $file->getClientOriginalName();
 
                 //move the file into the desired folder
-                $file->move(public_path('uploads'), $fileName);
+                $file->move(public_path('uploads/sign'), $fileName);
 
                 // Save the upload result into the database
                 $patientTransactionUploadedFilesObj->transaction_id = $transaction_id;
@@ -77,12 +78,44 @@ class ProfileController extends Controller
                 $mail_service = new MailService();
                 $mail_service->sendSignedMail($transaction_id, $fileName);
             }
-            return redirect()->back()->with('flash_success', 'Your have uploaded docs successfully.');
+            return redirect()->back()->with('flash_success', 'Your have uploaded signed docs successfully.');
         } else {
             return redirect()->back()->with('flash_error', 'Please choose files');
         }
 
+    }
 
+    public function upload_result_docs(Request $request)
+    {
+        if ($request->hasFile('result_files')) {
+            $uploadedFiles = $request->file('result_files');
+            $transaction_id = $request->transaction_id;
+            foreach ($uploadedFiles as $file) {
+                $patientResultUploadedFilesObj = new PatientResultFiles();
+
+                //set the file name
+                $fileName = $file->getClientOriginalName();
+
+                //move the file into the desired folder
+                $file->move(public_path('uploads/results'), $fileName);
+
+                // Save the upload result into the database
+                $patientResultUploadedFilesObj->transaction_id = $transaction_id;
+                $patientResultUploadedFilesObj->result_file = $fileName;
+                $patientResultUploadedFilesObj->save();
+
+                PatientTransaction::query()->where('id', $transaction_id)->update(['status' => config('const.status_code')['Test Done']]);
+
+                $sms_service = new SmsService();
+                $sms_service->sendResultSMS($transaction_id, $fileName);
+
+                $mail_service = new MailService();
+                $mail_service->sendResultMail($transaction_id, $fileName);
+            }
+            return redirect()->back()->with('flash_success', 'Your have uploaded result docs successfully.');
+        } else {
+            return redirect()->back()->with('flash_error', 'Please choose files');
+        }
     }
 
     /**

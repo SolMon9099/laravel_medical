@@ -251,7 +251,7 @@ class ReferralController extends Controller
                     $fileName = $file->getClientOriginalName();
 
                     //move the file into the desired folder
-                    $file->move(public_path('uploads'), $fileName);
+                    $file->move(public_path('uploads/sign'), $fileName);
 
                     // Save the upload result into the database
                     $patientTransactionUploadedFilesObj->transaction_id = $patientTransactionLatestID;
@@ -428,7 +428,7 @@ class ReferralController extends Controller
                         $fileName = $file->getClientOriginalName();
 
                         //move the file into the desired folder
-                        $file->move(public_path('uploads'), $fileName);
+                        $file->move(public_path('uploads/sign'), $fileName);
 
                         // Save the upload result into the database
                         $patientTransactionUploadedFilesObj->transaction_id = $id;
@@ -469,8 +469,8 @@ class ReferralController extends Controller
         $obj = PatientTransactionUploadedFiles::findorFail($id);
         $fileName = $obj->files;
 
-        if(File::exists(public_path('uploads/'.$fileName))){
-            File::delete(public_path('uploads/'.$fileName));
+        if(File::exists(public_path('uploads/sign/'.$fileName))){
+            File::delete(public_path('uploads/sign/'.$fileName));
         }
 
         $obj->delete();

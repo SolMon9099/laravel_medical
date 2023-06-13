@@ -30,12 +30,13 @@
                                                         <tr>
                                                             <th>No</th>
                                                             <th>Date</th>
-                                                            <th>Patient Name</th>
-                                                            <th>Attorney Name</th>
-                                                            <th>Doctor Name</th>
+                                                            <th>Patient</th>
+                                                            <th>Attorney</th>
+                                                            <th>Doctor</th>
                                                             <th>Status</th>
                                                             <th>Schedule</th>
                                                             <th>Signed doc</th>
+                                                            <th>Result</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -64,7 +65,7 @@
                                                                 <td>
                                                                     @if(isset($value->files) && count($value->files) > 0)
                                                                         @foreach ($value->files as $val)
-                                                                            <div><a target="_blank" href="{{ asset('uploads/'.$val->files) }}">{{$val->files}}</a></div>
+                                                                            <div><a target="_blank" href="{{ asset('uploads/sign/'.$val->files) }}">{{$val->files}}</a></div>
                                                                         @endforeach
                                                                     @else
                                                                         @if($value->status == config('const.status_code.Booked'))
@@ -77,6 +78,23 @@
                                                                         @endif
                                                                     @endif
                                                                 </td>
+                                                                <td>
+                                                                    @if(isset($value->result_files) && count($value->result_files) > 0)
+                                                                        @foreach ($value->result_files as $val)
+                                                                            <div><a target="_blank" href="{{ asset('uploads/results/'.$val->result_file) }}">{{$val->result_file}}</a></div>
+                                                                        @endforeach
+                                                                    @else
+                                                                        @if($value->status == config('const.status_code.Signed') && Auth::user()->roles[0]->name == 'doctor')
+                                                                        <form action="{{route('profiles.upload_result_docs')}}" method="POST" enctype="multipart/form-data">
+                                                                            @csrf
+                                                                            <input type="hidden" value = {{$value->id}} name="transaction_id" />
+                                                                            <input type="file" required name="result_files[]" accept="application/pdf" /><br/>
+                                                                            <button style="margin-top:10px;" type="submit" class="btn btn-sm btn-primary waves-effect">Upload Result</button>
+                                                                        </form>
+                                                                        @endif
+                                                                    @endif
+
+                                                                </td>
                                                             </tr>
                                                         @endforeach
                                                     </tbody>
@@ -88,15 +106,7 @@
                                     <!--/ post 1 -->
                                 </div>
                                 <!--/ center profile info section -->
-
                             </div>
-                                <!-- reload button -->
-                                {{-- <div class="row">
-                                    <div class="col-12 text-center">
-                                        <button type="button" class="btn btn-sm btn-primary block-element border-0 mb-1">Load More</button>
-                                    </div>
-                                </div> --}}
-                                <!--/ reload button -->
                         </section>
                         <!--/ profile info section -->
                     </div>

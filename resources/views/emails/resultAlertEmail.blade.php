@@ -10,7 +10,7 @@
       td,th,div,p,a,h1,h2,h3,h4,h5,h6 {font-family: "Segoe UI", sans-serif; mso-line-height-rule: exactly;}
     </style>
   <![endif]-->
-    <title>Signed Notification Email</title>
+    <title>Result Notification Email</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700" rel="stylesheet" media="screen">
     <style>
       .hover-underline:hover {
@@ -93,7 +93,7 @@
                   <table style="font-family: 'Montserrat',Arial,sans-serif; width: 100%;" width="100%" cellpadding="0" cellspacing="0" role="presentation">
                     <tbody><tr>
                       <td class="sm-px-24" style="--bg-opacity: 1; background-color: #ffffff; background-color: rgba(255, 255, 255, var(--bg-opacity)); border-radius: 4px; font-family: Montserrat, -apple-system, 'Segoe UI', sans-serif; font-size: 14px; line-height: 24px; padding: 48px; text-align: left; --text-opacity: 1; color: #626262; color: rgba(98, 98, 98, var(--text-opacity));" bgcolor="rgba(255, 255, 255, var(--bg-opacity))" align="left">
-                        <p style="font-weight: 600; font-size: 18px; margin-bottom: 15px;">Medical Lien Form with sign is uploaded</p>
+                        <p style="font-weight: 600; font-size: 18px; margin-bottom: 15px;">Patient Result is uploaded</p>
                         <p style="font-weight: 500; font-size: 16px; margin-top: 0; --text-opacity: 1;">
                            {{"Patient Name : ".$mailData['name']}}</p>
                         <p style="font-weight: 500; font-size: 16px; margin-top: 0; --text-opacity: 1;">
@@ -101,7 +101,7 @@
                         <p style="font-weight: 500; font-size: 16px; margin-top: 0; --text-opacity: 1;">
                             {{"Patient Phone : ".$mailData['phone']}}</p>
                         <p>
-                            <a href="{{ asset('uploads/sign/'.$mailData['filename']) }}">{{$mailData['filename']}}</a>
+                            <a href="{{ asset('uploads/results/'.$mailData['filename']) }}">{{$mailData['filename']}}</a>
                         </p>
                         <a href="{{ env('APP_URL') }}" style="display: block; font-size: 14px; line-height: 100%; margin-bottom: 24px; --text-opacity: 1; color: #7367f0; color: rgba(115, 103, 240, var(--text-opacity)); text-decoration: none;">{{ env('APP_URL') }}</a>
                         <table style="font-family: 'Montserrat',Arial,sans-serif; width: 100%;" width="100%" cellpadding="0" cellspacing="0" role="presentation">
