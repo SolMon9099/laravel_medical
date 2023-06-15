@@ -100,7 +100,7 @@
                           Thanks for signing up! 👋
                         </p>
                         <p style="margin: 0 0 24px;">
-                          Your password is {{$mailData['password']}}
+                          Your password is <b>{{$mailData['password']}}</b>
                         </p>
                         <p style="margin: 0 0 24px;">
                           If you can't login, please ignore this email or contact us at
