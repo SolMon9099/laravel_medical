@@ -28,25 +28,34 @@ class ProfileController extends Controller
         $transaction_data = array();
         switch(auth()->user()->roles[0]->id){
             case config('const.role_codes')['office manager']:
-                $transaction_data = PatientTransaction::with(['patient', 'files', 'result_files', 'invoice_files',  'attorney', 'doctor', 'schedule'])->where('office_id', auth()->user()->id)->get()->all();
+                $transaction_data = PatientTransaction::with(['patient', 'files', 'result_files', 'invoice_files',  'attorney', 'doctor', 'schedule'])
+                    ->where('office_id', auth()->user()->id)->orderBy('created_at','desc')->get()->all();
                 break;
             case config('const.role_codes')['patient']:
-                $transaction_data = PatientTransaction::with(['patient','files','result_files', 'invoice_files', 'attorney', 'doctor', 'schedule'])->where('patient_id', auth()->user()->id)->get()->all();
+                $transaction_data = PatientTransaction::with(['patient','files','result_files', 'invoice_files', 'attorney', 'doctor', 'schedule'])
+                    ->where('patient_id', auth()->user()->id)->orderBy('created_at','desc')->get()->all();
                 break;
             case config('const.role_codes')['doctor']:
-                $transaction_data = PatientTransaction::with(['patient','files','result_files', 'invoice_files', 'attorney', 'doctor', 'schedule'])->where('doctor_id', auth()->user()->id)->get()->all();
+                $transaction_data = PatientTransaction::with(['patient','files','result_files', 'invoice_files', 'attorney', 'doctor', 'schedule'])
+                    ->where('doctor_id', auth()->user()->id)->orderBy('created_at','desc')->get()->all();
                 break;
             case config('const.role_codes')['attorney']:
-                $transaction_data = PatientTransaction::with(['patient','files','result_files', 'invoice_files', 'attorney', 'doctor', 'schedule'])->where('attorney_id', auth()->user()->id)->get()->all();
+                $transaction_data = PatientTransaction::with(['patient','files','result_files', 'invoice_files', 'attorney', 'doctor', 'schedule'])
+                    ->where('attorney_id', auth()->user()->id)->orderBy('created_at','desc')->get()->all();
                 break;
             case config('const.role_codes')['technician']:
                 $clinics = Clinic::query()->where('technician_id', auth()->user()->id)->pluck('id');
                 $doctors = ClinicDoctor::query()->whereIn('clinic_id', $clinics)->pluck('doctor_id');
-                $transaction_data = PatientTransaction::with(['patient','files','result_files', 'attorney', 'doctor', 'schedule'])->whereIn('doctor_id', $doctors)->get()->all();
+                $transaction_data = PatientTransaction::with(['patient','files','result_files', 'attorney', 'doctor', 'schedule'])
+                    ->whereIn('doctor_id', $doctors)->orderBy('created_at','desc')->get()->all();
                 break;
             case config('const.role_codes')['funding company']:
-                $transaction_data = PatientTransaction::with(['patient','files','result_files', 'invoice_files', 'attorney', 'doctor', 'schedule'])->get()->all();
+                $transaction_data = PatientTransaction::with(['patient','files','result_files', 'invoice_files', 'attorney', 'doctor', 'schedule'])
+                    ->orderBy('created_at','desc')->get()->all();
                 break;
+            default:
+                $transaction_data = PatientTransaction::with(['patient', 'files', 'result_files', 'invoice_files',  'attorney', 'doctor', 'schedule'])
+                    ->orderBy('created_at','desc')->get()->all();
         }
 
 

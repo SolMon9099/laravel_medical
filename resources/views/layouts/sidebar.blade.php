@@ -23,6 +23,12 @@
                         <span class="menu-title text-truncate">Dashboard</span>
                     </a>
                 </li>
+                <li class="nav-item @if(request()->is('profiles/patient_transaction')) active @endif">
+                    <a class="d-flex align-items-center" href="{{ route('profiles.patient_transaction') }}">
+                        <i data-feather="copy"></i>
+                        <span class="menu-title text-truncate">Transactions</span>
+                    </a>
+                </li>
 
                 <li class="navigation-header">
                     <span>User &amp Role management</span>
