@@ -70,32 +70,28 @@
             <table style="width:100%;">
                 <tr>
                     <td style="text-align: left;width:50%;vertical-align:top;">
-                        <div class="blog">
-                            <div class="first-row">Bill To:</div>
-                            <div>
-                                @if(isset($data['patient_name']))
-                                    {{$data['patient_name']}}
-                                @endif
-                            </div>
-                            <div>
-                                @if(isset($data['patient_name']))
-                                    {{$data['patient_street_adderss']}}
-                                @endif
-                            </div>
-                            <div>
-                                @if(isset($data['patient_name']))
-                                {{$data['patient_city'].', '.$data['patient_state'].' '.$data['patient_postal']}}
-                                @endif
-                            </div>
+                        <div class="first-row">Bill To:</div>
+                        <div>
+                            @if(isset($data['patient_name']))
+                                {{$data['patient_name']}}
+                            @endif
+                        </div>
+                        <div>
+                            @if(isset($data['patient_name']))
+                                {{$data['patient_street_adderss']}}
+                            @endif
+                        </div>
+                        <div>
+                            @if(isset($data['patient_name']))
+                            {{$data['patient_city'].', '.$data['patient_state'].' '.$data['patient_postal']}}
+                            @endif
                         </div>
                     </td>
                     <td style="text-align: left;width:50%;vertical-align:top;">
-                        <div class="blog">
-                            <div class="first-row">Bill From:</div>
-                            <div>Limitless Regenerative, LLC</div>
-                            <div>5900 Balcones Drive STE 100</div>
-                            <div>Austin, TX 78731</div>
-                        </div>
+                        <div class="first-row">Bill From:</div>
+                        <div>Limitless Regenerative, LLC</div>
+                        <div>5900 Balcones Drive STE 100</div>
+                        <div>Austin, TX 78731</div>
                     </td>
                 </tr>
             </table>
@@ -151,7 +147,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>10/27/2022</td>
+                            <td></td>
                             <td>Neural Scan </td>
                             <td>H18.049</td>
                             <td>1</td>
@@ -159,7 +155,7 @@
                             <td style="text-align:right;padding-right:25px;">$7, 500.00</td>
                         </tr>
                         <tr>
-                            <td>10/27/2022</td>
+                            <td></td>
                             <td>Neural Scan Read</td>
                             <td>H18.049</td>
                             <td>1</td>
@@ -242,9 +238,6 @@
     }
     .foot-part td{
         color:white;
-    }
-    .blog{
-        width:25%;
     }
     .first-row{
         font-weight: bold;

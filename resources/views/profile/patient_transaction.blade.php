@@ -40,6 +40,9 @@
                                                             @if(Auth::user()->roles[0]->name == 'funding company')
                                                             <th>Paid</th>
                                                             @endif
+                                                            @if(Auth::user()->roles[0]->name == 'funding company' || Auth::user()->roles[0]->name == 'patient' || Auth::user()->roles[0]->name == 'attorney')
+                                                            <th>Invoice</th>
+                                                            @endif
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -112,6 +115,15 @@
                                                                         <input type="hidden" value = {{$value->id}} name="transaction_id" />
                                                                         <button type="submit" class="btn btn-sm btn-primary waves-effect">Settled</button>
                                                                     </form>
+                                                                    @endif
+                                                                </td>
+                                                                @endif
+                                                                @if(Auth::user()->roles[0]->name == 'funding company' || Auth::user()->roles[0]->name == 'patient' || Auth::user()->roles[0]->name == 'attorney')
+                                                                <td>
+                                                                    @if(isset($value->invoice_files) && count($value->invoice_files) > 0)
+                                                                        @foreach ($value->invoice_files as $val)
+                                                                            <div><a target="_blank" href="{{ asset('storage/invoice/'.$val->invoice_file) }}">{{$val->invoice_file}}</a></div>
+                                                                        @endforeach
                                                                     @endif
                                                                 </td>
                                                                 @endif
