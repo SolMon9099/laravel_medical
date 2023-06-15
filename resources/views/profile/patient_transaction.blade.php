@@ -75,7 +75,7 @@
                                                                             <form action="{{route('profiles.upload_sign_docs')}}" method="POST" enctype="multipart/form-data">
                                                                                 @csrf
                                                                                 <input type="hidden" value = {{$value->id}} name="transaction_id" />
-                                                                                <input type="file" required name="files[]" accept="application/pdf" /><br/>
+                                                                                <input class="form-control" type="file" required name="files[]" accept="application/pdf" />
                                                                                 <button style="margin-top:10px;" type="submit" class="btn btn-sm btn-primary waves-effect">Upload Docs</button>
                                                                             </form>
                                                                         @endif
@@ -91,7 +91,7 @@
                                                                         <form action="{{route('profiles.upload_result_docs')}}" method="POST" enctype="multipart/form-data">
                                                                             @csrf
                                                                             <input type="hidden" value = {{$value->id}} name="transaction_id" />
-                                                                            <input type="file" required name="result_files[]" accept="application/pdf" /><br/>
+                                                                            <input class="form-control" type="file" required name="result_files[]" accept="application/pdf" />
                                                                             <button style="margin-top:10px;" type="submit" class="btn btn-sm btn-primary waves-effect">Upload Result</button>
                                                                         </form>
                                                                         @endif

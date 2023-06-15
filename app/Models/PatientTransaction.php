@@ -20,6 +20,11 @@ class PatientTransaction extends Model
         return $this->hasMany(PatientResultFiles::class, 'transaction_id', 'id');
     }
 
+    public function invoice_files()
+    {
+        return $this->hasMany(PatientInvoiceFiles::class, 'transaction_id', 'id');
+    }
+
     public function patient()
     {
         return $this->hasOne(User::class, 'id', 'patient_id');

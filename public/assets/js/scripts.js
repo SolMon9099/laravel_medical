@@ -26,12 +26,12 @@ delete_form.submit(function(e){
 })
 
 //User Management
-var dtUserTable = $('.user-list-table');  
+var dtUserTable = $('.user-list-table');
 var newUserSidebar = $('.new-user-modal');
 var newUserForm = $('.add-new-user');
 var EditUserForm = $('.user_edit_form');
 
-var dt_user = dtUserTable.DataTable({      
+var dt_user = dtUserTable.DataTable({
 //   dom: '<"card-header border-bottom p-1"<"user-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
     dom:
     '<"d-flex justify-content-between align-items-center header-actions mx-2 row mt-75"' +
@@ -55,7 +55,7 @@ var dt_user = dtUserTable.DataTable({
         }
     }
     ]
-});    
+});
 
   // User Form Validation
   if (newUserForm.length) {
@@ -94,8 +94,8 @@ if(EditUserForm.length) {
             'email': {
               required: true,
               email: true
-            },            
-            'confirm_password': {              
+            },
+            'confirm_password': {
                 equalTo: '#password'
             },
             'roles': {
@@ -107,12 +107,12 @@ if(EditUserForm.length) {
 
 
 //Role Management
-var dtRoleTable = $('.role-list-table');  
+var dtRoleTable = $('.role-list-table');
 var newRoleSidebar = $('.new-role-modal');
 var newRoleForm = $('.add-new-role');
 var EditRoleForm = $('.role_edit_form');
 
-var dt_role = dtRoleTable.DataTable({  
+var dt_role = dtRoleTable.DataTable({
     order: [[2, 'desc']],
 //   dom: '<"card-header border-bottom p-1"<"user-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
     dom:
@@ -128,7 +128,7 @@ var dt_role = dtRoleTable.DataTable({
     {
         text: feather.icons['plus'].toSvg({ class: 'me-50 font-small-4' }) + 'Add New Role',
         className: 'create-new-role btn btn-success',
-        attr: {        
+        attr: {
         'href': createRoleUrl
         },
         init: function (api, node, config) {
@@ -136,7 +136,7 @@ var dt_role = dtRoleTable.DataTable({
         }
     }
     ]
-});    
+});
 
   // User Form Validation
   if (newUserForm.length) {
@@ -175,8 +175,8 @@ if(EditUserForm.length) {
             'email': {
               required: true,
               email: true
-            },            
-            'confirm_password': {              
+            },
+            'confirm_password': {
                 equalTo: '#password'
             },
             'roles': {
@@ -195,7 +195,7 @@ if (editPasswordForm.length) {
     rules: {
       'current_password': {
         required: true
-      },      
+      },
       'new_password': {
         required: true,
       },
@@ -208,11 +208,11 @@ if (editPasswordForm.length) {
 }
 
 //Clinic Management
-var dtClinicTable = $('.clinic-list-table');  
+var dtClinicTable = $('.clinic-list-table');
 var newClinicForm = $('.add-new-clinic');
 var EditClinicForm = $('.clinic_edit_form');
 
-var dt_clinic = dtClinicTable.DataTable({  
+var dt_clinic = dtClinicTable.DataTable({
     order: [[2, 'desc']],
 //   dom: '<"card-header border-bottom p-1"<"user-label"><"dt-action-buttons text-end"B>><"d-flex justify-content-between align-items-center mx-0 row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>t<"d-flex justify-content-between mx-0 row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
     dom:
@@ -228,7 +228,7 @@ var dt_clinic = dtClinicTable.DataTable({
     {
         text: feather.icons['plus'].toSvg({ class: 'me-50 font-small-4' }) + 'Add New Clinic',
         className: 'create-new-clinic btn btn-success',
-        attr: {        
+        attr: {
           'data-bs-toggle': 'modal',
           'data-bs-target': '#clinic-modals'
         },
@@ -237,7 +237,7 @@ var dt_clinic = dtClinicTable.DataTable({
         }
     }
     ]
-});    
+});
 
   // User Form Validation
   if (newClinicForm.length) {
@@ -263,8 +263,8 @@ var dt_clinic = dtClinicTable.DataTable({
     });
   }
 //Patient Referral list
-var dtPatientReferralTable = $('.patients-referral-table');  
-var dt_patientReferral = dtPatientReferralTable.DataTable({  
+var dtPatientReferralTable = $('.patients-referral-table');
+var dt_patientReferral = dtPatientReferralTable.DataTable({
   order: [[2, 'desc']],
   dom:
   '<"d-flex justify-content-between align-items-center header-actions mx-2 row mt-75"' +
@@ -279,7 +279,7 @@ var dt_patientReferral = dtPatientReferralTable.DataTable({
   {
       text: feather.icons['plus'].toSvg({ class: 'me-50 font-small-4' }) + 'Add New Patient',
       className: 'create-new-patient btn btn-success',
-      attr: {        
+      attr: {
         'href': createPatientReferralUrl
       },
       init: function (api, node, config) {
@@ -287,10 +287,10 @@ var dt_patientReferral = dtPatientReferralTable.DataTable({
       }
   }
   ]
-});    
+});
 
-//referral Form 
-var referralForm = $('#referralForm'); 
+//referral Form
+var referralForm = $('#referralForm');
 referralForm.validate({
   errorClass: 'error',
   rules: {
@@ -305,7 +305,8 @@ referralForm.validate({
       required: true
     },
     'patient_date_birth': {
-      required: true
+      required: true,
+      date: true
     },
     'patient_street_adderss': {
       required: true
@@ -315,12 +316,13 @@ referralForm.validate({
     },
     'patient_state': {
       required: true
-    },   
+    },
     'patient_postal': {
       required: true
     },
     'patient_date_injury': {
-      required: true
+      required: true,
+      date: true
     },
     'reason_referral': {
       required: true
@@ -396,12 +398,12 @@ referralForm.validate({
   }
 });
 
-$('.create-new-role').click(function (e) { 
+$('.create-new-role').click(function (e) {
   var link = $(this).attr('href');
   window.location.href = link;
 });
 
-$('.create-new-patient').click(function (e) { 
+$('.create-new-patient').click(function (e) {
   var link = $(this).attr('href');
   window.location.href = link;
 });

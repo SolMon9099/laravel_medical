@@ -21,7 +21,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="mb-1 col-md-3">
-                                <label class="form-label" for="patient_name">Date</label>
+                                <label class="form-label" for="referral_date">Date</label>
                                 <input type="text" id="referral_date" name="referral_date" class="form-control flatpickr_date" />
                             </div>
                         </div>
@@ -49,7 +49,7 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="patient_date_birth">Date of Birth</label>
-                                <input type="email" id="patient_date_birth" name="patient_date_birth" class="form-control flatpickr_dates" />
+                                <input type="text" id="patient_date_birth" name="patient_date_birth" class="form-control flatpickr_dates" />
                             </div>
 
                             <div class="mb-1 col-md-3">
@@ -97,7 +97,7 @@
                             </div>
 
                             <div class="mb-1 col-md-12">
-                                <label class="form-label" for="patient_date_injury">Reason for Referral</label>
+                                <label class="form-label" for="reason">Reason for Referral</label>
                                 <div class="row reason_row">
                                     <div class="form-check col-md-4 mb-10">
                                         <input class="form-check-input" type="checkbox" id="reason1" name="reason_referral[]" value="Headaches/Migraines" />
@@ -416,7 +416,7 @@
     <script>
     //Referral Form
     $(document).ready(function() {
-        //Date
+        // Date
         var flatpickrInstance = flatpickr(".flatpickr_date", {
             minDate: "today", // Set today as the minimum allowed date
             readOnly: false
@@ -425,11 +425,11 @@
         // Set the date to today's date
         flatpickrInstance.setDate(new Date());
 
-        //Birthday
-        var flatpickrInstance = flatpickr(".flatpickr_dates", {
-            altInput: true,
-            allowInput: true
-        });
+        // //Birthday
+        // var flatpickrInstance = flatpickr(".flatpickr_dates", {
+        //     altInput: true,
+        //     allowInput: true
+        // });
     });
 
     //Input Mask

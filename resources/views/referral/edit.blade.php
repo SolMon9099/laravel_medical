@@ -37,7 +37,7 @@
                                 <div class="stepper-wrapper">
                                     @foreach (config('const.status') as $key => $val)
                                         <div class="<?php echo ($data->status >= $key ? "completed" : ($data->status + 1 == $key ? "active" :""))." stepper-item" ?>">
-                                            <div class="step-counter">{{$key + 1}}</div>
+                                            <div class="step-counter" style="color:white;">{{$key + 1}}</div>
                                             <div class="step-name">{{$val}}</div>
                                         </div>
                                     @endforeach
@@ -80,9 +80,9 @@
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="patient_date_birth">Date of Birth</label>
                                 @if($is_pending)
-                                    <input type="email" id="patient_date_birth" name="patient_date_birth" class="form-control flatpickr_dates"  value="{{$data->patient->date_of_birth}}" />
+                                    <input type="text" id="patient_date_birth" name="patient_date_birth" class="form-control flatpickr_dates"  value="{{$data->patient->date_of_birth}}" />
                                 @else
-                                    <input disabled type="email" id="patient_date_birth" name="patient_date_birth" class="form-control flatpickr_dates"  value="{{$data->patient->date_of_birth}}" />
+                                    <input disabled type="text" id="patient_date_birth" name="patient_date_birth" class="form-control flatpickr_dates"  value="{{$data->patient->date_of_birth}}" />
                                 @endif
                             </div>
 
@@ -167,7 +167,7 @@
                                 $reason_referral = explode(',', $data->reason_referral);
                             @endphp
                             <div class="mb-1 col-md-12">
-                                <label class="form-label" for="patient_date_injury">Reason for Referral</label>
+                                <label class="form-label" for="reason">Reason for Referral</label>
                                 <div class="row reason_row">
                                     <div class="form-check col-md-4 mb-10">
                                         @if($is_pending)
@@ -689,16 +689,31 @@
                             @endif
                             <div class="table-responsive">
                                 <table class="table">
-                                @if($data->files)
                                     <thead>
                                         <tr>
+                                            <th>Type</th>
                                             <th>File Name</th>
                                             {{-- <th>Action</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    @if($data->invoice_files)
+                                        @foreach ($data->invoice_files as $val)
+                                            <tr>
+                                                <td>Invoice Doc</td>
+                                                <td>
+                                                    <a target="_blank" href="{{ asset('storage/invoice/'.$val->invoice_file) }}">{{$val->invoice_file}}</a>
+                                                </td>
+                                                {{-- <td>
+                                                    <a href="#" class="text-danger btn_trash_file" id="trash_{{$val->id}}"><i data-feather='trash-2'></i></a>
+                                                </td> --}}
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                    @if($data->files)
                                         @foreach ($data->files as $val)
                                             <tr>
+                                                <td>Sign Doc</td>
                                                 <td>
                                                     <a target="_blank" href="{{ asset('uploads/sign/'.$val->files) }}">{{$val->files}}</a>
                                                 </td>
@@ -707,8 +722,21 @@
                                                 </td> --}}
                                             </tr>
                                         @endforeach
+                                    @endif
+                                    @if($data->result_files)
+                                        @foreach ($data->result_files as $val)
+                                            <tr>
+                                                <td>Invoice Doc</td>
+                                                <td>
+                                                    <a target="_blank" href="{{ asset('uploads/results/'.$val->result_file) }}">{{$val->result_file}}</a>
+                                                </td>
+                                                {{-- <td>
+                                                    <a href="#" class="text-danger btn_trash_file" id="trash_{{$val->id}}"><i data-feather='trash-2'></i></a>
+                                                </td> --}}
+                                            </tr>
+                                        @endforeach
+                                    @endif
                                     </tbody>
-                                @endif
                                 </table>
                             </div>
                         </div>
@@ -742,8 +770,8 @@
 
 
         //Birthday
-        var flatpickrInstance = flatpickr(".flatpickr_dates", {
-        });
+        // var flatpickrInstance = flatpickr(".flatpickr_dates", {
+        // });
     });
 
     //Input Mask

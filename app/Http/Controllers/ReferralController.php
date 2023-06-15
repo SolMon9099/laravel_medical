@@ -17,16 +17,17 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Service\SmsService;
 use App\Service\MailService;
+use App\Http\Controllers\PdfController;
 
 class ReferralController extends Controller
 {
 
     function __construct()
     {
-         $this->middleware('permission:referral-list|referral-create|referral-edit|referral-delete', ['only' => ['index','store']]);
-         $this->middleware('permission:referral-create', ['only' => ['create','store']]);
-         $this->middleware('permission:referral-edit', ['only' => ['edit','update']]);
-         $this->middleware('permission:referral-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:referral-list|referral-create|referral-edit|referral-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:referral-create', ['only' => ['create','store']]);
+        $this->middleware('permission:referral-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:referral-delete', ['only' => ['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -37,8 +38,8 @@ class ReferralController extends Controller
             ->where('office_id', auth()->user()->id)
             ->orderBy('created_at','desc')
             ->get();
-
         return view('referral.index', compact('data'));
+
     }
 
     /**
@@ -140,8 +141,8 @@ class ReferralController extends Controller
 
             //send email with patient data info  (password)
             $welcomeMailData = [
-              'user_name'   => $patient_name,
-              'password' => 'password'
+                'user_name'   => $patient_name,
+                'password' => 'password'
             ];
 
             Mail::to($patient_email)->send(new WelcomeEmail($welcomeMailData));
@@ -173,7 +174,7 @@ class ReferralController extends Controller
             $welcomeMailData = [
                 'user_name'   => $attorney_name,
                 'password' => 'password'
-              ];
+            ];
 
             Mail::to($doctor_email)->send(new WelcomeEmail($welcomeMailData));
         }
@@ -204,7 +205,7 @@ class ReferralController extends Controller
             $welcomeMailData = [
                 'user_name'   => $doctor_name,
                 'password' => 'password'
-              ];
+            ];
 
             Mail::to($doctor_email)->send(new WelcomeEmail($welcomeMailData));
         }
@@ -264,10 +265,24 @@ class ReferralController extends Controller
 
         }catch(Exception $ex){
             DB::rollBack();
-
             return back()->with('flash_error', $ex->getMessage());
         }
 
+        $pdf_controller = new PdfController();
+        $invoice_data = [
+            'transaction_id' => $patientTransactionLatestID,
+            'patient_id' => $patient_id,
+            'referral_date' => $referral_date,
+            'patient_name' => $patient_name,
+            'patient_date_birth' => $patient_date_birth,
+            'patient_street_adderss' => $patient_street_adderss,
+            'patient_city' => $patient_city,
+            'patient_state' => $patient_state,
+            'patient_postal' => $patient_postal,
+            'clinic_name' => $clinic_name,
+            'doctor_name' => $doctor_name,
+        ];
+        $pdf_controller->generateInvoicePdf($invoice_data);
         return back()->with('flash_success', 'The form sent successfully');
     }
 
@@ -284,7 +299,7 @@ class ReferralController extends Controller
      */
     public function edit(string $id)
     {
-        $data = PatientTransaction::with(['patient', 'attorney', 'doctor', 'files'])->find($id);
+        $data = PatientTransaction::with(['patient', 'attorney', 'doctor', 'files', 'result_files', 'invoice_files'])->find($id);
         $clinicData = Clinic::get();
         $clinic_id = ClinicDoctor::where('doctor_id', $data->doctor_id)->value('clinic_id');
 
@@ -413,6 +428,22 @@ class ReferralController extends Controller
                 $patientTransactionObj->defendant_insurance_postal = $defendant_insurance_postal;
                 $patientTransactionObj->doctor_notes = $doctor_notes;
                 $patientTransactionObj->save();
+
+                $pdf_controller = new PdfController();
+                $invoice_data = [
+                    'transaction_id' => $id,
+                    'patient_id' => $patientTransactionObj->patient_id,
+                    'referral_date' => $referral_date,
+                    'patient_name' => $patient_name,
+                    'patient_date_birth' => $patient_date_birth,
+                    'patient_street_adderss' => $patient_street_adderss,
+                    'patient_city' => $patient_city,
+                    'patient_state' => $patient_state,
+                    'patient_postal' => $patient_postal,
+                    'clinic_name' => $clinic_name,
+                    'doctor_name' => $doctor_name,
+                ];
+                $pdf_controller->generateInvoicePdf($invoice_data);
 
                 return back()->with('flash_success', 'The patient is updated successfully');
                 break;
