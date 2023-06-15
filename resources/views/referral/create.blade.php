@@ -426,10 +426,10 @@
         flatpickrInstance.setDate(new Date());
 
         // //Birthday
-        // var flatpickrInstance = flatpickr(".flatpickr_dates", {
-        //     altInput: true,
-        //     allowInput: true
-        // });
+        var flatpickrInstance = flatpickr(".flatpickr_dates", {
+            // altInput: true,
+            // allowInput: true
+        });
     });
 
     //Input Mask

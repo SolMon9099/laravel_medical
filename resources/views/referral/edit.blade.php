@@ -770,8 +770,8 @@
 
 
         //Birthday
-        // var flatpickrInstance = flatpickr(".flatpickr_dates", {
-        // });
+        var flatpickrInstance = flatpickr(".flatpickr_dates", {
+        });
     });
 
     //Input Mask
