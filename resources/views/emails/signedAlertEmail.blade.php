@@ -101,7 +101,7 @@
                         <p style="font-weight: 500; font-size: 16px; margin-top: 0; --text-opacity: 1;">
                             {{"Patient Phone : ".$mailData['phone']}}</p>
                         <p>
-                            <a href="{{ asset('uploads/sign/'.$mailData['filename']) }}">{{$mailData['filename']}}</a>
+                            <a href="{{ asset('uploads/sign/'.$mailData['filename']) }}">Signed Doc</a>
                         </p>
                         <a href="{{ env('APP_URL') }}" style="display: block; font-size: 14px; line-height: 100%; margin-bottom: 24px; --text-opacity: 1; color: #7367f0; color: rgba(115, 103, 240, var(--text-opacity)); text-decoration: none;">{{ env('APP_URL') }}</a>
                         <table style="font-family: 'Montserrat',Arial,sans-serif; width: 100%;" width="100%" cellpadding="0" cellspacing="0" role="presentation">

@@ -71,7 +71,7 @@
                                                                 <td>
                                                                     @if(isset($value->files) && count($value->files) > 0)
                                                                         @foreach ($value->files as $val)
-                                                                            <div><a target="_blank" href="{{ asset('uploads/sign/'.$val->files) }}">{{$val->files}}</a></div>
+                                                                            <div><a class='pdf-link' target="_blank" href="{{ asset('uploads/sign/'.$val->files) }}">{{$val->files}}</a></div>
                                                                         @endforeach
                                                                     @else
                                                                         @if($value->status == config('const.status_code.Booked'))
@@ -87,7 +87,7 @@
                                                                 <td>
                                                                     @if(isset($value->result_files) && count($value->result_files) > 0)
                                                                         @foreach ($value->result_files as $val)
-                                                                            <div><a target="_blank" href="{{ asset('uploads/results/'.$val->result_file) }}">{{$val->result_file}}</a></div>
+                                                                            <div><a target="_blank" class='pdf-link' href="{{ asset('uploads/results/'.$val->result_file) }}">{{$val->result_file}}</a></div>
                                                                         @endforeach
                                                                     @else
                                                                         @if($value->status == config('const.status_code.Signed') && (Auth::user()->roles[0]->name == 'doctor' || Auth::user()->roles[0]->name == 'technician'))
@@ -122,7 +122,7 @@
                                                                 <td>
                                                                     @if(isset($value->invoice_files) && count($value->invoice_files) > 0)
                                                                         @foreach ($value->invoice_files as $val)
-                                                                            <div><a target="_blank" href="{{ asset('storage/invoice/'.$val->invoice_file) }}">{{$val->invoice_file}}</a></div>
+                                                                            <div><a class='pdf-link' target="_blank" href="{{ asset('storage/invoice/'.$val->invoice_file) }}">{{$val->invoice_file}}</a></div>
                                                                         @endforeach
                                                                     @endif
                                                                 </td>
@@ -150,6 +150,14 @@
 <style>
     .dt-buttons{
         display:none;
+    }
+    .pdf-link{
+        text-overflow:ellipsis;
+        overflow: hidden;
+        position: relative;
+        display: inline-block;
+        white-space: nowrap;
+        width:100px;
     }
 </style>
 @endsection

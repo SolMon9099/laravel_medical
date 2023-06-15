@@ -265,7 +265,7 @@ var dt_clinic = dtClinicTable.DataTable({
 //Patient Referral list
 var dtPatientReferralTable = $('.patients-referral-table');
 var dt_patientReferral = dtPatientReferralTable.DataTable({
-  order: [[2, 'desc']],
+  order: [[0, 'asc']],
   dom:
   '<"d-flex justify-content-between align-items-center header-actions mx-2 row mt-75"' +
   '<"col-sm-12 col-lg-4 d-flex justify-content-center justify-content-lg-start" l>' +
