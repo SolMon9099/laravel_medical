@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Service\SmsService;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\BookAlertEmail;
+use Exception;
 class CalendarController extends Controller
 {
     /**
@@ -167,7 +168,13 @@ class CalendarController extends Controller
                             'start_date' => date('m/d/Y H:i', strtotime($request['start_date'])),
                             'end_date' => date('m/d/Y H:i', strtotime($request['end_date'])),
                         ];
-                        Mail::to($user->email)->send(new BookAlertEmail($mailData));
+                        try{
+                            Mail::to($user->email)->send(new BookAlertEmail($mailData));
+                        } catch (Exception $e) {
+                            // Error occurred
+                            var_dump($e->getMessage());exit;
+                        }
+
                     }
                     break;
                 case 'delete':
