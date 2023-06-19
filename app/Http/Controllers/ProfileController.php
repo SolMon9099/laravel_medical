@@ -134,6 +134,8 @@ class ProfileController extends Controller
                 // Save the upload result into the database
                 $patientResultUploadedFilesObj->transaction_id = $transaction_id;
                 $patientResultUploadedFilesObj->result_file = $fileName;
+                $patientResultUploadedFilesObj->created_by = Auth::user()->id;
+                $patientResultUploadedFilesObj->updated_by = Auth::user()->id;
                 $patientResultUploadedFilesObj->save();
 
                 PatientTransaction::query()->where('id', $transaction_id)->update(['status' => config('const.status_code')['Test Done']]);

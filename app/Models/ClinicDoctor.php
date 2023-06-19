@@ -9,5 +9,8 @@ class ClinicDoctor extends Model
 {
     use HasFactory;
 
-   
+    public function clinic()
+    {
+        return $this->hasOne(Clinic::class, 'id', 'clinic_id');
+    }
 }

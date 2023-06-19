@@ -14,6 +14,7 @@
                     <th>Patient Email</th>
                     <th>Attorney Name</th>
                     <th>Doctor Name</th>
+                    <th>Clinic</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -27,6 +28,7 @@
                         <td>{{$value->patient->email}}</td>
                         <td>{{$value->attorney->name}}</td>
                         <td>{{$value->doctor->name}}</td>
+                        <td>{{$value->clinic_doctor->clinic->name}}</td>
                         <td>
                             <span class="{{config('const.status_class')[$value->status]}}">{{config('const.status')[$value->status]}}</span>
                         </td>

@@ -33,6 +33,7 @@
                                                             <th>Patient</th>
                                                             <th>Attorney</th>
                                                             <th>Doctor</th>
+                                                            <th>Clinic</th>
                                                             <th>Status</th>
                                                             <th>Schedule</th>
                                                             <th>Signed doc</th>
@@ -53,6 +54,7 @@
                                                                 <td>{{$value->patient->name}}</td>
                                                                 <td>{{$value->attorney->name}}</td>
                                                                 <td>{{$value->doctor->name}}</td>
+                                                                <td>{{$value->clinic_doctor->clinic->name}}</td>
                                                                 <td>
                                                                     <span class="{{config('const.status_class')[$value->status]}}">{{config('const.status')[$value->status]}}</span>
                                                                 </td>
@@ -78,7 +80,7 @@
                                                                             <form action="{{route('profiles.upload_sign_docs')}}" method="POST" enctype="multipart/form-data">
                                                                                 @csrf
                                                                                 <input type="hidden" value = {{$value->id}} name="transaction_id" />
-                                                                                <input class="form-control" type="file" required name="files[]" accept="application/pdf" />
+                                                                                <input class="form-control upload-files" type="file" required name="files[]" accept="application/pdf" />
                                                                                 <button style="margin-top:10px;" type="submit" class="btn btn-sm btn-primary waves-effect">Upload Docs</button>
                                                                             </form>
                                                                         @endif
@@ -94,7 +96,7 @@
                                                                         <form action="{{route('profiles.upload_result_docs')}}" method="POST" enctype="multipart/form-data">
                                                                             @csrf
                                                                             <input type="hidden" value = {{$value->id}} name="transaction_id" />
-                                                                            <input class="form-control" type="file" required name="result_files[]" accept="application/pdf" />
+                                                                            <input class="form-control upload-files" type="file" required name="result_files[]" accept="application/pdf" />
                                                                             <button style="margin-top:10px;" type="submit" class="btn btn-sm btn-primary waves-effect">Upload Result</button>
                                                                         </form>
                                                                         @endif
@@ -158,6 +160,10 @@
         display: inline-block;
         white-space: nowrap;
         width:100px;
+    }
+    .upload-files{
+        max-width: 200px;
+        font-size: 12px;
     }
 </style>
 @endsection

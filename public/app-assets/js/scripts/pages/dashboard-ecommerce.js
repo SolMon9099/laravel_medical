@@ -695,7 +695,7 @@ $(window).on('load', function () {
         stops: [0, 100]
       }
     },
-    series: [83],
+    series: [t_total > 0 ? result_by_doctor/t_total * 100 : 0],
     stroke: {
       lineCap: 'round'
     },

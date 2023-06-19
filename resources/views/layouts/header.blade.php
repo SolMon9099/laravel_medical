@@ -14,7 +14,10 @@
                         <span class="user-name fw-bolder">{{ Auth::user()->name }}</span>
                         <span class="user-status">{{ Auth::user()->getRoleNames()[0] }}</span>
                     </div>
-                        <span class="avatar"><img class="round" src="{{ asset('app-assets/images/portrait/small/avatar-s-11.jpg') }}" alt="avatar" height="40" width="40">
+                        <span class="avatar">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user font-large-1">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>
+                            </svg>
                             <span class="avatar-status-online"></span>
                         </span>
                 </a>
