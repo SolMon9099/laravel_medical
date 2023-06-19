@@ -79,12 +79,12 @@
                 </li>
             @endrole
             @role(['patient'])
-            <li class="nav-item @if(request()->is('home')) active @endif">
+            {{-- <li class="nav-item @if(request()->is('home')) active @endif">
                 <a class="d-flex align-items-center" href="{{ route('home') }}">
                     <i data-feather="home"></i>
                     <span class="menu-title text-truncate">Dashboard</span>
                 </a>
-            </li>
+            </li> --}}
             <li class="nav-item @if(request()->is('profiles/patient_transaction')) active @endif">
                 <a class="d-flex align-items-center" href="{{ route('profiles.patient_transaction') }}">
                     <i data-feather="copy"></i>
