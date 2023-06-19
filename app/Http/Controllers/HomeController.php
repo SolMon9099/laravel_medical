@@ -17,10 +17,10 @@ class HomeController extends Controller
 
     public function index()
     {
-        if (auth()->user()->roles[0]->name == 'patient'){
-            return redirect(route('profiles.patient_transaction'));
+        // if (auth()->user()->roles[0]->name == 'patient'){
+        //     return redirect(route('profiles.patient_transaction'));
 
-        } else {
+        // } else {
             $data = PatientTransaction::all();
             $technicians = User::whereHas(
                 'roles', function($q){
@@ -34,7 +34,7 @@ class HomeController extends Controller
             )->get()->all();
             $schedules = PatientSchedule::query()->where('start_date', '>=', date('Y-m-d'))->get()->all();
             return view('home', compact('data', 'technicians', 'doctors', 'schedules'));
-        }
+        // }
 
     }
 }
