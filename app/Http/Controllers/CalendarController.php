@@ -133,6 +133,7 @@ class CalendarController extends Controller
                         'name'   => $user->name,
                         'start_date' => date('m-d-Y H:i', strtotime($request['start_date'])),
                         'end_date' => date('m-d-Y H:i', strtotime($request['end_date'])),
+                        'clinic_phone' => auth()->user()->phone
                     ];
                     Mail::to($user->email)->send(new BookAlertEmail($mailData));
 
@@ -167,6 +168,7 @@ class CalendarController extends Controller
                             'name'   => $user->name,
                             'start_date' => date('m-d-Y H:i', strtotime($request['start_date'])),
                             'end_date' => date('m-d-Y H:i', strtotime($request['end_date'])),
+                            'clinic_phone' => auth()->user()->phone
                         ];
                         try{
                             Mail::to($user->email)->send(new BookAlertEmail($mailData));
@@ -198,7 +200,8 @@ class CalendarController extends Controller
                             'name'   => $user->name,
                             'start_date' => date('m-d-Y H:i', strtotime($schedule_data['start_date'])),
                             'end_date' => date('m-d-Y H:i', strtotime($schedule_data['end_date'])),
-                            'type' => 'delete'
+                            'type' => 'delete',
+                            'clinic_phone' => auth()->user()->phone
                         ];
                         Mail::to($user->email)->send(new BookAlertEmail($mailData));
                     }

@@ -99,12 +99,13 @@
                         <p class="sm-leading-32" style="font-weight: 600; font-size: 20px; margin: 0 0 16px; --text-opacity: 1; color: #263238; color: rgba(38, 50, 56, var(--text-opacity));">
                         </p>
                         @if(isset($mailData['type']) && $mailData['type'] == 'delete')
-                        <p style="margin: 0 0 24px;">Your schedule is deleted</p>
+                        <p style="margin: 0 0 24px;">Your NeuralScan for {{$mailData['start_date']}} has been deleted!</p>
                         @else
-                        <p style="margin: 0 0 24px;">You have a Schedule</p>
+                        <p style="margin: 0 0 24px;">Your NeuralScan for {{$mailData['start_date']}} has been scheduled!</p>
                         @endif
-                        <p style="margin: 0 0 24px;">From {{$mailData['start_date']}}</p>
-                        <p style="margin: 0 0 24px;">To {{$mailData['end_date']}}</p>
+                        {{-- <p style="margin: 0 0 24px;">From {{$mailData['start_date']}}</p>
+                        <p style="margin: 0 0 24px;">To {{$mailData['end_date']}}</p> --}}
+                        <p style="margin: 0 0 24px;">To Reschedule: {{$mailData['clinic_phone']}}</p>
                         <a href="{{ env('APP_URL') }}" style="display: block; font-size: 14px; line-height: 100%; margin-bottom: 24px; --text-opacity: 1; color: #7367f0; color: rgba(115, 103, 240, var(--text-opacity)); text-decoration: none;">{{ env('APP_URL') }}</a>
                         <table style="font-family: 'Montserrat',Arial,sans-serif; width: 100%;" width="100%" cellpadding="0" cellspacing="0" role="presentation">
                           <tbody><tr>

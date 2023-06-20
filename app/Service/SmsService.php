@@ -71,7 +71,7 @@ class SmsService{
                 }
                 break;
         }
-        $message .="\nTo Reschedule ". auth()->user()->phone;
+        $message .="\nTo Reschedule: ". auth()->user()->phone;
         return $message;
     }
 
