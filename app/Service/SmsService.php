@@ -39,27 +39,35 @@ class SmsService{
         }
         switch($type){
             case 'notify':
-                $message .= "You have a schedule soon.\n";
+                $message .= "Your NeuralScan for ";
                 if (isset($schedule_data['start_date']) && isset($schedule_data['end_date'])){
-                    $message .= "From ".date('m/d/Y H:i', strtotime($schedule_data['start_date'])). "\nTo ".date('m/d/Y H:i', strtotime($schedule_data['end_date']));
+                    // $message .= "From ".date('m/d/Y H:i', strtotime($schedule_data['start_date'])). "\nTo ".date('m/d/Y H:i', strtotime($schedule_data['end_date']));
+                    $message .= date('MM-DD-YYYY H:i', strtotime($schedule_data['start_date']));
+                    $message .= " has been scheduled!";
                 }
                 break;
             case 'add':
-                $message .= "Your new schedule is added.\n";
+                $message .= "Your NeuralScan for ";
                 if (isset($schedule_data['start_date']) && isset($schedule_data['end_date'])){
-                    $message .= "From ".date('m/d/Y H:i', strtotime($schedule_data['start_date'])). "\nTo ".date('m/d/Y H:i', strtotime($schedule_data['end_date']));
+                    // $message .= "From ".date('m/d/Y H:i', strtotime($schedule_data['start_date'])). "\nTo ".date('m/d/Y H:i', strtotime($schedule_data['end_date']));
+                    $message .= date('MM-DD-YYYY H:i', strtotime($schedule_data['start_date']));
+                    $message .= " has been scheduled!";
                 }
                 break;
             case 'edit':
-                $message .= "Your schedule is updated.\n";
+                $message .= "Your NeuralScan for ";
                 if (isset($schedule_data['start_date']) && isset($schedule_data['end_date'])){
-                    $message .= "From ".date('m/d/Y H:i', strtotime($schedule_data['start_date'])). "\nTo ".date('m/d/Y H:i', strtotime($schedule_data['end_date']));
+                    // $message .= "From ".date('m/d/Y H:i', strtotime($schedule_data['start_date'])). "\nTo ".date('m/d/Y H:i', strtotime($schedule_data['end_date']));
+                    $message .= date('MM-DD-YYYY H:i', strtotime($schedule_data['start_date']));
+                    $message .= " has been scheduled!";
                 }
                 break;
             case 'delete':
-                $message .= "Your schedule is deleted.\n";
+                $message .= "Your NeuralScan for";
                 if (isset($schedule_data['start_date']) && isset($schedule_data['end_date'])){
-                    $message .= "From ".date('m/d/Y H:i', strtotime($schedule_data['start_date'])). "\nTo ".date('m/d/Y H:i', strtotime($schedule_data['end_date']));
+                    // $message .= "From ".date('m/d/Y H:i', strtotime($schedule_data['start_date'])). "\nTo ".date('m/d/Y H:i', strtotime($schedule_data['end_date']));
+                    $message .= date('MM-DD-YYYY H:i', strtotime($schedule_data['start_date']));
+                    $message .= " has been deleted!";
                 }
                 break;
         }
@@ -116,7 +124,7 @@ class SmsService{
             $message .="Patient Name : ". $patient_user->name ."\n";
             $message .="Patient Email : ". $patient_user->email ."\n";
             $message .="Patient Phone : ". $patient_user->phone ."\n";
-            $message .="Result : ".public_path('uploads/results/'.$fileName);
+            $message .="Result : ".asset('uploads/results/'.$fileName);
 
             $offic_user = User::find($transaction_record->office_id);
             $attorney_user = User::find($transaction_record->attorney_id);
