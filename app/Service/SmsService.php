@@ -42,7 +42,7 @@ class SmsService{
                 $message .= "Your NeuralScan for ";
                 if (isset($schedule_data['start_date']) && isset($schedule_data['end_date'])){
                     // $message .= "From ".date('m/d/Y H:i', strtotime($schedule_data['start_date'])). "\nTo ".date('m/d/Y H:i', strtotime($schedule_data['end_date']));
-                    $message .= date('MM-DD-YYYY H:i', strtotime($schedule_data['start_date']));
+                    $message .= date('m-d-Y H:i', strtotime($schedule_data['start_date']));
                     $message .= " has been scheduled!";
                 }
                 break;
@@ -50,7 +50,7 @@ class SmsService{
                 $message .= "Your NeuralScan for ";
                 if (isset($schedule_data['start_date']) && isset($schedule_data['end_date'])){
                     // $message .= "From ".date('m/d/Y H:i', strtotime($schedule_data['start_date'])). "\nTo ".date('m/d/Y H:i', strtotime($schedule_data['end_date']));
-                    $message .= date('MM-DD-YYYY H:i', strtotime($schedule_data['start_date']));
+                    $message .= date('m-d-Y H:i', strtotime($schedule_data['start_date']));
                     $message .= " has been scheduled!";
                 }
                 break;
@@ -58,7 +58,7 @@ class SmsService{
                 $message .= "Your NeuralScan for ";
                 if (isset($schedule_data['start_date']) && isset($schedule_data['end_date'])){
                     // $message .= "From ".date('m/d/Y H:i', strtotime($schedule_data['start_date'])). "\nTo ".date('m/d/Y H:i', strtotime($schedule_data['end_date']));
-                    $message .= date('MM-DD-YYYY H:i', strtotime($schedule_data['start_date']));
+                    $message .= date('m-d-Y H:i', strtotime($schedule_data['start_date']));
                     $message .= " has been scheduled!";
                 }
                 break;
@@ -66,11 +66,12 @@ class SmsService{
                 $message .= "Your NeuralScan for";
                 if (isset($schedule_data['start_date']) && isset($schedule_data['end_date'])){
                     // $message .= "From ".date('m/d/Y H:i', strtotime($schedule_data['start_date'])). "\nTo ".date('m/d/Y H:i', strtotime($schedule_data['end_date']));
-                    $message .= date('MM-DD-YYYY H:i', strtotime($schedule_data['start_date']));
+                    $message .= date('m-d-Y H:i', strtotime($schedule_data['start_date']));
                     $message .= " has been deleted!";
                 }
                 break;
         }
+        $message .="\nTo Reschedule ". auth()->user()->phone;
         return $message;
     }
 

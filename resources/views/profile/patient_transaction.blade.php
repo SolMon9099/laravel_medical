@@ -50,7 +50,7 @@
                                                         @foreach ($transaction_data as $key=>$value)
                                                             <tr>
                                                                 <td>{{++$key}}</td>
-                                                                <td>{{$value->referral_date}}</td>
+                                                                <td>{{date('m-d-Y', strtotime($value->referral_date))}}</td>
                                                                 <td>{{$value->patient->name}}</td>
                                                                 <td>{{$value->attorney->name}}</td>
                                                                 <td>{{$value->doctor->name}}</td>
@@ -60,7 +60,7 @@
                                                                 </td>
                                                                 <td>
                                                                     @if(isset($value->schedule))
-                                                                        <div>{{date('m/d/y H:i', strtotime($value->schedule->start_date))}} ～ {{date('H:i', strtotime($value->schedule->end_date))}}</div>
+                                                                        <div>{{date('m-d-Y H:i', strtotime($value->schedule->start_date))}} ～ {{date('H:i', strtotime($value->schedule->end_date))}}</div>
                                                                         <div>{{$value->schedule->title}}</div>
                                                                         @if ($value->schedule->description)
                                                                             <div>{{$value->schedule->description}}</div>

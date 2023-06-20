@@ -23,7 +23,7 @@
                 @foreach ($data as $key=>$value)
                     <tr>
                         <td>{{++$key}}</td>
-                        <td>{{$value->referral_date}}</td>
+                        <td>{{date('m-d-Y', strtotime($value->referral_date))}}</td>
                         <td>{{$value->patient->name}}</td>
                         <td>{{$value->patient->email}}</td>
                         <td>{{$value->attorney->name}}</td>

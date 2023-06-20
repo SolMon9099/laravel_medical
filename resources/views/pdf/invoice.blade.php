@@ -20,7 +20,7 @@
                             <table>
                                 <tr>
                                     <td class="title">Statement Date:</td>
-                                    <td class="value">{{date('m/d/Y')}}</td>
+                                    <td class="value">{{date('m-d-Y')}}</td>
                                 </tr>
                             </table>
                         </div>
@@ -30,7 +30,7 @@
                                     <td class="title">Due Date:</td>
                                     <td class="value">
                                         @isset($data['referral_date'])
-                                        {{date('m/d/Y', strtotime($data['referral_date']))}}
+                                        {{date('m-d-Y', strtotime($data['referral_date']))}}
                                         @endif
                                     </td>
                                 </tr>
@@ -127,7 +127,7 @@
                             </td>
                             <td>
                                 @if(isset($data['patient_date_birth']))
-                                    {{date('m/d/Y', strtotime($data['patient_date_birth']))}}
+                                    {{date('m-d-Y', strtotime($data['patient_date_birth']))}}
                                 @endif
                             </td>
                         </tr>

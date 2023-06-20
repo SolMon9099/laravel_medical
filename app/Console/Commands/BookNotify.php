@@ -37,8 +37,8 @@ class BookNotify extends Command
 
             $mailData = [
                 'name'   => $item->patient->name,
-                'start_date' => date('m/d/Y H:i', strtotime($item->start_date)),
-                'end_date' => date('m/d/Y H:i', strtotime($item->end_date)),
+                'start_date' => date('m-d-Y H:i', strtotime($item->start_date)),
+                'end_date' => date('m-d-Y H:i', strtotime($item->end_date)),
             ];
             Mail::to($item->patient->email)->send(new BookAlertEmail($mailData));
         }
