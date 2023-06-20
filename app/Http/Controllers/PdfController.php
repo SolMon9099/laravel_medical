@@ -35,8 +35,8 @@ class PdfController extends Controller
             $patient_info = '_'.$data['patient_id'];
         }
         $filename = 'invoice_'.date('YmdHis').$patient_info.'.pdf';
-        if (!is_dir(storage_path('public/invoice'))) {
-            mkdir(storage_path('public/invoice'), 0755, true);
+        if (!is_dir(storage_path('app/public/invoice'))) {
+            mkdir(storage_path('app/public/invoice'), 0775, true);
         }
         Storage::put('public/invoice/'.$filename, $dompdf->output());
         if(isset($data['transaction_id']) && $data['transaction_id'] > 0){
