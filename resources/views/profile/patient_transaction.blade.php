@@ -7,7 +7,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Patient Transactions</h4>
+                    <h4 class="card-title">Patient Referrals</h4>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
@@ -36,13 +36,14 @@
                                                             <th>Clinic</th>
                                                             <th>Status</th>
                                                             <th>Schedule</th>
+                                                            <th>Referral</th>
                                                             <th>Signed doc</th>
-                                                            <th>Result</th>
-                                                            @if(Auth::user()->roles[0]->name == 'funding company')
-                                                            <th>Paid</th>
-                                                            @endif
-                                                            @if(Auth::user()->roles[0]->name == 'funding company' || Auth::user()->roles[0]->name == 'patient' || Auth::user()->roles[0]->name == 'attorney')
+                                                            @if(Auth::user()->roles[0]->name == 'funding company' || Auth::user()->roles[0]->name == 'patient' || Auth::user()->roles[0]->name == 'attorney' || Auth::user()->roles[0]->name == 'admin')
                                                             <th>Invoice</th>
+                                                            @endif
+                                                            <th>Result</th>
+                                                            @if(Auth::user()->roles[0]->name == 'funding company' || Auth::user()->roles[0]->name == 'admin')
+                                                            <th>Paid</th>
                                                             @endif
                                                         </tr>
                                                     </thead>
@@ -71,12 +72,19 @@
                                                                     @endif
                                                                 </td>
                                                                 <td>
+                                                                @if(isset($value->referral_files) && count($value->referral_files) > 0)
+                                                                @foreach ($value->referral_files as $val)
+                                                                    <div><a class='pdf-link' target="_blank" href="{{ asset('storage/referral/'.$val->referral_file) }}">{{$val->referral_file}}</a></div>
+                                                                @endforeach
+                                                                @endif
+                                                                </td>
+                                                                <td>
                                                                     @if(isset($value->files) && count($value->files) > 0)
                                                                         @foreach ($value->files as $val)
                                                                             <div><a class='pdf-link' target="_blank" href="{{ asset('uploads/sign/'.$val->files) }}">{{$val->files}}</a></div>
                                                                         @endforeach
                                                                     @else
-                                                                        @if($value->status == config('const.status_code.Booked') && Auth::user()->roles[0]->name == 'patient')
+                                                                        @if($value->status == config('const.status_code.Booked') && (Auth::user()->roles[0]->name == 'patient' || Auth::user()->roles[0]->name == 'office manager'))
                                                                             <form action="{{route('profiles.upload_sign_docs')}}" method="POST" enctype="multipart/form-data">
                                                                                 @csrf
                                                                                 <input type="hidden" value = {{$value->id}} name="transaction_id" />
@@ -86,13 +94,22 @@
                                                                         @endif
                                                                     @endif
                                                                 </td>
+                                                                @if(Auth::user()->roles[0]->name == 'funding company' || Auth::user()->roles[0]->name == 'patient' || Auth::user()->roles[0]->name == 'attorney' || Auth::user()->roles[0]->name == 'admin')
+                                                                <td>
+                                                                    @if(isset($value->invoice_files) && count($value->invoice_files) > 0)
+                                                                        @foreach ($value->invoice_files as $val)
+                                                                            <div><a class='pdf-link' target="_blank" href="{{ asset('storage/invoice/'.$val->invoice_file) }}">{{$val->invoice_file}}</a></div>
+                                                                        @endforeach
+                                                                    @endif
+                                                                </td>
+                                                                @endif
                                                                 <td>
                                                                     @if(isset($value->result_files) && count($value->result_files) > 0)
                                                                         @foreach ($value->result_files as $val)
                                                                             <div><a target="_blank" class='pdf-link' href="{{ asset('uploads/results/'.$val->result_file) }}">{{$val->result_file}}</a></div>
                                                                         @endforeach
                                                                     @else
-                                                                        @if($value->status == config('const.status_code.Signed') && (Auth::user()->roles[0]->name == 'doctor' || Auth::user()->roles[0]->name == 'technician'))
+                                                                        @if($value->status == config('const.status_code.Signed') && (Auth::user()->roles[0]->name == 'doctor' || Auth::user()->roles[0]->name == 'technician' || Auth::user()->roles[0]->name == 'office manager'))
                                                                         <form action="{{route('profiles.upload_result_docs')}}" method="POST" enctype="multipart/form-data">
                                                                             @csrf
                                                                             <input type="hidden" value = {{$value->id}} name="transaction_id" />
@@ -102,9 +119,9 @@
                                                                         @endif
                                                                     @endif
                                                                 </td>
-                                                                @if(Auth::user()->roles[0]->name == 'funding company')
+                                                                @if(Auth::user()->roles[0]->name == 'funding company' || Auth::user()->roles[0]->name == 'admin')
                                                                 <td>
-                                                                    @if($value->status == config('const.status_code')['Test Done'])
+                                                                    @if($value->status == config('const.status_code')['Test Done'] && Auth::user()->roles[0]->name == 'funding company')
                                                                     <form action="{{route('profiles.set_advanced_paid')}}" method="POST" enctype="multipart/form-data">
                                                                         @csrf
                                                                         <input type="hidden" value = {{$value->id}} name="transaction_id" />
@@ -117,15 +134,6 @@
                                                                         <input type="hidden" value = {{$value->id}} name="transaction_id" />
                                                                         <button type="submit" class="btn btn-sm btn-primary waves-effect">Settled</button>
                                                                     </form>
-                                                                    @endif
-                                                                </td>
-                                                                @endif
-                                                                @if(Auth::user()->roles[0]->name == 'funding company' || Auth::user()->roles[0]->name == 'patient' || Auth::user()->roles[0]->name == 'attorney')
-                                                                <td>
-                                                                    @if(isset($value->invoice_files) && count($value->invoice_files) > 0)
-                                                                        @foreach ($value->invoice_files as $val)
-                                                                            <div><a class='pdf-link' target="_blank" href="{{ asset('storage/invoice/'.$val->invoice_file) }}">{{$val->invoice_file}}</a></div>
-                                                                        @endforeach
                                                                     @endif
                                                                 </td>
                                                                 @endif

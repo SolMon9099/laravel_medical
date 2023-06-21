@@ -205,7 +205,7 @@
         border: 1px solid;
     }
     .title{
-        width:150px;
+        width:140px;
         padding-left:15px;
         padding-top: 1px;
         padding-bottom: 1px;

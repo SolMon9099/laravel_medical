@@ -362,7 +362,9 @@
                                 <label class="form-label" for="vertical-twitter">Clinic Name</label>
                                 <select class="form-control" name="clinic_name">
                                     @foreach ($clinicData as $key => $val)
-                                        <option value="{{$val->id}}">{{$val->name}}</option>
+                                        @if(isset(Auth::user()->clinic_by_manager) && Auth::user()->clinic_by_manager->clinic_id == $val->id)
+                                            <option selected value="{{$val->id}}">{{$val->name}}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>

@@ -633,7 +633,7 @@
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="vertical-twitter">Clinic Name</label>
                                 @if($is_pending)
-                                    <select class="form-control" name="clinic_name">
+                                    <select class="form-control" name="clinic_name" disabled>
                                 @else
                                     <select class="form-control" name="clinic_name" disabled>
                                 @endif
@@ -697,16 +697,13 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    @if($data->invoice_files)
-                                        @foreach ($data->invoice_files as $val)
+                                    @if($data->referral_files)
+                                        @foreach ($data->referral_files as $val)
                                             <tr>
-                                                <td>Invoice Doc</td>
+                                                <td>Referral Doc</td>
                                                 <td>
-                                                    <a target="_blank" href="{{ asset('storage/invoice/'.$val->invoice_file) }}">{{$val->invoice_file}}</a>
+                                                    <a target="_blank" href="{{ asset('storage/referral/'.$val->referral_file) }}">{{$val->referral_file}}</a>
                                                 </td>
-                                                {{-- <td>
-                                                    <a href="#" class="text-danger btn_trash_file" id="trash_{{$val->id}}"><i data-feather='trash-2'></i></a>
-                                                </td> --}}
                                             </tr>
                                         @endforeach
                                     @endif
@@ -723,10 +720,23 @@
                                             </tr>
                                         @endforeach
                                     @endif
+                                    @if($data->invoice_files)
+                                        @foreach ($data->invoice_files as $val)
+                                            <tr>
+                                                <td>Invoice Doc</td>
+                                                <td>
+                                                    <a target="_blank" href="{{ asset('storage/invoice/'.$val->invoice_file) }}">{{$val->invoice_file}}</a>
+                                                </td>
+                                                {{-- <td>
+                                                    <a href="#" class="text-danger btn_trash_file" id="trash_{{$val->id}}"><i data-feather='trash-2'></i></a>
+                                                </td> --}}
+                                            </tr>
+                                        @endforeach
+                                    @endif
                                     @if($data->result_files)
                                         @foreach ($data->result_files as $val)
                                             <tr>
-                                                <td>Invoice Doc</td>
+                                                <td>Result Doc</td>
                                                 <td>
                                                     <a target="_blank" href="{{ asset('uploads/results/'.$val->result_file) }}">{{$val->result_file}}</a>
                                                 </td>

@@ -12,7 +12,7 @@
         <table class="user-list-table table">
             <thead class="table-light">
                 <tr>
-                    <th></th>                        
+                    <th></th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Role</th>
@@ -32,7 +32,7 @@
                             @endforeach
                         @endif
                         </td>
-                        <td>                           
+                        <td>
                             <a class="btn btn-primary mr-1" href="{{ route('users.edit',$user->id) }}">Edit</a>
                                 {!! Form::open(['method' => 'DELETE', 'class' => 'delete_form', 'route' => ['users.destroy', $user->id],'style'=>'display:inline']) !!}
                                     {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
@@ -52,14 +52,14 @@
             <div class="modal-header bg-transparent">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body pb-5 px-sm-5 pt-50">                
+            <div class="modal-body pb-5 px-sm-5 pt-50">
                 <div class="text-center mb-2">
-                    <h1 class="mb-1">Add New User Information</h1>                    
+                    <h1 class="mb-1">Add New User Information</h1>
                 </div>
-                
+
                 <form action="{{ route('users.store') }}" class="add-new-user row gy-1 pt-75" method="POST">
                     @csrf
-                    <div class="col-12 col-md-6">                        
+                    <div class="col-12 col-md-6">
                         <label class="form-label" for="name">Username</label>
                         <input type="text" class="form-control name" id="name" placeholder="John Doe" name="name" />
                     </div>
@@ -77,7 +77,7 @@
                         <label class="form-label" for="email">Date of Birth</label>
                         <input type="text" id="date_of_birth" class="form-control date-mask" name="date_of_birth" />
                     </div>
- 
+
                     <div class="col-12 col-md-6">
                         <label class="form-label" for="password">Password</label>
                         <input type="password" id="password" class="form-control password" placeholder="*****" name="password" />
@@ -127,13 +127,23 @@
                         </div>
                     </div>
 
+                    <div class="col-12 col-md-12">
+                        <label class="form-label" for="clinic_id">Clinic</label>
+                        <select disabled class="select2 form-select w-100 form-control" id="clinic_id" name="clinic_id">
+                            <option value=""></option>
+                            @foreach ($clinics as $item)
+                                <option value={{$item->id}}>{{$item->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <div class="col-12">
                         <label class="form-label" for="user-role">User Role</label>
                         <select id="roles" name="roles" class="select2 form-select" multiple style="height:120px;">
                             @foreach ($roles as $role)
                                 <option value="{{$role}}">{{$role}}</option>
-                            @endforeach                        
-                        </select>            
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="col-12 text-center mt-2 pt-50">
@@ -153,9 +163,9 @@
 @endsection
 
 @section('page-script')
-<script src="{{ asset('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}"></script>   
-<script src="{{ asset('app-assets/vendors/js/forms/cleave/cleave.min.js') }}"></script>    
-<script src="{{ asset('app-assets/vendors/js/forms/cleave/addons/cleave-phone.us.js') }}"></script>  
+<script src="{{ asset('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js') }}"></script>
+<script src="{{ asset('app-assets/vendors/js/forms/cleave/cleave.min.js') }}"></script>
+<script src="{{ asset('app-assets/vendors/js/forms/cleave/addons/cleave-phone.us.js') }}"></script>
 
 <script>
     $(document).ready(function(){
@@ -168,6 +178,15 @@
             date: true,
             delimiter: '-',
             datePattern: ['Y', 'm', 'd']
+        });
+
+        $('#roles').change(function(){
+            if ($(this).val()[0] == "office manager"){
+                $('#clinic_id').attr('disabled', false);
+            } else {
+                $('#clinic_id').attr('disabled', true);
+                $('#clinic_id').val('');
+            }
         });
     });
 

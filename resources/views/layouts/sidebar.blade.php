@@ -26,7 +26,7 @@
                 <li class="nav-item @if(request()->is('profiles/patient_transaction')) active @endif">
                     <a class="d-flex align-items-center" href="{{ route('profiles.patient_transaction') }}">
                         <i data-feather="copy"></i>
-                        <span class="menu-title text-truncate">Transactions</span>
+                        <span class="menu-title text-truncate">Referrals</span>
                     </a>
                 </li>
 
@@ -77,6 +77,12 @@
                         <span class="menu-title text-truncate">Calendar</span>
                     </a>
                 </li>
+                <li class="nav-item @if(request()->is('profiles/patient_transaction')) active @endif">
+                    <a class="d-flex align-items-center" href="{{ route('profiles.patient_transaction') }}">
+                        <i data-feather="copy"></i>
+                        <span class="menu-title text-truncate">Referrals</span>
+                    </a>
+                </li>
             @endrole
             @role(['patient'])
             {{-- <li class="nav-item @if(request()->is('home')) active @endif">
@@ -88,7 +94,7 @@
             <li class="nav-item @if(request()->is('profiles/patient_transaction')) active @endif">
                 <a class="d-flex align-items-center" href="{{ route('profiles.patient_transaction') }}">
                     <i data-feather="copy"></i>
-                    <span class="menu-title text-truncate">Transactions</span>
+                    <span class="menu-title text-truncate">Referrals</span>
                 </a>
             </li>
             @endrole
@@ -102,7 +108,7 @@
             <li class="nav-item @if(request()->is('profiles/patient_transaction')) active @endif">
                 <a class="d-flex align-items-center" href="{{ route('profiles.patient_transaction') }}">
                     <i data-feather="copy"></i>
-                    <span class="menu-title text-truncate">Transactions</span>
+                    <span class="menu-title text-truncate">Referrals</span>
                 </a>
             </li>
             @endrole
@@ -116,7 +122,7 @@
             <li class="nav-item @if(request()->is('profiles/patient_transaction')) active @endif">
                 <a class="d-flex align-items-center" href="{{ route('profiles.patient_transaction') }}">
                     <i data-feather="copy"></i>
-                    <span class="menu-title text-truncate">Transactions</span>
+                    <span class="menu-title text-truncate">Referrals</span>
                 </a>
             </li>
             @endrole
@@ -130,7 +136,7 @@
             <li class="nav-item @if(request()->is('profiles/patient_transaction')) active @endif">
                 <a class="d-flex align-items-center" href="{{ route('profiles.patient_transaction') }}">
                     <i data-feather="copy"></i>
-                    <span class="menu-title text-truncate">Transactions</span>
+                    <span class="menu-title text-truncate">Referrals</span>
                 </a>
             </li>
             @endrole
@@ -144,7 +150,7 @@
             <li class="nav-item @if(request()->is('profiles/patient_transaction')) active @endif">
                 <a class="d-flex align-items-center" href="{{ route('profiles.patient_transaction') }}">
                     <i data-feather="copy"></i>
-                    <span class="menu-title text-truncate">Transactions</span>
+                    <span class="menu-title text-truncate">Referrals</span>
                 </a>
             </li>
             @endrole

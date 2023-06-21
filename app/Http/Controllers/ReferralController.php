@@ -115,6 +115,55 @@ class ReferralController extends Controller
         $doctor_phone = $request->input('doctor_phone');
         $doctor_notes = $request->input('doctor_notes');
 
+        $pdf_data = [
+            'referral_date' => $request->input('referral_date'),
+            'patient_name' => $request->input('patient_name'),
+            'patient_email' => $request->input('patient_email'),
+            'patient_phone' => $request->input('patient_phone'),
+            'patient_date_birth' => $request->input('patient_date_birth'),
+            'patient_street_adderss' => $request->input('patient_street_adderss'),
+            'patient_street_adderss_line2' => $request->input('patient_street_adderss_line2'),
+            'patient_city' => $request->input('patient_city'),
+            'patient_state' => $request->input('patient_state'),
+            'patient_postal' => $request->input('patient_postal'),
+            'patient_date_injury' => $request->input('patient_date_injury'),
+            'genders' => $request->input('genders'),
+            'reason_referral' => implode(',', $request->input('reason_referral')),
+
+            'patient_insurance_company' => $request->input('patient_insurance_company'),
+            'patient_insurance_policy' => $request->input('patient_insurance_policy'),
+            'patient_insurance_street_adderss' => $request->input('patient_insurance_street_adderss'),
+            'patient_insurance_street_adderss_line2' => $request->input('patient_insurance_street_adderss_line2'),
+            'patient_insurance_city' => $request->input('patient_insurance_city'),
+            'patient_insurance_state' => $request->input('patient_insurance_state'),
+            'patient_insurance_postal' => $request->input('patient_insurance_postal'),
+
+            'defendant_insurance_hit' => $request->input('defendant_insurance_hit'),
+            'defendant_insure' => $request->input('defendant_insure'),
+            'defendant_insurance_company' => $request->input('defendant_insurance_company'),
+            'defendant_insurance_claim' => $request->input('defendant_insurance_claim'),
+            'defendant_policy_limit' => $request->input('defendant_policy_limit'),
+            'defendant_insurance_street_adderss' => $request->input('defendant_insurance_street_adderss'),
+            'defendant_insurance_street_adderss_line2' => $request->input('defendant_insurance_street_adderss_line2'),
+            'defendant_insurance_city' => $request->input('defendant_insurance_city'),
+            'defendant_insurance_state' => $request->input('defendant_insurance_state'),
+            'defendant_insurance_postal' => $request->input('defendant_insurance_postal'),
+
+            'attorney_name' => $request->input('attorney_name'),
+            'attorney_email' => $request->input('attorney_email'),
+            'attorney_phone' => $request->input('attorney_phone'),
+            'law_firm_adderss' => $request->input('law_firm_adderss'),
+            'law_firm_adderss_line2' => $request->input('law_firm_adderss_line2'),
+            'law_firm_city' => $request->input('law_firm_city'),
+            'law_firm_state' => $request->input('law_firm_state'),
+            'law_firm_postal' => $request->input('law_firm_postal'),
+
+            'clinic_data' => auth()->user()->clinic_by_manager->clinic,
+            'doctor_name' => $request->input('doctor_name'),
+            'doctor_email' => $request->input('doctor_email'),
+            'doctor_phone' => $request->input('doctor_phone'),
+            'doctor_notes' => $request->input('doctor_notes'),
+        ];
 
         // if there isn't patient data, create a new patient with patient information and get ID.
         $isPatientExist = User::where('email', $patient_email)->first();
@@ -283,6 +332,9 @@ class ReferralController extends Controller
             'doctor_name' => $doctor_name,
         ];
         $pdf_controller->generateInvoicePdf($invoice_data);
+        $pdf_data['id'] = $patientTransactionLatestID;
+        $pdf_data['patient_id'] = $patient_id;
+        $pdf_controller->generateReferralPdf($pdf_data);
         return back()->with('flash_success', 'The form sent successfully');
     }
 
@@ -443,8 +495,60 @@ class ReferralController extends Controller
                     'clinic_name' => $clinic_name,
                     'doctor_name' => $doctor_name,
                 ];
-                $pdf_controller->generateInvoicePdf($invoice_data);
 
+                $pdf_data = [
+                    'id' => $id,
+                    'patient_id' => $patientTransactionObj->patient_id,
+                    'referral_date' => $request->input('referral_date'),
+                    'patient_name' => $request->input('patient_name'),
+                    'patient_email' => $request->input('patient_email'),
+                    'patient_phone' => $request->input('patient_phone'),
+                    'patient_date_birth' => $request->input('patient_date_birth'),
+                    'patient_street_adderss' => $request->input('patient_street_adderss'),
+                    'patient_street_adderss_line2' => $request->input('patient_street_adderss_line2'),
+                    'patient_city' => $request->input('patient_city'),
+                    'patient_state' => $request->input('patient_state'),
+                    'patient_postal' => $request->input('patient_postal'),
+                    'patient_date_injury' => $request->input('patient_date_injury'),
+                    'genders' => $request->input('genders'),
+                    'reason_referral' => implode(',', $request->input('reason_referral')),
+
+                    'patient_insurance_company' => $request->input('patient_insurance_company'),
+                    'patient_insurance_policy' => $request->input('patient_insurance_policy'),
+                    'patient_insurance_street_adderss' => $request->input('patient_insurance_street_adderss'),
+                    'patient_insurance_street_adderss_line2' => $request->input('patient_insurance_street_adderss_line2'),
+                    'patient_insurance_city' => $request->input('patient_insurance_city'),
+                    'patient_insurance_state' => $request->input('patient_insurance_state'),
+                    'patient_insurance_postal' => $request->input('patient_insurance_postal'),
+
+                    'defendant_insurance_hit' => $request->input('defendant_insurance_hit'),
+                    'defendant_insure' => $request->input('defendant_insure'),
+                    'defendant_insurance_company' => $request->input('defendant_insurance_company'),
+                    'defendant_insurance_claim' => $request->input('defendant_insurance_claim'),
+                    'defendant_policy_limit' => $request->input('defendant_policy_limit'),
+                    'defendant_insurance_street_adderss' => $request->input('defendant_insurance_street_adderss'),
+                    'defendant_insurance_street_adderss_line2' => $request->input('defendant_insurance_street_adderss_line2'),
+                    'defendant_insurance_city' => $request->input('defendant_insurance_city'),
+                    'defendant_insurance_state' => $request->input('defendant_insurance_state'),
+                    'defendant_insurance_postal' => $request->input('defendant_insurance_postal'),
+
+                    'attorney_name' => $request->input('attorney_name'),
+                    'attorney_email' => $request->input('attorney_email'),
+                    'attorney_phone' => $request->input('attorney_phone'),
+                    'law_firm_adderss' => $request->input('law_firm_adderss'),
+                    'law_firm_adderss_line2' => $request->input('law_firm_adderss_line2'),
+                    'law_firm_city' => $request->input('law_firm_city'),
+                    'law_firm_state' => $request->input('law_firm_state'),
+                    'law_firm_postal' => $request->input('law_firm_postal'),
+
+                    'clinic_data' => auth()->user()->clinic_by_manager->clinic,
+                    'doctor_name' => $request->input('doctor_name'),
+                    'doctor_email' => $request->input('doctor_email'),
+                    'doctor_phone' => $request->input('doctor_phone'),
+                    'doctor_notes' => $request->input('doctor_notes'),
+                ];
+                $pdf_controller->generateInvoicePdf($invoice_data);
+                $pdf_controller->generateReferralPdf($pdf_data);
                 return back()->with('flash_success', 'The patient is updated successfully');
                 break;
             case config('const.status_code.Booked'):

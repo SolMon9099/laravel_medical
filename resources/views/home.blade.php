@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 @endsection
 <?php
+    $user_role = Auth::user()->roles[0]->name;
     $all_clinics = [];
     $all_results = [];
     $all_schedules = [];
@@ -13,6 +14,7 @@
     $data_by_status = [];
     $pending_data = [];
     $paid_data = [];
+    $settled_data = [];
 
     $seven_ago = date('Y-m-d', strtotime('-7 days'));
     $thirty_ago = date('Y-m-d', strtotime('-30 days'));
@@ -69,8 +71,11 @@
         if ($value->status == config('const.status_code')['Test Done']){
             $pending_data[] = $value;
         }
-        if ($value->status > config('const.status_code')['Test Done']){
+        if ($value->status == config('const.status_code')['Advance Paid']){
             $paid_data[] = $value;
+        }
+        if ($value->status == config('const.status_code')['Settled']){
+            $settled_data[] = $value;
         }
 
         if(isset($value->result_files) && count($value->result_files) > 0){
@@ -87,177 +92,185 @@
 @section('content')
 <!-- Dashboard Analytics Start -->
 <section id="dashboard-analytics">
-    <div class="row match-height">
-        <div class="col-lg-4 col-md-6 col-12">
-            <div class="card card-browser-states">
-                <div class="card-body">
-                    <div class="browser-states">
-                        <div class="d-flex">
-                            {{-- <img src="../../../app-assets/images/icons/google-chrome.png" class="rounded me-1" height="30" alt="Google Chrome" /> --}}
-                            <div class="avatar bg-light-danger me-2">
-                                <div class="avatar-content">
-                                    <i style="font-size:15px;" class="fa fa-hospital-o avatar-icon"></i>
-                                </div>
-                            </div>
-                            <h6 class="align-self-center mb-0">Clinics</h6>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="fw-bold text-body-heading me-1">{{count($all_clinics)}}</div>
-                        </div>
-                    </div>
-                    <div class="browser-states">
-                        <div class="d-flex">
-                            <div class="avatar bg-light-warning me-2">
-                                <div class="avatar-content">
-                                    <i data-feather="user" class="avatar-icon"></i>
-                                </div>
-                            </div>
-                            <h6 class="align-self-center mb-0">Patients</h6>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="fw-bold text-body-heading me-1">{{count($all_patients)}}</div>
-                        </div>
-                    </div>
-                    <div class="browser-states">
-                        <div class="d-flex">
-                            <div class="avatar bg-light-warning me-2">
-                                <div class="avatar-content">
-                                    <i style="font-size:15px;" class="fa fa-database avatar-icon"></i>
-                                </div>
-                            </div>
-                            <h6 class="align-self-center mb-0">Referrals</h6>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="fw-bold text-body-heading me-1">{{count($data)}}</div>
-                        </div>
-                    </div>
-                    <div class="browser-states">
-                        <div class="d-flex">
-                            <div class="avatar bg-light-primary me-2">
-                                <div class="avatar-content">
-                                    <i style="font-size:15px;" class="avatar-icon fa fa-user-md"></i>
-                                </div>
-                            </div>
-                            <h6 class="align-self-center mb-0">Doctors</h6>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="fw-bold text-body-heading me-1">{{count($doctors)}}</div>
-                        </div>
-                    </div>
-                    <div class="browser-states">
-                        <div class="d-flex">
-                            <div class="avatar bg-light-secondary me-2">
-                                <div class="avatar-content">
-                                    <i style="font-size:15px;" class="fa fa-wrench avatar-icon"></i>
-                                </div>
-                            </div>
-                            <h6 class="align-self-center mb-0">Technicians</h6>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="fw-bold text-body-heading me-1">{{count($technicians)}}</div>
-                        </div>
-                    </div>
-                    <div class="browser-states">
-                        <div class="d-flex">
-                            <div class="avatar bg-light-secondary me-2">
-                                <div class="avatar-content">
-                                    <i style="font-size:15px;" class="fa fa-calendar avatar-icon"></i>
-                                </div>
-                            </div>
-                            <h6 class="align-self-center mb-0">Schedule</h6>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <div class="fw-bold text-body-heading me-1">{{count($schedules)}}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-6 col-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="card-title">Scanned Results</h4>
-                    {{-- <i data-feather="help-circle" class="font-medium-3 text-muted cursor-pointer"></i> --}}
-                </div>
-                <div class="card-body p-0">
-                    <div id="goal-overview-radial-bar-chart" class="my-2"></div>
-                    <div class="row border-top text-center mx-0">
-                        <div class="col-6 border-end py-1">
-                            <p class="card-text text-muted mb-0">By Doctors</p>
-                            <h3 class="fw-bolder mb-0">{{$result_by_doctor}}</h3>
-                        </div>
-                        <div class="col-6 py-1">
-                            <p class="card-text text-muted mb-0">By Technicians</p>
-                            <h3 class="fw-bolder mb-0">{{$result_by_tech}}</h3>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-6 col-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between pb-0">
-                    <h4 class="card-title">Statistics by paid</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-2 col-12 d-flex flex-column flex-wrap text-center">
-                            <h1 class="font-large-2 fw-bolder mt-2 mb-0">{{count($pending_data) + count($paid_data)}}</h1>
-                            <p class="card-text">Total</p>
-                        </div>
-                        <div class="col-sm-10 col-12 d-flex justify-content-center">
-                            <div id="support-trackers-chart"></div>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-between mt-1">
-                        <div class="text-center">
-                            <p class="card-text mb-50">Unpaid</p>
-                            <span class="font-large-1 fw-bold">{{count($pending_data)}}</span>
-                        </div>
-                        <div class="text-center">
-                            <p class="card-text mb-50">Paid</p>
-                            <span class="font-large-1 fw-bold">{{count($paid_data)}}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row match-height">
-        <div class="col-lg-12 col-md-12 col-12">
-            <div class="card card-statistics">
-                <div class="card-header">
-                    <h4 class="card-title">Statistics</h4>
-                    {{-- <div class="d-flex align-items-center">
-                        <p class="card-text font-small-2 me-25 mb-0">Updated 1 month ago</p>
-                    </div> --}}
-                </div>
-                <div class="card-body statistics-body">
-                    <div class="row">
-                        @foreach (config('const.status') as $code => $val)
-                        <div class="col-xl-2 col-sm-6 col-12 mb-2 mb-xl-0">
-                            <div class="d-flex flex-row">
-                                <div class="<?php echo config('const.status_bg_class')[$code].' avatar me-2' ?>">
+    @if($user_role !== 'attorney')
+        <div class="row match-height">
+            <div class="col-lg-4 col-md-6 col-12">
+                <div class="card card-browser-states">
+                    <div class="card-body">
+                        <div class="browser-states">
+                            <div class="d-flex">
+                                {{-- <img src="../../../app-assets/images/icons/google-chrome.png" class="rounded me-1" height="30" alt="Google Chrome" /> --}}
+                                <div class="avatar bg-light-danger me-2">
                                     <div class="avatar-content">
-                                        <i style="font-size:22px;" class="avatar-icon fa fa-database"></i>
+                                        <i style="font-size:15px;" class="fa fa-hospital-o avatar-icon"></i>
                                     </div>
                                 </div>
-                                <div class="my-auto">
-                                    <h4 class="<?php echo config('const.status_class')[$code]." fw-bolder mb-0" ?>">
-                                        {{isset($data_by_status[$code]) ? count($data_by_status[$code]) : 0}}
-                                    </h4>
-                                    <p class="<?php echo config('const.status_class')[$code]." card-text font-small-3 mb-0" ?>">
-                                        {{$val}}
-                                    </p>
-                                </div>
+                                <h6 class="align-self-center mb-0">Clinics</h6>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="fw-bold text-body-heading me-1">{{count($all_clinics)}}</div>
                             </div>
                         </div>
-                        @endforeach
+                        <div class="browser-states">
+                            <div class="d-flex">
+                                <div class="avatar bg-light-warning me-2">
+                                    <div class="avatar-content">
+                                        <i data-feather="user" class="avatar-icon"></i>
+                                    </div>
+                                </div>
+                                <h6 class="align-self-center mb-0">Patients</h6>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="fw-bold text-body-heading me-1">{{count($all_patients)}}</div>
+                            </div>
+                        </div>
+                        <div class="browser-states">
+                            <div class="d-flex">
+                                <div class="avatar bg-light-warning me-2">
+                                    <div class="avatar-content">
+                                        <i style="font-size:15px;" class="fa fa-database avatar-icon"></i>
+                                    </div>
+                                </div>
+                                <h6 class="align-self-center mb-0">Referrals</h6>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="fw-bold text-body-heading me-1">{{count($data)}}</div>
+                            </div>
+                        </div>
+                        <div class="browser-states">
+                            <div class="d-flex">
+                                <div class="avatar bg-light-primary me-2">
+                                    <div class="avatar-content">
+                                        <i style="font-size:15px;" class="avatar-icon fa fa-user-md"></i>
+                                    </div>
+                                </div>
+                                <h6 class="align-self-center mb-0">Doctors</h6>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="fw-bold text-body-heading me-1">{{count($doctors)}}</div>
+                            </div>
+                        </div>
+                        <div class="browser-states">
+                            <div class="d-flex">
+                                <div class="avatar bg-light-secondary me-2">
+                                    <div class="avatar-content">
+                                        <i style="font-size:15px;" class="fa fa-wrench avatar-icon"></i>
+                                    </div>
+                                </div>
+                                <h6 class="align-self-center mb-0">Technicians</h6>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="fw-bold text-body-heading me-1">{{count($technicians)}}</div>
+                            </div>
+                        </div>
+                        <div class="browser-states">
+                            <div class="d-flex">
+                                <div class="avatar bg-light-secondary me-2">
+                                    <div class="avatar-content">
+                                        <i style="font-size:15px;" class="fa fa-calendar avatar-icon"></i>
+                                    </div>
+                                </div>
+                                <h6 class="align-self-center mb-0">Schedule</h6>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div class="fw-bold text-body-heading me-1">{{count($schedules)}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">Scanned Results</h4>
+                        {{-- <i data-feather="help-circle" class="font-medium-3 text-muted cursor-pointer"></i> --}}
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="goal-overview-radial-bar-chart" class="my-2"></div>
+                        <div class="row border-top text-center mx-0">
+                            <div class="col-6 border-end py-1">
+                                <p class="card-text text-muted mb-0">By Doctors</p>
+                                <h3 class="fw-bolder mb-0">{{$result_by_doctor}}</h3>
+                            </div>
+                            <div class="col-6 py-1">
+                                <p class="card-text text-muted mb-0">By Technicians</p>
+                                <h3 class="fw-bolder mb-0">{{$result_by_tech}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between pb-0">
+                        <h4 class="card-title">Statistics by paid</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-2 col-12 d-flex flex-column flex-wrap text-center">
+                                <h1 class="font-large-2 fw-bolder mt-2 mb-0">{{count($pending_data) + count($paid_data)}}</h1>
+                                <p class="card-text">Total</p>
+                            </div>
+                            <div class="col-sm-10 col-12 d-flex justify-content-center">
+                                <div id="support-trackers-chart"></div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-1">
+                            <div class="text-center">
+                                <p class="card-text mb-50">Unpaid</p>
+                                <span class="font-large-1 fw-bold">{{count($pending_data)}}</span>
+                            </div>
+                            <div class="text-center">
+                                <p class="card-text mb-50">Advance Paid</p>
+                                <span class="font-large-1 fw-bold">{{count($paid_data)}}</span>
+                            </div>
+                            <div class="text-center">
+                                <p class="card-text mb-50">Settled</p>
+                                <span class="font-large-1 fw-bold">{{count($settled_data)}}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+        @if($user_role !== 'office manager')
+            <div class="row match-height">
+                <div class="col-lg-12 col-md-12 col-12">
+                    <div class="card card-statistics">
+                        <div class="card-header">
+                            <h4 class="card-title">Statistics</h4>
+                            {{-- <div class="d-flex align-items-center">
+                                <p class="card-text font-small-2 me-25 mb-0">Updated 1 month ago</p>
+                            </div> --}}
+                        </div>
+                        <div class="card-body statistics-body">
+                            <div class="row">
+                                @foreach (config('const.status') as $code => $val)
+                                <div class="col-xl-2 col-sm-6 col-12 mb-2 mb-xl-0">
+                                    <div class="d-flex flex-row">
+                                        <div class="<?php echo config('const.status_bg_class')[$code].' avatar me-2' ?>">
+                                            <div class="avatar-content">
+                                                <i style="font-size:22px;" class="avatar-icon fa fa-database"></i>
+                                            </div>
+                                        </div>
+                                        <div class="my-auto">
+                                            <h4 class="<?php echo config('const.status_class')[$code]." fw-bolder mb-0" ?>">
+                                                {{isset($data_by_status[$code]) ? count($data_by_status[$code]) : 0}}
+                                            </h4>
+                                            <p class="<?php echo config('const.status_class')[$code]." card-text font-small-3 mb-0" ?>">
+                                                {{$val}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+    @endif
     <div class="row match-height">
         <div class="col-lg-12 col-md-12 col-12">
             <div class="card card-statistics">
@@ -342,7 +355,8 @@
 
         var pending_number = "<?php echo count($pending_data);?>";
         var paid_number = "<?php echo count($paid_data);?>";
-        var total_number = parseInt(pending_number) + parseInt(paid_number);
+        var settled_number = "<?php echo count($settled_data);?>";
+        var total_number = parseInt(pending_number) + parseInt(paid_number) + parseInt(settled_number);
     </script>
     <!-- BEGIN: Page Vendor JS-->
     <script src="{{ asset('app-assets/vendors/js/charts/apexcharts.min.js') }}"></script>

@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 sidebar.modal('hide');
                 // $('.event-sidebar').removeClass('show');
                 $('.app-calendar .body-content-overlay').removeClass('show');
-
+                location.reload();
                 $.ajax({
                     url:"/calendar/action",
                     method:"POST",
@@ -248,7 +248,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         // alert("Event deleted Successfully");
                     }
                 })
-                // location.reload();
             }
         })
     });
@@ -334,7 +333,7 @@ document.addEventListener('DOMContentLoaded', function () {
       ];
     },
     dateClick: function (info) {
-      var date = moment(info.date).format('YYYY-MM-DD');
+      var date = moment(info.date).format('YYYY-MM-DD hh:mm');
       resetValues();
       sidebar.modal('show');
       addEventBtn.removeClass('d-none');
@@ -437,6 +436,7 @@ document.addEventListener('DOMContentLoaded', function () {
     calendar.addEvent(eventData);
     // calendar.refetchEvents();
     // set_form_schedules(calendar.getEvents());
+    location.reload();
     $.ajax({
         url:"/calendar/action",
         method:"POST",
@@ -455,7 +455,6 @@ document.addEventListener('DOMContentLoaded', function () {
             // alert("Event Created Successfully");
         }
     })
-    // location.reload();
   }
 
   // ------------------------------------------------
@@ -467,6 +466,7 @@ document.addEventListener('DOMContentLoaded', function () {
     eventData.extendedProps.calendar = 'Business';
     updateEventInCalendar(eventData, propsToUpdate, extendedPropsToUpdate);
     // set_form_schedules(calendar.getEvents());
+    location.reload();
     $.ajax({
         url:"/calendar/action",
         method:"POST",
@@ -486,7 +486,6 @@ document.addEventListener('DOMContentLoaded', function () {
             // alert("Event Edited Successfully");
         }
     })
-    // location.reload();
   }
 
   // ------------------------------------------------

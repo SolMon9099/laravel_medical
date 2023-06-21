@@ -184,10 +184,33 @@
             'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content')
         }
     });
+    function formatDateTime(datetime){
+        var res = '';
+        res = datetime.getFullYear() + '-';
+        res += datetime.getMonth() < 9 ? ("0" + (datetime.getMonth()+1)) : datetime.getMonth() + 1;
+        res += '-';
+        res += datetime.getDate() < 10 ? ("0" + datetime.getDate()) : datetime.getDate();
+        res += ' ';
+
+        res += datetime.getHours() < 10 ? ("0" + datetime.getHours()) : datetime.getHours();
+        res += ':';
+        res += datetime.getMinutes() < 10 ? ("0" + datetime.getMinutes()) : datetime.getMinutes();
+        return res;
+    }
+    $('#start-date').change(function(){
+        var start_date = $('#start-date').val();
+        if (start_date != null && start_date != ''){
+            start_date += ":00";
+            start_date = new Date(start_date);
+            start_date.setHours(start_date.getHours() + 1);
+            var end_date = formatDateTime(start_date);
+            $('#end-date').val(end_date);
+        }
+
+    })
 </script>
 <script src="{{ asset('app-assets/vendors/js/calendar/fullcalendar.min.js')}}"></script>
 <script src="{{ asset('app-assets/vendors/js/pickers/flatpickr/flatpickr.min.js')}}"></script>
 <script src="{{ asset('app-assets/js/scripts/pages/app-calendar-events.js')}}"></script>
 <script src="{{ asset('app-assets/js/scripts/pages/app-calendar.js')}}"></script>
-
 @endsection

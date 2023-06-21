@@ -76,6 +76,9 @@ var dt_user = dtUserTable.DataTable({
             required: true,
             equalTo: '#password'
         },
+        'clinic_id':{
+            required: true,
+        },
         'roles': {
             required: true
         }
@@ -97,6 +100,9 @@ if(EditUserForm.length) {
             },
             'confirm_password': {
                 equalTo: '#password'
+            },
+            'clinic_id':{
+                required: true,
             },
             'roles': {
                 required: true
