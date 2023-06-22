@@ -284,8 +284,8 @@ $(window).on('load', function () {
     stroke: {
       dashArray: 8
     },
-    series: [total_number > 0 ? 100 * settled_number/total_number : 0],
-    labels: ['Settled Referrals']
+    series: [total_number > 0 ? 100 * pending_number/total_number : 0],
+    labels: ['Incomplete Referrals']
   };
   supportTrackerChart = new ApexCharts($supportTrackerChart, supportTrackerChartOptions);
   supportTrackerChart.render();
