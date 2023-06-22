@@ -166,6 +166,7 @@
                                             </div>
                                             @endif
 
+                                            @if(count($incompleted_data) > 0)
                                             <h5>Incomplete</h5>
                                             <div class="table-responsive">
                                                 <table class="patients-referral-table table">
@@ -191,7 +192,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach ($transaction_data as $key=>$value)
+                                                        @foreach ($incompleted_data as $key=>$value)
                                                             <tr>
                                                                 <td>{{++$key}}</td>
                                                                 <td>{{date('m-d-Y', strtotime($value->referral_date))}}</td>
@@ -285,6 +286,7 @@
                                                     </tbody>
                                                 </table>
                                             </div>
+                                            @endif
 
                                             @if (count($paid_data) > 0)
                                             <h5>Advance Paid</h5>
