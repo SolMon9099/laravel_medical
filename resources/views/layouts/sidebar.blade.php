@@ -25,7 +25,7 @@
                 </li>
                 <li class="nav-item @if(request()->is('profiles/patient_transaction')) active @endif">
                     <a class="d-flex align-items-center" href="{{ route('profiles.patient_transaction') }}">
-                        <i data-feather="copy"></i>
+                        <i data-feather="database"></i>
                         <span class="menu-title text-truncate">Referrals</span>
                     </a>
                 </li>
@@ -71,7 +71,7 @@
                 </li>
                 <li class="nav-item @if(request()->is('profiles/patient_transaction')) active @endif">
                     <a class="d-flex align-items-center" href="{{ route('profiles.patient_transaction') }}">
-                        <i data-feather="copy"></i>
+                        <i data-feather="database"></i>
                         <span class="menu-title text-truncate">Referrals</span>
                     </a>
                 </li>
@@ -91,7 +91,7 @@
             </li> --}}
             <li class="nav-item @if(request()->is('profiles/patient_transaction')) active @endif">
                 <a class="d-flex align-items-center" href="{{ route('profiles.patient_transaction') }}">
-                    <i data-feather="copy"></i>
+                    <i data-feather="database"></i>
                     <span class="menu-title text-truncate">Referrals</span>
                 </a>
             </li>
@@ -105,7 +105,7 @@
             </li>
             <li class="nav-item @if(request()->is('profiles/patient_transaction')) active @endif">
                 <a class="d-flex align-items-center" href="{{ route('profiles.patient_transaction') }}">
-                    <i data-feather="copy"></i>
+                    <i data-feather="database"></i>
                     <span class="menu-title text-truncate">Referrals</span>
                 </a>
             </li>
@@ -119,7 +119,7 @@
             </li>
             <li class="nav-item @if(request()->is('profiles/patient_transaction')) active @endif">
                 <a class="d-flex align-items-center" href="{{ route('profiles.patient_transaction') }}">
-                    <i data-feather="copy"></i>
+                    <i data-feather="database"></i>
                     <span class="menu-title text-truncate">Referrals</span>
                 </a>
             </li>
@@ -133,7 +133,7 @@
             </li>
             <li class="nav-item @if(request()->is('profiles/patient_transaction')) active @endif">
                 <a class="d-flex align-items-center" href="{{ route('profiles.patient_transaction') }}">
-                    <i data-feather="copy"></i>
+                    <i data-feather="database"></i>
                     <span class="menu-title text-truncate">Referrals</span>
                 </a>
             </li>
@@ -147,7 +147,7 @@
             </li>
             <li class="nav-item @if(request()->is('profiles/patient_transaction')) active @endif">
                 <a class="d-flex align-items-center" href="{{ route('profiles.patient_transaction') }}">
-                    <i data-feather="copy"></i>
+                    <i data-feather="database"></i>
                     <span class="menu-title text-truncate">Referrals</span>
                 </a>
             </li>
