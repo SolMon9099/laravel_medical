@@ -63,14 +63,6 @@
                         <span class="menu-title text-truncate">Dashboard</span>
                     </a>
                 </li>
-
-                <li class="nav-item @if(request()->is('referral*')) active @endif">
-                    <a class="d-flex align-items-center" href="{{ route('referral.index') }}">
-                        <i data-feather="copy"></i>
-                        <span class="menu-title text-truncate">Patient Management</span>
-                    </a>
-                </li>
-
                 <li class="nav-item @if(request()->is('calendar*')) active @endif">
                     <a class="d-flex align-items-center" href="{{ route('calendar.index') }}">
                         <i data-feather="calendar"></i>
@@ -81,6 +73,12 @@
                     <a class="d-flex align-items-center" href="{{ route('profiles.patient_transaction') }}">
                         <i data-feather="copy"></i>
                         <span class="menu-title text-truncate">Referrals</span>
+                    </a>
+                </li>
+                <li class="nav-item @if(request()->is('referral*')) active @endif">
+                    <a class="d-flex align-items-center" href="{{ route('referral.index') }}">
+                        <i data-feather="copy"></i>
+                        <span class="menu-title text-truncate">Patient Management</span>
                     </a>
                 </li>
             @endrole
