@@ -591,7 +591,7 @@ class ReferralController extends Controller
                 $patientTransactionObj->defendant_insurance_state = $defendant_insurance_state;
                 $patientTransactionObj->defendant_insurance_postal = $defendant_insurance_postal;
                 $patientTransactionObj->doctor_notes = $doctor_notes;
-                $patientTransactionObj->status == ($draft != 'draft') ? config('const.status_code.Pending') : config('const.status_code.Draft');
+                $patientTransactionObj->status = ($draft != 'draft') ? config('const.status_code.Pending') : config('const.status_code.Draft');
                 $patientTransactionObj->save();
 
                 if ($draft != 'draft'){
@@ -611,7 +611,7 @@ class ReferralController extends Controller
                         'patient_postal' => $request->input('patient_postal'),
                         'patient_date_injury' => $request->input('patient_date_injury'),
                         'genders' => $request->input('genders'),
-                        'reason_referral' => implode(',', $request->input('reason_referral')),
+                        'reason_referral' => implode(',', $request->input('reason_referral', array())),
 
                         'patient_insurance_company' => $request->input('patient_insurance_company'),
                         'patient_insurance_policy' => $request->input('patient_insurance_policy'),
