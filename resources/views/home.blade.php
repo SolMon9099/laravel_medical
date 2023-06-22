@@ -68,7 +68,7 @@
             $data_by_status[$value->status] = [];
         }
         $data_by_status[$value->status][] = $value;
-        if ($value->status == config('const.status_code')['Test Done']){
+        if ((int)$value->status <= (int)config('const.status_code')['Test Done']){
             $pending_data[] = $value;
         }
         if ($value->status == config('const.status_code')['Advance Paid']){
@@ -208,7 +208,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-2 col-12 d-flex flex-column flex-wrap text-center">
-                                <h1 class="font-large-2 fw-bolder mt-2 mb-0">{{count($pending_data) + count($paid_data)}}</h1>
+                                <h1 class="font-large-2 fw-bolder mt-2 mb-0">{{count($pending_data) + count($paid_data) + count($settled_data)}}</h1>
                                 <p class="card-text">Total</p>
                             </div>
                             <div class="col-sm-10 col-12 d-flex justify-content-center">
