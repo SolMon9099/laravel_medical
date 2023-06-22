@@ -37,30 +37,33 @@
     $result_by_tech = 0;
 
     foreach ($data as $key => $value) {
-        $all_clinics[$value->clinic_doctor->clinic->name] = [];
-        if (strtotime($value->referral_date) >= strtotime($seven_ago)){
-            if (!isset($all_clinics[$value->clinic_doctor->clinic->name]['seven'])){
-                $all_clinics[$value->clinic_doctor->clinic->name]['seven'] = [];
+        if (isset($value->clinic_doctor)){
+            $all_clinics[$value->clinic_doctor->clinic->name] = [];
+            if (strtotime($value->referral_date) >= strtotime($seven_ago)){
+                if (!isset($all_clinics[$value->clinic_doctor->clinic->name]['seven'])){
+                    $all_clinics[$value->clinic_doctor->clinic->name]['seven'] = [];
+                }
+                $all_clinics[$value->clinic_doctor->clinic->name]['seven'][] = $value;
             }
-            $all_clinics[$value->clinic_doctor->clinic->name]['seven'][] = $value;
-        }
-        if (strtotime($value->referral_date) >= strtotime($thirty_ago)){
-            if (!isset($all_clinics[$value->clinic_doctor->clinic->name]['thirty'])){
-                $all_clinics[$value->clinic_doctor->clinic->name]['thirty'] = [];
+            if (strtotime($value->referral_date) >= strtotime($thirty_ago)){
+                if (!isset($all_clinics[$value->clinic_doctor->clinic->name]['thirty'])){
+                    $all_clinics[$value->clinic_doctor->clinic->name]['thirty'] = [];
+                }
+                $all_clinics[$value->clinic_doctor->clinic->name]['thirty'][] = $value;
             }
-            $all_clinics[$value->clinic_doctor->clinic->name]['thirty'][] = $value;
-        }
-        if (strtotime($value->referral_date) >= strtotime($sixty_ago)){
-            if (!isset($all_clinics[$value->clinic_doctor->clinic->name]['sixty'])){
-                $all_clinics[$value->clinic_doctor->clinic->name]['sixty'] = [];
+            if (strtotime($value->referral_date) >= strtotime($sixty_ago)){
+                if (!isset($all_clinics[$value->clinic_doctor->clinic->name]['sixty'])){
+                    $all_clinics[$value->clinic_doctor->clinic->name]['sixty'] = [];
+                }
+                $all_clinics[$value->clinic_doctor->clinic->name]['sixty'][] = $value;
             }
-            $all_clinics[$value->clinic_doctor->clinic->name]['sixty'][] = $value;
-        }
-        if (strtotime($value->referral_date) >= strtotime($ninety_ago)){
-            if (!isset($all_clinics[$value->clinic_doctor->clinic->name]['ninety'])){
-                $all_clinics[$value->clinic_doctor->clinic->name]['ninety'] = [];
+            if (strtotime($value->referral_date) >= strtotime($ninety_ago)){
+                if (!isset($all_clinics[$value->clinic_doctor->clinic->name]['ninety'])){
+                    $all_clinics[$value->clinic_doctor->clinic->name]['ninety'] = [];
+                }
+                $all_clinics[$value->clinic_doctor->clinic->name]['ninety'][] = $value;
             }
-            $all_clinics[$value->clinic_doctor->clinic->name]['ninety'][] = $value;
+
         }
 
         $all_patients[$value->patient->id] = $value->patient;

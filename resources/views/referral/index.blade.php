@@ -28,7 +28,7 @@
                         <td>{{$value->patient->email}}</td>
                         <td>{{$value->attorney->name}}</td>
                         <td>{{$value->doctor->name}}</td>
-                        <td>{{$value->clinic_doctor->clinic->name}}</td>
+                        <td>{{isset($value->clinic_doctor) ? $value->clinic_doctor->clinic->name : ''}}</td>
                         <td>
                             <span class="{{config('const.status_class')[$value->status]}}">{{config('const.status')[$value->status]}}</span>
                         </td>

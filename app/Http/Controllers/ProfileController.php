@@ -151,7 +151,7 @@ class ProfileController extends Controller
                     'patient_city' => $transaction_record->patient->city,
                     'patient_state' => $transaction_record->patient->state,
                     'patient_postal' => $transaction_record->patient->postal,
-                    'clinic_name' => $transaction_record->clinic_doctor->clinic->name,
+                    'clinic_name' => isset($transaction_record->clinic_doctor)? $transaction_record->clinic_doctor->clinic->name : '',
                     'doctor_name' => $transaction_record->doctor->name,
                 ];
                 $pdf_controller->generateInvoicePdf($invoice_data);
