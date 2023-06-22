@@ -500,7 +500,7 @@
                             </div>
 
                             <div class="mb-1 col-md-3">
-                                <label class="form-label" for="patient_insurance_street_adderss">Defendant Insurance Company Address</label>
+                                <label class="form-label" for="patient_insurance_street_adderss">Defendant Insurance Address</label>
                                 @if($is_pending)
                                     <input type="text" id="defendant_insurance_street_adderss" name="defendant_insurance_street_adderss" value="{{ $data->defendant_insurance_street_adderss }}" class="form-control" />
                                 @else
@@ -509,7 +509,7 @@
                             </div>
 
                             <div class="mb-1 col-md-3">
-                                <label class="form-label" for="patient_insurance_street_adderss_line2">Defendant Insurance Company Address Line2</label>
+                                <label class="form-label" for="patient_insurance_street_adderss_line2">Defendant Insurance Address Line2</label>
                                 @if($is_pending)
                                     <input type="text" id="defendant_insurance_street_adderss_line2" name="defendant_insurance_street_adderss_line2" class="form-control" value="{{ $data->defendant_insurance_street_adderss_line2 }}" />
                                 @else
