@@ -318,20 +318,6 @@ class ReferralController extends Controller
         }
 
         $pdf_controller = new PdfController();
-        $invoice_data = [
-            'transaction_id' => $patientTransactionLatestID,
-            'patient_id' => $patient_id,
-            'referral_date' => $referral_date,
-            'patient_name' => $patient_name,
-            'patient_date_birth' => $patient_date_birth,
-            'patient_street_adderss' => $patient_street_adderss,
-            'patient_city' => $patient_city,
-            'patient_state' => $patient_state,
-            'patient_postal' => $patient_postal,
-            'clinic_name' => $clinic_name,
-            'doctor_name' => $doctor_name,
-        ];
-        $pdf_controller->generateInvoicePdf($invoice_data);
         $pdf_data['id'] = $patientTransactionLatestID;
         $pdf_data['patient_id'] = $patient_id;
         $pdf_controller->generateReferralPdf($pdf_data);
@@ -482,20 +468,6 @@ class ReferralController extends Controller
                 $patientTransactionObj->save();
 
                 $pdf_controller = new PdfController();
-                $invoice_data = [
-                    'transaction_id' => $id,
-                    'patient_id' => $patientTransactionObj->patient_id,
-                    'referral_date' => $referral_date,
-                    'patient_name' => $patient_name,
-                    'patient_date_birth' => $patient_date_birth,
-                    'patient_street_adderss' => $patient_street_adderss,
-                    'patient_city' => $patient_city,
-                    'patient_state' => $patient_state,
-                    'patient_postal' => $patient_postal,
-                    'clinic_name' => $clinic_name,
-                    'doctor_name' => $doctor_name,
-                ];
-
                 $pdf_data = [
                     'id' => $id,
                     'patient_id' => $patientTransactionObj->patient_id,
@@ -547,7 +519,6 @@ class ReferralController extends Controller
                     'doctor_phone' => $request->input('doctor_phone'),
                     'doctor_notes' => $request->input('doctor_notes'),
                 ];
-                $pdf_controller->generateInvoicePdf($invoice_data);
                 $pdf_controller->generateReferralPdf($pdf_data);
                 return back()->with('flash_success', 'The patient is updated successfully');
                 break;

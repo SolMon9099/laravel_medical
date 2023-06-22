@@ -147,7 +147,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td></td>
+                            <td>{{date('m-d-Y')}}</td>
                             <td>Neural Scan </td>
                             <td>H18.049</td>
                             <td>1</td>
@@ -155,7 +155,7 @@
                             <td style="text-align:right;padding-right:25px;">$7, 500.00</td>
                         </tr>
                         <tr>
-                            <td></td>
+                            <td>{{date('m-d-Y')}}</td>
                             <td>Neural Scan Read</td>
                             <td>H18.049</td>
                             <td>1</td>

@@ -13,7 +13,7 @@ use App\Models\PatientResultFiles;
 use App\Models\PatientTransaction;
 use App\Service\SmsService;
 use App\Service\MailService;
-
+use App\Http\Controllers\PdfController;
 class ProfileController extends Controller
 {
     /**
@@ -137,6 +137,24 @@ class ProfileController extends Controller
                 $patientResultUploadedFilesObj->created_by = Auth::user()->id;
                 $patientResultUploadedFilesObj->updated_by = Auth::user()->id;
                 $patientResultUploadedFilesObj->save();
+
+                $pdf_controller = new PdfController();
+                $transaction_record = PatientTransaction::find($transaction_id);
+
+                $invoice_data = [
+                    'transaction_id' => $transaction_id,
+                    'patient_id' => $transaction_record->patient_id,
+                    'referral_date' => $transaction_record->referral_date,
+                    'patient_name' => $transaction_record->patient->name,
+                    'patient_date_birth' => $transaction_record->patient->date_of_birth,
+                    'patient_street_adderss' => $transaction_record->patient->address,
+                    'patient_city' => $transaction_record->patient->city,
+                    'patient_state' => $transaction_record->patient->state,
+                    'patient_postal' => $transaction_record->patient->postal,
+                    'clinic_name' => $transaction_record->clinic_doctor->clinic->name,
+                    'doctor_name' => $transaction_record->doctor->name,
+                ];
+                $pdf_controller->generateInvoicePdf($invoice_data);
 
                 PatientTransaction::query()->where('id', $transaction_id)->update(['status' => config('const.status_code')['Test Done']]);
 
