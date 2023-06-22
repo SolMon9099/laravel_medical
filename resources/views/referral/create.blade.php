@@ -212,7 +212,7 @@
                             </div>
 
                             <div class="mb-1 col-md-3">
-                                <label class="form-label" for="patient_insurance_street_adderss_line2">Patient's Insurance Street Address Line2</label>
+                                <label class="form-label" for="patient_insurance_street_adderss_line2">Street Address Line2</label>
                                 <input type="text" id="patient_insurance_street_adderss_line2" name="patient_insurance_street_adderss_line2" class="form-control" />
                             </div>
 
