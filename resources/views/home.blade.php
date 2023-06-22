@@ -246,6 +246,7 @@
                         <div class="card-body statistics-body">
                             <div class="row">
                                 @foreach (config('const.status') as $code => $val)
+                                @if ($code != -1)
                                 <div class="col-xl-2 col-sm-6 col-12 mb-2 mb-xl-0">
                                     <div class="d-flex flex-row">
                                         <div class="<?php echo config('const.status_bg_class')[$code].' avatar me-2' ?>">
@@ -263,6 +264,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                @endif
                                 @endforeach
                             </div>
                         </div>
