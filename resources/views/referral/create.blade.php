@@ -396,7 +396,9 @@
                             </div> --}}
                         </div>
                         <div class="mt-1 mb-1">
-                            <button type="submit" class="btn btn-success me-1 waves-effect waves-float waves-light">Save</button>
+                            <input id="draft_flag" type="hidden" value="" name="draft_flag"/>
+                            <button onclick="saveDraft()" class="btn btn-info me-1">Save Draft</button>
+                            <button onclick="save()" type="" class="btn btn-success me-1 waves-effect waves-float waves-light">Save</button>
                             <a href={{route('referral.index')}} class="btn btn-primary waves-effect">Back</a>
                         </div>
                     </div>
@@ -416,54 +418,209 @@
     <script src="{{ asset('app-assets/vendors/js/file-uploaders/dropzone.min.js') }}"></script>
 
     <script>
-    //Referral Form
-    $(document).ready(function() {
-        // Date
-        var flatpickrInstance = flatpickr(".flatpickr_date", {
-            minDate: "today", // Set today as the minimum allowed date
-            readOnly: false
+        function saveDraft(){
+            $('#draft_flag').val('draft');
+            var referralForm = $('#referralForm');
+            referralForm.validate().destroy();
+            referralForm.validate({
+                errorClass: 'error',
+                rules:{
+                    'patient_name': {
+                        required: true
+                    },
+                    'patient_email': {
+                        required:true,
+                        email: true
+                    },
+                    'attorney_name': {
+                        required: true
+                    },
+                    'attorney_email': {
+                        required:true,
+                        email:true
+                    },
+                    'doctor_name':{
+                        required:true,
+                    },
+                    'doctor_email': {
+                        required:true,
+                        email:true
+                    },
+                    'patient_date_birth': {
+                        date: true
+                    },
+                    'patient_date_injury': {
+                        date: true
+                    },
+                }
+            });
+            $('#referralForm').submit();
+        }
+
+        function save(){
+            $('#draft_flag').val('');
+            var referralForm = $('#referralForm');
+            referralForm.validate().destroy();
+            referralForm.validate({
+                errorClass: 'error',
+                rules: {
+                    'patient_name': {
+                    required: true
+                    },
+                    'patient_email': {
+                    required: true,
+                    email: true
+                    },
+                    'patient_phone': {
+                    required: true
+                    },
+                    'patient_date_birth': {
+                    required: true,
+                    date: true
+                    },
+                    'patient_street_adderss': {
+                    required: true
+                    },
+                    'patient_city': {
+                    required: true
+                    },
+                    'patient_state': {
+                    required: true
+                    },
+                    'patient_postal': {
+                    required: true
+                    },
+                    'patient_date_injury': {
+                    required: true,
+                    date: true
+                    },
+                    'reason_referral': {
+                    required: true
+                    },
+                    'patient_insurance_company': {
+                    required: true
+                    },
+                    'patient_insurance_policy': {
+                    required: true
+                    },
+                    'patient_insurance_street_adderss': {
+                    required: true
+                    },
+                    'patient_insurance_city': {
+                    required: true
+                    },
+                    'patient_insurance_state': {
+                    required: true
+                    },
+                    'patient_insurance_postal': {
+                    required: true
+                    },
+                    'defendant_insurance_company': {
+                    required: true
+                    },
+                    'defendant_insurance_claim': {
+                    required: true
+                    },
+                    'defendant_policy_limit': {
+                    required: true
+                    },
+                    'defendant_insurance_street_adderss': {
+                    required: true
+                    },
+                    'defendant_insurance_city': {
+                    required: true
+                    },
+                    'defendant_insurance_state': {
+                    required: true
+                    },
+                    'defendant_insurance_postal': {
+                    required: true
+                    },
+                    'attorney_name': {
+                    required: true
+                    },
+                    'attorney_email': {
+                    required: true,
+                    email:true
+                    },
+                    'attorney_phone': {
+                    required: true
+                    },
+                    'law_firm_adderss': {
+                    required: true
+                    },
+                    'law_firm_city': {
+                    required: true
+                    },
+                    'law_firm_state': {
+                    required: true
+                    },
+                    'law_firm_postal': {
+                    required: true
+                    },
+                    'doctor_name':{
+                    required:true,
+                    },
+                    'doctor_email': {
+                    required: true,
+                    email:true
+                    },
+                    'doctor_phone': {
+                    required: true
+                    }
+                }
+            });
+            $('#referralForm').submit();
+        }
+
+        //Referral Form
+        $(document).ready(function() {
+            // Date
+            var flatpickrInstance = flatpickr(".flatpickr_date", {
+                minDate: "today", // Set today as the minimum allowed date
+                readOnly: false
+            });
+
+            // Set the date to today's date
+            flatpickrInstance.setDate(new Date());
+
+            // //Birthday
+            var flatpickrInstance = flatpickr(".flatpickr_dates", {
+                // altInput: true,
+                // allowInput: true
+            });
         });
 
-        // Set the date to today's date
-        flatpickrInstance.setDate(new Date());
-
-        // //Birthday
-        var flatpickrInstance = flatpickr(".flatpickr_dates", {
-            // altInput: true,
-            // allowInput: true
+        //Input Mask
+        new Cleave($('.phone-number-mask'), {
+            phone: true,
+            phoneRegionCode: 'US'
         });
-    });
 
-    //Input Mask
-    new Cleave($('.phone-number-mask'), {
-        phone: true,
-        phoneRegionCode: 'US'
-    });
+        new Cleave($('#attorney_phone'), {
+            phone: true,
+            phoneRegionCode: 'US'
+        });
 
-    new Cleave($('#attorney_phone'), {
-        phone: true,
-        phoneRegionCode: 'US'
-    });
+        new Cleave($('#doctor_phone'), {
+            phone: true,
+            phoneRegionCode: 'US'
+        });
 
-    new Cleave($('#doctor_phone'), {
-        phone: true,
-        phoneRegionCode: 'US'
-    });
+        Dropzone.options.myDropzone = {
+            // Configuration options go here
+        };
 
-    Dropzone.options.myDropzone = {
-        // Configuration options go here
-    };
-
-    // var multipleFiles = $('#dpz-multiple-files');
-    // multipleFiles.dropzone({
-    //     autoProcessQueue: false,
-    //     uploadMultiple: true,
-    //     parallelUploads: 100,
-    //     maxFiles: 100,
-    //     paramName: 'file', // The name that will be used to transfer the file
-    //     maxFilesize: 0.5, // MB
-    //     clickable: true
-    // });
+        // var multipleFiles = $('#dpz-multiple-files');
+        // multipleFiles.dropzone({
+        //     autoProcessQueue: false,
+        //     uploadMultiple: true,
+        //     parallelUploads: 100,
+        //     maxFiles: 100,
+        //     paramName: 'file', // The name that will be used to transfer the file
+        //     maxFilesize: 0.5, // MB
+        //     clickable: true
+        // });
 
     </script>
 @endsection

@@ -22,19 +22,23 @@ class HomeController extends Controller
         } else {
             switch(auth()->user()->roles[0] ->id){
                 case config('const.role_codes')['office manager']:
-                    $data = PatientTransaction::query()->where('office_id', auth()->user()->id)->get()->all();
+                    $data = PatientTransaction::query()->where('office_id', auth()->user()->id)
+                        ->where('status', '!=', config('const.status_code')['Draft'])
+                        ->get()->all();
                     break;
                 case config('const.role_codes')['doctor']:
-                    $data = PatientTransaction::query()->where('doctor_id', auth()->user()->id)->get()->all();
+                    $data = PatientTransaction::query()->where('doctor_id', auth()->user()->id)
+                        ->where('status', '!=', config('const.status_code')['Draft'])->get()->all();
                     break;
                 case config('const.role_codes')['attorney']:
-                    $data = PatientTransaction::query()->where('attorney_id', auth()->user()->id)->get()->all();
+                    $data = PatientTransaction::query()->where('attorney_id', auth()->user()->id)
+                        ->where('status', '!=', config('const.status_code')['Draft'])->get()->all();
                     break;
                 case config('const.role_codes')['technician']:
-                    $data = PatientTransaction::all();
+                    $data = PatientTransaction::query()->where('status', '!=', config('const.status_code')['Draft'])->get()->all();
                     break;
                 default:
-                    $data = PatientTransaction::all();
+                    $data = PatientTransaction::query()->where('status', '!=', config('const.status_code')['Draft'])->get()->all();
                     break;
             }
             $all_transaction_ids = [];

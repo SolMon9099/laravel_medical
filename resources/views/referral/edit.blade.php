@@ -7,7 +7,7 @@
     {{-- <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/plugins/forms/form-file-uploader.css') }}">   --}}
 @endsection
 <?php
-    $is_pending = ($data->status == config('const.status_code.Pending'));
+    $is_pending = ($data->status == config('const.status_code.Pending') || $data->status == config('const.status_code.Draft'));
     $is_booked_status = ($data->status == config('const.status_code.Booked'));
 ?>
 @section('content')
@@ -751,7 +751,11 @@
                             </div>
                         </div>
                         <div class="mt-1 mb-1">
-                            <button type="submit" class="btn btn-success me-1 waves-effect waves-float waves-light">Update</button>
+                            <input id="draft_flag" type="hidden" value="" name="draft_flag"/>
+                            @if($data->status == config('const.status_code.Draft'))
+                                <button onclick="saveDraft()" class="btn btn-info me-1">Save Draft</button>
+                            @endif
+                            <button onclick="save()" class="btn btn-success me-1 waves-effect waves-float waves-light">Update</button>
                             <a href={{route('referral.index')}} class="btn btn-primary waves-effect">Back</a>
                         </div>
                     </div>
@@ -771,6 +775,160 @@
     <script src="{{ asset('app-assets/vendors/js/file-uploaders/dropzone.min.js') }}"></script>
 
     <script>
+        function saveDraft(){
+            $('#draft_flag').val('draft');
+            var referralForm = $('#referralForm');
+            referralForm.validate().destroy();
+            referralForm.validate({
+                errorClass: 'error',
+                rules:{
+                    'patient_name': {
+                        required: true
+                    },
+                    'patient_email': {
+                        required:true,
+                        email: true
+                    },
+                    'attorney_name': {
+                        required: true
+                    },
+                    'attorney_email': {
+                        required:true,
+                        email:true
+                    },
+                    'doctor_name':{
+                        required:true,
+                    },
+                    'doctor_email': {
+                        required:true,
+                        email:true
+                    },
+                    'patient_date_birth': {
+                        date: true
+                    },
+                    'patient_date_injury': {
+                        date: true
+                    },
+                }
+            });
+            $('#referralForm').submit();
+        }
+
+        function save(){
+            $('#draft_flag').val('');
+            var referralForm = $('#referralForm');
+            referralForm.validate().destroy();
+            referralForm.validate({
+                errorClass: 'error',
+                rules: {
+                    'patient_name': {
+                    required: true
+                    },
+                    'patient_email': {
+                    required: true,
+                    email: true
+                    },
+                    'patient_phone': {
+                    required: true
+                    },
+                    'patient_date_birth': {
+                    required: true,
+                    date: true
+                    },
+                    'patient_street_adderss': {
+                    required: true
+                    },
+                    'patient_city': {
+                    required: true
+                    },
+                    'patient_state': {
+                    required: true
+                    },
+                    'patient_postal': {
+                    required: true
+                    },
+                    'patient_date_injury': {
+                    required: true,
+                    date: true
+                    },
+                    'reason_referral': {
+                    required: true
+                    },
+                    'patient_insurance_company': {
+                    required: true
+                    },
+                    'patient_insurance_policy': {
+                    required: true
+                    },
+                    'patient_insurance_street_adderss': {
+                    required: true
+                    },
+                    'patient_insurance_city': {
+                    required: true
+                    },
+                    'patient_insurance_state': {
+                    required: true
+                    },
+                    'patient_insurance_postal': {
+                    required: true
+                    },
+                    'defendant_insurance_company': {
+                    required: true
+                    },
+                    'defendant_insurance_claim': {
+                    required: true
+                    },
+                    'defendant_policy_limit': {
+                    required: true
+                    },
+                    'defendant_insurance_street_adderss': {
+                    required: true
+                    },
+                    'defendant_insurance_city': {
+                    required: true
+                    },
+                    'defendant_insurance_state': {
+                    required: true
+                    },
+                    'defendant_insurance_postal': {
+                    required: true
+                    },
+                    'attorney_name': {
+                    required: true
+                    },
+                    'attorney_email': {
+                    required: true,
+                    email:true
+                    },
+                    'attorney_phone': {
+                    required: true
+                    },
+                    'law_firm_adderss': {
+                    required: true
+                    },
+                    'law_firm_city': {
+                    required: true
+                    },
+                    'law_firm_state': {
+                    required: true
+                    },
+                    'law_firm_postal': {
+                    required: true
+                    },
+                    'doctor_name':{
+                    required:true,
+                    },
+                    'doctor_email': {
+                    required: true,
+                    email:true
+                    },
+                    'doctor_phone': {
+                    required: true
+                    }
+                }
+            });
+            $('#referralForm').submit();
+        }
     //Referral Form
     $(document).ready(function() {
         //Date

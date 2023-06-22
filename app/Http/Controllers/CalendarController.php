@@ -19,7 +19,7 @@ class CalendarController extends Controller
     {
         $patient_data = PatientTransaction::with(['patient'])
             ->where('office_id', auth()->user()->id)
-            // ->where('status', 0)
+            ->where('status', '!=', config('const.status_code.Draft'))
             ->orderBy('created_at','desc')
             ->get()->all();
 

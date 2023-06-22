@@ -1,6 +1,7 @@
 <?php
     return [
         'status' => [
+            -1 => 'Draft',
             0 => 'Pending',
             1 => 'Booked',
             2 => 'Signed',
@@ -9,6 +10,7 @@
             5 => 'Settled',
         ],
         'status_code' => [
+            'Draft' => -1,
             'Pending'  => 0,
             'Booked' => 1,
             'Signed' => 2,
@@ -17,6 +19,7 @@
             'Settled' => 5,
         ],
         'status_class' => [
+            -1 => 'text-secondary',
             0 => 'text-primary',
             1 => 'text-secondary',
             2 => 'text-warning',
@@ -25,6 +28,7 @@
             5 => 'text-success',
         ],
         'status_bg_class' => [
+            -1 => 'bg-light-secondary',
             0 => 'bg-light-primary',
             1 => 'bg-light-secondary',
             2 => 'bg-light-warning',
