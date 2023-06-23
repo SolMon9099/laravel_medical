@@ -377,7 +377,7 @@
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="vertical-twitter">Doctor Name</label>
                                 <input type="text" id="doctor_name" name="doctor_name" class="form-control" value="Dr. Mark Cohen" />
-                                <span>If not listen</span>
+                                <span>If Not Listed</span>
                             </div>
 
                             <div class="mb-1 col-md-3">

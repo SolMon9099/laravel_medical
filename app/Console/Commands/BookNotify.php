@@ -24,15 +24,19 @@ class BookNotify extends Command
     {
         Log::info('start cron for book alert');
         $tomorrow = date("Y-m-d 23:59:59", strtotime('tomorrow'));
-        $sch_data = PatientSchedule::with(['patient'])
-            ->where('start_date', '<=', $tomorrow)
+        $sch_data = PatientSchedule::query()
+            ->where('start_date', '<', $tomorrow)
             ->where('start_date', '>=', date('Y-m-d'))
             ->orderBy('created_at','desc')
             ->get()->all();
 
         $sms_service = new SmsService();
         foreach($sch_data as $item){
-            $message = $sms_service->makePatientMessage($item->patient, ['start_date' => $item->start_date, 'end_date' => $item->end_date], 'notify');
+            $message = $sms_service->makePatientMessage(
+                $item->patient,
+                ['start_date' => $item->start_date, 'end_date' => $item->end_date, 'transaction' => $item->patient_transaction],
+                'notify'
+            );
             $sms_service->sendSMS($message, $item->patient->phone);
 
             $mailData = [

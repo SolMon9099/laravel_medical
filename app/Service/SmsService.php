@@ -39,11 +39,20 @@ class SmsService{
         }
         switch($type){
             case 'notify':
-                $message .= "Your NeuralScan for ";
+                $message .= "A reminder of your Neuralscan Appointment Tomorrow at ";
+                if (isset($schedule_data['transaction'])){
+                    if ($schedule_data['transaction']->clinic_doctor){
+                        $message .= $schedule_data['transaction']->clinic_doctor->clinic->name;
+                    }
+                }
                 if (isset($schedule_data['start_date']) && isset($schedule_data['end_date'])){
                     // $message .= "From ".date('m/d/Y H:i', strtotime($schedule_data['start_date'])). "\nTo ".date('m/d/Y H:i', strtotime($schedule_data['end_date']));
-                    $message .= date('m-d-Y H:i', strtotime($schedule_data['start_date']));
-                    $message .= " has been scheduled!";
+                    $message .= "\n".date('m-d-Y H:i', strtotime($schedule_data['start_date']));
+                }
+                if (isset($schedule_data['transaction'])){
+                    if (isset($schedule_data['transaction']->doctor)){
+                        $message .="\nTo Reschedule: ". $schedule_data['transaction']->doctor->phone;
+                    }
                 }
                 break;
             case 'add':
@@ -53,6 +62,7 @@ class SmsService{
                     $message .= date('m-d-Y H:i', strtotime($schedule_data['start_date']));
                     $message .= " has been scheduled!";
                 }
+                $message .="\nTo Reschedule: ". auth()->user()->phone;
                 break;
             case 'edit':
                 $message .= "Your NeuralScan for ";
@@ -61,6 +71,7 @@ class SmsService{
                     $message .= date('m-d-Y H:i', strtotime($schedule_data['start_date']));
                     $message .= " has been scheduled!";
                 }
+                $message .="\nTo Reschedule: ". auth()->user()->phone;
                 break;
             case 'delete':
                 $message .= "Your NeuralScan for";
@@ -69,9 +80,9 @@ class SmsService{
                     $message .= date('m-d-Y H:i', strtotime($schedule_data['start_date']));
                     $message .= " has been deleted!";
                 }
+                $message .="\nTo Reschedule: ". auth()->user()->phone;
                 break;
         }
-        $message .="\nTo Reschedule: ". auth()->user()->phone;
         return $message;
     }
 

@@ -663,7 +663,7 @@
                                 @else
                                     <input disabled type="text" id="doctor_name" name="doctor_name" class="form-control" value="{{ $data->doctor->name }}" />
                                 @endif
-                                <span>If not listen</span>
+                                <span>If Not Listed</span>
                             </div>
 
                             <div class="mb-1 col-md-3">
