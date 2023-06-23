@@ -2,7 +2,7 @@
    <div class="main-menu menu-fixed menu-light menu-accordion menu-shadow" data-scroll-to-active="true">
     <div class="navbar-header">
         <ul class="nav navbar-nav flex-row">
-            <li class="nav-item me-auto">
+            <li class="nav-item me-auto" style="width:100%;">
                 <a class="navbar-brand" href="{{route('home')}}">
                     <img src="{{ asset('assets/image/logo.svg') }}" />
                 </a>
