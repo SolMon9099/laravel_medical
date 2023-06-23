@@ -202,8 +202,13 @@
                                 <input type="text" id="patient_insurance_company" name="patient_insurance_company" class="form-control" />
                             </div>
                             <div class="mb-1 col-md-3">
-                                <label class="form-label" for="patient_insurance_policy">Patient's Policy</label>
+                                <label class="form-label" for="patient_insurance_policy">Patient Policy Number</label>
                                 <input type="text" id="patient_insurance_policy" name="patient_insurance_policy" class="form-control"  />
+                            </div>
+
+                            <div class="mb-1 col-md-3">
+                                <label class="form-label" for="patient_policy_limit">Patient Policy Limit</label>
+                                <input type="number" value="10000" id="patient_policy_limit" name="patient_policy_limit" class="form-control"  />
                             </div>
 
                             <div class="mb-1 col-md-3">
@@ -276,7 +281,7 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="vertical-address">Defendant Policy Limit</label>
-                                <input type="text" id="defendant_policy_limit" name="defendant_policy_limit" class="form-control" />
+                                <input type="number" value="10000" id="defendant_policy_limit" name="defendant_policy_limit" class="form-control" />
                             </div>
 
                             <div class="mb-1 col-md-3">
@@ -501,6 +506,9 @@
                     required: true
                     },
                     'patient_insurance_policy': {
+                    required: true
+                    },
+                    'patient_policy_limit': {
                     required: true
                     },
                     'patient_insurance_street_adderss': {

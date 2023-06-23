@@ -81,6 +81,7 @@ class ReferralController extends Controller
         //patient insurance
         $patient_insurance_company = $request->input('patient_insurance_company', '');
         $patient_insurance_policy = $request->input('patient_insurance_policy', '');
+        $patient_policy_limit = $request->input('patient_policy_limit');
         $patient_insurance_street_adderss = $request->input('patient_insurance_street_adderss', '');
         $patient_insurance_street_adderss_line2 = $request->input('patient_insurance_street_adderss_line2', '');
         $patient_insurance_city = $request->input('patient_insurance_city', '');
@@ -131,7 +132,7 @@ class ReferralController extends Controller
             $doctor_id = '';
 
             $isPatientExist = User::where('email', $patient_email)->first();
-            if ($isPatientExist) {
+            if ($isPatientExist && $isPatientExist->roles[0]->name == 'patient') {
                 $patient_id = User::where('email', $patient_email)->value('id');
             }else{
                 $patientObj = new User();
@@ -153,7 +154,7 @@ class ReferralController extends Controller
             }
 
             $isAttorneyExist = User::where('email', $attorney_email)->first();
-            if ($isAttorneyExist) {
+            if ($isAttorneyExist && $isAttorneyExist->roles[0]->name == 'attorney') {
                 $attorney_id = User::where('email', $attorney_email)->value('id');
             }else{
                 $attorneyObj = new User();
@@ -174,7 +175,7 @@ class ReferralController extends Controller
             }
 
             $isDoctorExist = User::where('email', $doctor_email)->first();
-            if ($isDoctorExist) {
+            if ($isDoctorExist && $isDoctorExist->roles[0]->name == 'doctor') {
                 $doctor_id = User::where('email', $doctor_email)->value('id');
             } else {
                 $doctorObj = new User();
@@ -206,6 +207,7 @@ class ReferralController extends Controller
                 $patientTransactionObj->reason_referral = $reason_referral;
                 $patientTransactionObj->patient_insurance_company = $patient_insurance_company;
                 $patientTransactionObj->patient_insurance_policy = $patient_insurance_policy;
+                $patientTransactionObj->patient_policy_limit = $patient_policy_limit;
                 $patientTransactionObj->patient_insurance_street_adderss = $patient_insurance_street_adderss;
                 $patientTransactionObj->patient_insurance_street_adderss_line2 = $patient_insurance_street_adderss_line2;
                 $patientTransactionObj->patient_insurance_city = $patient_insurance_city;
@@ -239,7 +241,7 @@ class ReferralController extends Controller
         } else {
             // if there isn't patient data, create a new patient with patient information and get ID.
             $isPatientExist = User::where('email', $patient_email)->first();
-            if ($isPatientExist) {
+            if ($isPatientExist && $isPatientExist->roles[0]->name == 'patient') {
                 $patient_id = User::where('email', $patient_email)->value('id');
             }else{
                 $patientObj = new User();
@@ -272,7 +274,7 @@ class ReferralController extends Controller
 
             //if there isn't attorney data, create a new attorney with attorney information and get ID.
             $isAttorneyExist = User::where('email', $attorney_email)->first();
-            if ($isAttorneyExist) {
+            if ($isAttorneyExist && $isAttorneyExist->roles[0]->name == 'attorney') {
                 $attorney_id = User::where('email', $attorney_email)->value('id');
             }else{
                 $attorneyObj = new User();
@@ -302,7 +304,7 @@ class ReferralController extends Controller
 
             //if there isn't doctor data, create a new doctor with doctor information and get ID.
             $isDoctorExist = User::where('email', $doctor_email)->first();
-            if ($isDoctorExist) {
+            if ($isDoctorExist && $isDoctorExist->roles[0]->name == 'doctor') {
                 $doctor_id = User::where('email', $doctor_email)->value('id');
             }else{
                 $doctorObj = new User();
@@ -343,6 +345,7 @@ class ReferralController extends Controller
                 $patientTransactionObj->reason_referral = $reason_referral;
                 $patientTransactionObj->patient_insurance_company = $patient_insurance_company;
                 $patientTransactionObj->patient_insurance_policy = $patient_insurance_policy;
+                $patientTransactionObj->patient_policy_limit = $patient_policy_limit;
                 $patientTransactionObj->patient_insurance_street_adderss = $patient_insurance_street_adderss;
                 $patientTransactionObj->patient_insurance_street_adderss_line2 = $patient_insurance_street_adderss_line2;
                 $patientTransactionObj->patient_insurance_city = $patient_insurance_city;
@@ -407,6 +410,7 @@ class ReferralController extends Controller
 
                 'patient_insurance_company' => $request->input('patient_insurance_company'),
                 'patient_insurance_policy' => $request->input('patient_insurance_policy'),
+                'patient_policy_limit' => $request->input('patient_policy_limit'),
                 'patient_insurance_street_adderss' => $request->input('patient_insurance_street_adderss'),
                 'patient_insurance_street_adderss_line2' => $request->input('patient_insurance_street_adderss_line2'),
                 'patient_insurance_city' => $request->input('patient_insurance_city'),
@@ -494,6 +498,7 @@ class ReferralController extends Controller
                 //patient insurance
                 $patient_insurance_company = $request->input('patient_insurance_company');
                 $patient_insurance_policy = $request->input('patient_insurance_policy');
+                $patient_policy_limit = $request->input('patient_policy_limit');
                 $patient_insurance_street_adderss = $request->input('patient_insurance_street_adderss');
                 $patient_insurance_street_adderss_line2 = $request->input('patient_insurance_street_adderss_line2');
                 $patient_insurance_city = $request->input('patient_insurance_city');
@@ -575,6 +580,7 @@ class ReferralController extends Controller
                 $patientTransactionObj->reason_referral = $reason_referral;
                 $patientTransactionObj->patient_insurance_company = $patient_insurance_company;
                 $patientTransactionObj->patient_insurance_policy = $patient_insurance_policy;
+                $patientTransactionObj->patient_policy_limit = $patient_policy_limit;
                 $patientTransactionObj->patient_insurance_street_adderss = $patient_insurance_street_adderss;
                 $patientTransactionObj->patient_insurance_street_adderss_line2 = $patient_insurance_street_adderss_line2;
                 $patientTransactionObj->patient_insurance_city = $patient_insurance_city;
@@ -615,6 +621,7 @@ class ReferralController extends Controller
 
                         'patient_insurance_company' => $request->input('patient_insurance_company'),
                         'patient_insurance_policy' => $request->input('patient_insurance_policy'),
+                        'patient_policy_limit' => $request->input('patient_policy_limit'),
                         'patient_insurance_street_adderss' => $request->input('patient_insurance_street_adderss'),
                         'patient_insurance_street_adderss_line2' => $request->input('patient_insurance_street_adderss_line2'),
                         'patient_insurance_city' => $request->input('patient_insurance_city'),

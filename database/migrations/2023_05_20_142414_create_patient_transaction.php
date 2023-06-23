@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('reason_referral')->nullable();
             $table->string('patient_insurance_company')->nullable();
             $table->string('patient_insurance_policy')->nullable();
+            $table->string('patient_policy_limit')->nullable();
             $table->string('patient_insurance_street_adderss')->nullable();
             $table->string('patient_insurance_street_adderss_line2')->nullable();
             $table->string('patient_insurance_city')->nullable();

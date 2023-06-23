@@ -367,11 +367,22 @@
                                 @endif
                             </div>
                             <div class="mb-1 col-md-3">
-                                <label class="form-label" for="patient_insurance_policy">Patient's Policy</label>
+                                <label class="form-label" for="patient_insurance_policy">Patient Policy Number</label>
                                 @if($is_pending)
                                     <input type="text" id="patient_insurance_policy" name="patient_insurance_policy" value="{{ $data->patient_insurance_policy }}" class="form-control"  />
                                 @else
                                     <input disabled type="text" id="patient_insurance_policy" name="patient_insurance_policy" value="{{ $data->patient_insurance_policy }}" class="form-control"  />
+                                @endif
+                            </div>
+
+                            <div class="mb-1 col-md-3">
+                                <label class="form-label" for="patient_policy_limit">Patient Policy Limit</label>
+                                @if($is_pending)
+                                    <input type="number" id="patient_policy_limit" name="patient_policy_limit" class="form-control"
+                                        value="{{ (int)$data->patient_policy_limit > 0 ? $data->patient_policy_limit : 10000 }}" />
+                                @else
+                                    <input disabled type="number" id="patient_policy_limit" name="patient_policy_limit" class="form-control"
+                                        value="{{ (int)$data->patient_policy_limit > 0 ? $data->patient_policy_limit : 10000 }}" />
                                 @endif
                             </div>
 
@@ -493,9 +504,11 @@
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="vertical-address">Defendant Policy Limit</label>
                                 @if($is_pending)
-                                    <input type="text" id="defendant_policy_limit" name="defendant_policy_limit" class="form-control" value="{{ $data->defendant_policy_limit }}" />
+                                    <input type="number" id="defendant_policy_limit" name="defendant_policy_limit" class="form-control"
+                                        value="{{ (int)$data->defendant_policy_limit > 0 ? $data->defendant_policy_limit : 10000 }}" />
                                 @else
-                                    <input disabled type="text" id="defendant_policy_limit" name="defendant_policy_limit" class="form-control" value="{{ $data->defendant_policy_limit }}" />
+                                    <input disabled type="number" id="defendant_policy_limit" name="defendant_policy_limit" class="form-control"
+                                        value="{{ (int)$data->defendant_policy_limit > 0 ? $data->defendant_policy_limit : 10000 }}" />
                                 @endif
                             </div>
 
@@ -858,6 +871,9 @@
                     required: true
                     },
                     'patient_insurance_policy': {
+                    required: true
+                    },
+                    'patient_policy_limit': {
                     required: true
                     },
                     'patient_insurance_street_adderss': {
