@@ -74,11 +74,14 @@ class ProfileController extends Controller
         if ($request->hasFile('files')) {
             $uploadedFiles = $request->file('files');
             $transaction_id = $request->transaction_id;
+            $transaction_record = PatientTransaction::find($transaction_id);
             foreach ($uploadedFiles as $file) {
                 $patientTransactionUploadedFilesObj = new PatientTransactionUploadedFiles();
 
                 //set the file name
-                $fileName = $file->getClientOriginalName();
+                // $fileName = $file->getClientOriginalName();
+                $patient_name = $transaction_record->patient->name;
+                $fileName = $patient_name.'-Singed Lien-'.date('m-d-Y').'.pdf';
 
                 //move the file into the desired folder
                 $file->move(public_path('uploads/sign'), $fileName);
@@ -122,11 +125,14 @@ class ProfileController extends Controller
         if ($request->hasFile('result_files')) {
             $uploadedFiles = $request->file('result_files');
             $transaction_id = $request->transaction_id;
+            $transaction_record = PatientTransaction::find($transaction_id);
             foreach ($uploadedFiles as $file) {
                 $patientResultUploadedFilesObj = new PatientResultFiles();
 
                 //set the file name
-                $fileName = $file->getClientOriginalName();
+                // $fileName = $file->getClientOriginalName();
+                $patient_name = $transaction_record->patient->name;
+                $fileName = $patient_name.'-Records-'.date('m-d-Y').'.pdf';
 
                 //move the file into the desired folder
                 $file->move(public_path('uploads/results'), $fileName);

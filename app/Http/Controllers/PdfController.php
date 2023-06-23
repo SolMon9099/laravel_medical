@@ -21,10 +21,10 @@ class PdfController extends Controller
         // $dompdf->stream('referral.pdf', array('Attachment' => 0));
 
         $patient_info = '';
-        if (isset($data['patient_id'])){
-            $patient_info = '_'.$data['patient_id'];
+        if (isset($data['patient_name'])){
+            $patient_info = '_'.$data['patient_name'];
         }
-        $filename = 'referral_'.date('YmdHis').$patient_info.'.pdf';
+        $filename = $patient_info.'-'. 'Demographics-'.date('m-d-Y').'.pdf';
 
         if (!is_dir(storage_path('app/public/referral'))) {
             mkdir(storage_path('app/public/referral'), 0775, true);
@@ -64,10 +64,10 @@ class PdfController extends Controller
 
         // Save the PDF to the storage directory
         $patient_info = '';
-        if (isset($data['patient_id'])){
-            $patient_info = '_'.$data['patient_id'];
+        if (isset($data['patient_name'])){
+            $patient_info = '_'.$data['patient_name'];
         }
-        $filename = 'invoice_'.date('YmdHis').$patient_info.'.pdf';
+        $filename = $patient_info.'-'.'invoice-'.date('m-d-Y').'.pdf';
         if (!is_dir(storage_path('app/public/invoice'))) {
             mkdir(storage_path('app/public/invoice'), 0775, true);
         }

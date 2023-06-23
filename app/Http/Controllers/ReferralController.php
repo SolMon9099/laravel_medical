@@ -366,24 +366,6 @@ class ReferralController extends Controller
                 $patientTransactionObj->doctor_notes = $doctor_notes;
                 $patientTransactionObj->save();
                 $patientTransactionLatestID = $patientTransactionObj->id;
-                //file upload
-                if ($request->hasFile('files')) {
-                    $uploadedFiles = $request->file('files');
-                    foreach ($uploadedFiles as $file) {
-                        $patientTransactionUploadedFilesObj = new PatientTransactionUploadedFiles();
-
-                        //set the file name
-                        $fileName = $file->getClientOriginalName();
-
-                        //move the file into the desired folder
-                        $file->move(public_path('uploads/sign'), $fileName);
-
-                        // Save the upload result into the database
-                        $patientTransactionUploadedFilesObj->transaction_id = $patientTransactionLatestID;
-                        $patientTransactionUploadedFilesObj->files = $fileName;
-                        $patientTransactionUploadedFilesObj->save();
-                    }
-                }
 
                 DB::commit();
 
@@ -662,13 +644,15 @@ class ReferralController extends Controller
             case config('const.status_code.Booked'):
                 //file upload
                 if ($request->hasFile('files')) {
+                    $patient_name = $request->input('patient_name');
                     PatientTransactionUploadedFiles::query()->where('transaction_id', $id)->delete();
                     $uploadedFiles = $request->file('files');
                     foreach ($uploadedFiles as $file) {
                         $patientTransactionUploadedFilesObj = new PatientTransactionUploadedFiles();
 
                         //set the file name
-                        $fileName = $file->getClientOriginalName();
+                        // $fileName = $file->getClientOriginalName();
+                        $fileName = $patient_name.'-Singed Lien-'.date('m-d-Y').'.pdf';
 
                         //move the file into the desired folder
                         $file->move(public_path('uploads/sign'), $fileName);
