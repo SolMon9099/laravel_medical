@@ -208,7 +208,7 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="patient_policy_limit">Patient Policy Limit</label>
-                                <input type="number" value="10000" id="patient_policy_limit" name="patient_policy_limit" class="form-control"  />
+                                <input type="number" placeholder="N/A" id="patient_policy_limit" name="patient_policy_limit" class="form-control"  />
                             </div>
 
                             <div class="mb-1 col-md-3">
@@ -281,7 +281,7 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="vertical-address">Defendant Policy Limit</label>
-                                <input type="number" value="10000" id="defendant_policy_limit" name="defendant_policy_limit" class="form-control" />
+                                <input type="number" placeholder="N/A" id="defendant_policy_limit" name="defendant_policy_limit" class="form-control" />
                             </div>
 
                             <div class="mb-1 col-md-3">

@@ -379,10 +379,10 @@
                                 <label class="form-label" for="patient_policy_limit">Patient Policy Limit</label>
                                 @if($is_pending)
                                     <input type="number" id="patient_policy_limit" name="patient_policy_limit" class="form-control"
-                                        value="{{ (int)$data->patient_policy_limit > 0 ? $data->patient_policy_limit : 10000 }}" />
+                                        value="{{ $data->patient_policy_limit }}" placeholder="N/A" />
                                 @else
                                     <input disabled type="number" id="patient_policy_limit" name="patient_policy_limit" class="form-control"
-                                        value="{{ (int)$data->patient_policy_limit > 0 ? $data->patient_policy_limit : 10000 }}" />
+                                        value="{{ $data->patient_policy_limit }}" placeholder="N/A" />
                                 @endif
                             </div>
 
@@ -505,10 +505,10 @@
                                 <label class="form-label" for="vertical-address">Defendant Policy Limit</label>
                                 @if($is_pending)
                                     <input type="number" id="defendant_policy_limit" name="defendant_policy_limit" class="form-control"
-                                        value="{{ (int)$data->defendant_policy_limit > 0 ? $data->defendant_policy_limit : 10000 }}" />
+                                        value="{{ $data->defendant_policy_limit }}" placeholder="N/A"/>
                                 @else
                                     <input disabled type="number" id="defendant_policy_limit" name="defendant_policy_limit" class="form-control"
-                                        value="{{ (int)$data->defendant_policy_limit > 0 ? $data->defendant_policy_limit : 10000 }}" />
+                                        value="{{ $data->defendant_policy_limit }}" placeholder="N/A"/>
                                 @endif
                             </div>
 
