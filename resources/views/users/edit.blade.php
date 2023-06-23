@@ -109,6 +109,17 @@
                                         @endif
                                     @endforeach
                                 </select>
+                            @elseif (isset($userRole['doctor']))
+                                <select class="select2 form-select w-100 form-control" id="clinic_id" name="clinic_id">
+                                    <option value=""></option>
+                                    @foreach ($clinics as $item)
+                                        @if(isset($user->clinic_by_doctor) && $user->clinic_by_doctor->clinic_id > 0 && $user->clinic_by_doctor->clinic_id == $item->id)
+                                            <option selected value={{$item->id}}>{{$item->name}}</option>
+                                        @else
+                                            <option value={{$item->id}}>{{$item->name}}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
                             @else
                                 <select disabled class="select2 form-select w-100 form-control" id="clinic_id" name="clinic_id">
                                     <option value=""></option>
@@ -155,7 +166,7 @@
 
 
         $('#roles').change(function(){
-            if ($(this).val()[0] == "office manager"){
+            if ($(this).val()[0] == "office manager" || $(this).val()[0] == "doctor"){
                 $('#clinic_id').attr('disabled', false);
             } else {
                 $('#clinic_id').attr('disabled', true);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Clinic;
+use App\Models\ClinicDoctor;
 use App\Models\User;
 use App\Models\ClinicManager;
 use Spatie\Permission\Models\Role;
@@ -71,6 +72,13 @@ class UserController extends Controller
             $clinic_manager = new ClinicManager();
             $clinic_manager->clinic_id = $request->input('clinic_id');
             $clinic_manager->manager_id = $user->id;
+            $clinic_manager->save();
+        }
+
+        if($request->input('roles') == 'doctor'){
+            $clinic_manager = new ClinicDoctor();
+            $clinic_manager->clinic_id = $request->input('clinic_id');
+            $clinic_manager->doctor_id = $user->id;
             $clinic_manager->save();
         }
 
@@ -141,6 +149,15 @@ class UserController extends Controller
             $clinic_manager->clinic_id = $request->input('clinic_id');
             $clinic_manager->manager_id = $id;
             $clinic_manager->save();
+        }
+
+        DB::table('clinic_doctors')->where('doctor_id', $id)->delete();
+
+        if($request->input('roles')[0] == 'doctor'){
+            $clinic_doctor = new ClinicDoctor();
+            $clinic_doctor->clinic_id = $request->input('clinic_id');
+            $clinic_doctor->doctor_id = $id;
+            $clinic_doctor->save();
         }
 
         return redirect()->route('users.index')

@@ -181,7 +181,7 @@
         });
 
         $('#roles').change(function(){
-            if ($(this).val()[0] == "office manager"){
+            if ($(this).val()[0] == "office manager" || $(this).val()[0] == "doctor"){
                 $('#clinic_id').attr('disabled', false);
             } else {
                 $('#clinic_id').attr('disabled', true);

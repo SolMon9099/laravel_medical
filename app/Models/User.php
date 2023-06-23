@@ -66,4 +66,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(ClinicManager::class,'manager_id', 'id');
     }
+
+    public function clinic_by_doctor()
+    {
+        return $this->hasOne(ClinicDoctor::class,'doctor_id', 'id');
+    }
 }

@@ -19,18 +19,21 @@ $(window).on('load', function () {
   var $orderChart = document.querySelector('#order-chart');
   var $avgSessionsChart = document.querySelector('#avg-sessions-chart');
   var $supportTrackerChart = document.querySelector('#support-trackers-chart');
+  var $referralTrackerChart = document.querySelector('#referral-trackers-chart');
   var $salesVisitChart = document.querySelector('#sales-visit-chart');
 
   var gainedChartOptions;
   var orderChartOptions;
   var avgSessionsChartOptions;
   var supportTrackerChartOptions;
+  var referralTrackerChartOptions;
   var salesVisitChartOptions;
 
   var gainedChart;
   var orderChart;
   var avgSessionsChart;
   var supportTrackerChart;
+  var referralTrackerChart;
   var salesVisitChart;
   var isRtl = $('html').attr('data-textdirection') === 'rtl';
 
@@ -284,11 +287,68 @@ $(window).on('load', function () {
     stroke: {
       dashArray: 8
     },
-    series: [total_number > 0 ?parseFloat(100 * pending_number/total_number).toFixed(1) : 0],
-    labels: ['Incomplete Referrals']
+    series: [total_number > 0 ?parseFloat(100 * unpaid_number/total_number).toFixed(1) : 0],
+    labels: ['Unpaid Results']
   };
   supportTrackerChart = new ApexCharts($supportTrackerChart, supportTrackerChartOptions);
   supportTrackerChart.render();
+
+  //referral tracker Chart
+  referralTrackerChartOptions = {
+    chart: {
+      height: 270,
+      type: 'radialBar'
+    },
+    plotOptions: {
+      radialBar: {
+        size: 150,
+        offsetY: 20,
+        startAngle: -150,
+        endAngle: 150,
+        hollow: {
+          size: '65%'
+        },
+        track: {
+          background: $white,
+          strokeWidth: '100%'
+        },
+        dataLabels: {
+          name: {
+            offsetY: -5,
+            color: $textHeadingColor,
+            fontSize: '1rem'
+          },
+          value: {
+            offsetY: 15,
+            color: $textHeadingColor,
+            fontSize: '1.714rem'
+          }
+        }
+      }
+    },
+    colors: [window.colors.solid.danger],
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shade: 'dark',
+        type: 'horizontal',
+        shadeIntensity: 0.5,
+        gradientToColors: [window.colors.solid.primary],
+        inverseColors: true,
+        opacityFrom: 1,
+        opacityTo: 1,
+        stops: [0, 100]
+      }
+    },
+    stroke: {
+      dashArray: 8
+    },
+    series: [total_referral_number > 0 ?parseFloat(100 * draft_number/total_referral_number).toFixed(1) : 0],
+    labels: ['Draft Referrals']
+  };
+
+  referralTrackerChart = new ApexCharts($referralTrackerChart, referralTrackerChartOptions);
+  referralTrackerChart.render();
 
   // Sales Chart
   // -----------------------------

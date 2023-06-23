@@ -12,7 +12,10 @@
     $all_schedules = [];
     $all_patients = [];
     $data_by_status = [];
+    $draft_data = [];
     $pending_data = [];
+    $booked_data = [];
+    $unpaid_data = [];
     $paid_data = [];
     $settled_data = [];
 
@@ -63,7 +66,6 @@
                 }
                 $all_clinics[$value->clinic_doctor->clinic->name]['ninety'][] = $value;
             }
-
         }
 
         $all_patients[$value->patient->id] = $value->patient;
@@ -71,8 +73,18 @@
             $data_by_status[$value->status] = [];
         }
         $data_by_status[$value->status][] = $value;
-        if ((int)$value->status <= (int)config('const.status_code')['Test Done']){
+        if ((int)$value->status == (int)config('const.status_code')['Draft']){
+            $draft_data[] = $value;
+        }
+        if ((int)$value->status == (int)config('const.status_code')['Pending']){
             $pending_data[] = $value;
+        }
+        if ((int)$value->status == (int)config('const.status_code')['Booked']){
+            $booked_data[] = $value;
+        }
+
+        if ((int)$value->status == (int)config('const.status_code')['Test Done']){
+            $unpaid_data[] = $value;
         }
         if ($value->status == config('const.status_code')['Advance Paid']){
             $paid_data[] = $value;
@@ -182,11 +194,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-6 col-12">
+            {{-- <div class="col-lg-4 col-md-6 col-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title">Scanned Results</h4>
-                        {{-- <i data-feather="help-circle" class="font-medium-3 text-muted cursor-pointer"></i> --}}
                     </div>
                     <div class="card-body p-0">
                         <div id="goal-overview-radial-bar-chart" class="my-2"></div>
@@ -202,16 +213,48 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <div class="col-lg-4 col-md-6 col-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between pb-0">
-                        <h4 class="card-title">Statistics by paid</h4>
+                        <h4 class="card-title">Referral Statistics</h4>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-2 col-12 d-flex flex-column flex-wrap text-center">
-                                <h1 class="font-large-2 fw-bolder mt-2 mb-0">{{count($pending_data) + count($paid_data) + count($settled_data)}}</h1>
+                                <h1 class="font-large-2 fw-bolder mt-2 mb-0">{{count($draft_data) + count($pending_data) + count($booked_data)}}</h1>
+                                <p class="card-text">Total</p>
+                            </div>
+                            <div class="col-sm-10 col-12 d-flex justify-content-center">
+                                <div id="referral-trackers-chart"></div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between mt-1">
+                            <div class="text-center">
+                                <p class="card-text mb-50">Draft</p>
+                                <span class="font-large-1 fw-bold">{{count($draft_data)}}</span>
+                            </div>
+                            <div class="text-center">
+                                <p class="card-text mb-50">Pending</p>
+                                <span class="font-large-1 fw-bold">{{count($pending_data)}}</span>
+                            </div>
+                            <div class="text-center">
+                                <p class="card-text mb-50">Booked</p>
+                                <span class="font-large-1 fw-bold">{{count($booked_data)}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between pb-0">
+                        <h4 class="card-title">Result Statistics by paid</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-2 col-12 d-flex flex-column flex-wrap text-center">
+                                <h1 class="font-large-2 fw-bolder mt-2 mb-0">{{count($unpaid_data) + count($paid_data) + count($settled_data)}}</h1>
                                 <p class="card-text">Total</p>
                             </div>
                             <div class="col-sm-10 col-12 d-flex justify-content-center">
@@ -221,7 +264,7 @@
                         <div class="d-flex justify-content-between mt-1">
                             <div class="text-center">
                                 <p class="card-text mb-50">Unpaid</p>
-                                <span class="font-large-1 fw-bold">{{count($pending_data)}}</span>
+                                <span class="font-large-1 fw-bold">{{count($unpaid_data)}}</span>
                             </div>
                             <div class="text-center">
                                 <p class="card-text mb-50">Advance Paid</p>
@@ -358,10 +401,15 @@
         var result_by_tech = "<?php echo $result_by_tech;?>";
         var t_total = parseInt(result_by_doctor) + parseInt(result_by_tech);
 
-        var pending_number = "<?php echo count($pending_data);?>";
+        var unpaid_number = "<?php echo count($unpaid_data);?>";
         var paid_number = "<?php echo count($paid_data);?>";
         var settled_number = "<?php echo count($settled_data);?>";
-        var total_number = parseInt(pending_number) + parseInt(paid_number) + parseInt(settled_number);
+        var total_number = parseInt(unpaid_number) + parseInt(paid_number) + parseInt(settled_number);
+
+        var draft_number = "<?php echo count($draft_data);?>";
+        var pending_number = "<?php echo count($pending_data);?>";
+        var booked_number = "<?php echo count($booked_data);?>";
+        var total_referral_number = parseInt(draft_number) + parseInt(pending_number) + parseInt(booked_number);
     </script>
     <!-- BEGIN: Page Vendor JS-->
     <script src="{{ asset('app-assets/vendors/js/charts/apexcharts.min.js') }}"></script>
@@ -369,7 +417,7 @@
 
     <!-- BEGIN: Page JS-->
     <script src="{{ asset('app-assets/js/scripts/pages/dashboard-analytics.js') }}"></script>
-    <script src="{{ asset('app-assets/js/scripts/pages/dashboard-ecommerce.js') }}"></script>
+    {{-- <script src="{{ asset('app-assets/js/scripts/pages/dashboard-ecommerce.js') }}"></script> --}}
     <!-- END: Page JS-->
 @endsection
 
