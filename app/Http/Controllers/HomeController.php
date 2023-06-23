@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\PatientSchedule;
 use App\Models\PatientTransaction;
 use App\Models\User;
+use App\Models\Clinic;
+use App\Models\ClinicDoctor;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,22 +25,31 @@ class HomeController extends Controller
             switch(auth()->user()->roles[0] ->id){
                 case config('const.role_codes')['office manager']:
                     $data = PatientTransaction::query()->where('office_id', auth()->user()->id)
-                        ->where('status', '!=', config('const.status_code')['Draft'])
+                        // ->where('status', '!=', config('const.status_code')['Draft'])
                         ->get()->all();
                     break;
                 case config('const.role_codes')['doctor']:
                     $data = PatientTransaction::query()->where('doctor_id', auth()->user()->id)
-                        ->where('status', '!=', config('const.status_code')['Draft'])->get()->all();
+                        // ->where('status', '!=', config('const.status_code')['Draft'])
+                        ->get()->all();
                     break;
                 case config('const.role_codes')['attorney']:
                     $data = PatientTransaction::query()->where('attorney_id', auth()->user()->id)
-                        ->where('status', '!=', config('const.status_code')['Draft'])->get()->all();
+                        // ->where('status', '!=', config('const.status_code')['Draft'])
+                        ->get()->all();
                     break;
                 case config('const.role_codes')['technician']:
-                    $data = PatientTransaction::query()->where('status', '!=', config('const.status_code')['Draft'])->get()->all();
+                    $clinics = Clinic::query()->where('technician_id', auth()->user()->id)->pluck('id');
+                    $doctors = ClinicDoctor::query()->whereIn('clinic_id', $clinics)->pluck('doctor_id');
+                    $data = PatientTransaction::query()
+                        // ->where('status', '!=', config('const.status_code')['Draft'])
+                        ->whereIn('doctor_id', $doctors)
+                        ->get()->all();
                     break;
                 default:
-                    $data = PatientTransaction::query()->where('status', '!=', config('const.status_code')['Draft'])->get()->all();
+                    $data = PatientTransaction::query()
+                        // ->where('status', '!=', config('const.status_code')['Draft'])
+                        ->get()->all();
                     break;
             }
             $all_transaction_ids = [];

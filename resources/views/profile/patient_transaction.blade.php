@@ -228,7 +228,7 @@
                                                                             <div><a class='pdf-link' target="_blank" href="{{ asset('uploads/sign/'.$val->files) }}">{{$val->files}}</a></div>
                                                                         @endforeach
                                                                     @else
-                                                                        @if($value->status == config('const.status_code.Booked') && (Auth::user()->roles[0]->name == 'patient' || Auth::user()->roles[0]->name == 'office manager'))
+                                                                        @if($value->status == config('const.status_code.Booked') && (Auth::user()->roles[0]->name == 'patient' || Auth::user()->roles[0]->name == 'office manager' || Auth::user()->roles[0]->name == 'technician'))
                                                                             <form action="{{route('profiles.upload_sign_docs')}}" method="POST" enctype="multipart/form-data">
                                                                                 @csrf
                                                                                 <input type="hidden" value = {{$value->id}} name="transaction_id" />
@@ -350,7 +350,7 @@
                                                                             <div><a class='pdf-link' target="_blank" href="{{ asset('uploads/sign/'.$val->files) }}">{{$val->files}}</a></div>
                                                                         @endforeach
                                                                     @else
-                                                                        @if($value->status == config('const.status_code.Booked') && (Auth::user()->roles[0]->name == 'patient' || Auth::user()->roles[0]->name == 'office manager'))
+                                                                        @if($value->status == config('const.status_code.Booked') && (Auth::user()->roles[0]->name == 'patient' || Auth::user()->roles[0]->name == 'office manager' || Auth::user()->roles[0]->name == 'technician'))
                                                                             <form action="{{route('profiles.upload_sign_docs')}}" method="POST" enctype="multipart/form-data">
                                                                                 @csrf
                                                                                 <input type="hidden" value = {{$value->id}} name="transaction_id" />
@@ -469,7 +469,7 @@
                                                                             <div><a class='pdf-link' target="_blank" href="{{ asset('uploads/sign/'.$val->files) }}">{{$val->files}}</a></div>
                                                                         @endforeach
                                                                     @else
-                                                                        @if($value->status == config('const.status_code.Booked') && (Auth::user()->roles[0]->name == 'patient' || Auth::user()->roles[0]->name == 'office manager'))
+                                                                        @if($value->status == config('const.status_code.Booked') && (Auth::user()->roles[0]->name == 'patient' || Auth::user()->roles[0]->name == 'office manager' || Auth::user()->roles[0]->name == 'technician'))
                                                                             <form action="{{route('profiles.upload_sign_docs')}}" method="POST" enctype="multipart/form-data">
                                                                                 @csrf
                                                                                 <input type="hidden" value = {{$value->id}} name="transaction_id" />
