@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel
     ];
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('book_alert')->daily();
+        $schedule->command('book_alert')->dailyAt('8:00');
     }
 
     /**
