@@ -621,14 +621,14 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="attorney_email">Attorney Email</label>
-                                @if($is_pending && count($attorneys) > 0)
-                                    <input type="text" id="attorney_email" name="attorney_email"  class="form-control" value="{{ $data->attorney->email }}"  />
-                                @else
-                                    @if(ount($attorneys) > 0)
+                                @if($is_pending)
+                                    @if(count($attorneys) > 0)
                                         <input readonly type="text" id="attorney_email" name="attorney_email"  class="form-control" value="{{ $data->attorney->email }}"  />
                                     @else
-                                        <input disabled type="text" id="attorney_email" name="attorney_email"  class="form-control" value="{{ $data->attorney->email }}"  />
+                                        <input type="text" id="attorney_email" name="attorney_email"  class="form-control" value="{{ $data->attorney->email }}"  />
                                     @endif
+                                @else
+                                    <input disabled type="text" id="attorney_email" name="attorney_email"  class="form-control" value="{{ $data->attorney->email }}"  />
                                 @endif
                             </div>
 
@@ -731,14 +731,14 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="vertical-twitter">Doctor Email</label>
-                                @if($is_pending && count($doctorData) > 0)
-                                    <input type="text" id="doctor_email" name="doctor_email" class="form-control" value="{{ $data->doctor->email }}" />
-                                @else
+                                @if($is_pending)
                                     @if(count($doctorData) > 0)
                                         <input readonly type="text" id="doctor_email" name="doctor_email" class="form-control" value="{{ $data->doctor->email }}" />
                                     @else
-                                        <input disabled type="text" id="doctor_email" name="doctor_email" class="form-control" value="{{ $data->doctor->email }}" />
+                                        <input type="text" id="doctor_email" name="doctor_email" class="form-control" value="{{ $data->doctor->email }}" />
                                     @endif
+                                @else
+                                    <input disabled type="text" id="doctor_email" name="doctor_email" class="form-control" value="{{ $data->doctor->email }}" />
                                 @endif
                             </div>
 
