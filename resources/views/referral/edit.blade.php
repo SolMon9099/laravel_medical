@@ -624,7 +624,11 @@
                                 @if($is_pending && count($attorneys) > 0)
                                     <input type="text" id="attorney_email" name="attorney_email"  class="form-control" value="{{ $data->attorney->email }}"  />
                                 @else
-                                    <input disabled type="text" id="attorney_email" name="attorney_email"  class="form-control" value="{{ $data->attorney->email }}"  />
+                                    @if(ount($attorneys) > 0)
+                                        <input readonly type="text" id="attorney_email" name="attorney_email"  class="form-control" value="{{ $data->attorney->email }}"  />
+                                    @else
+                                        <input disabled type="text" id="attorney_email" name="attorney_email"  class="form-control" value="{{ $data->attorney->email }}"  />
+                                    @endif
                                 @endif
                             </div>
 
@@ -730,7 +734,11 @@
                                 @if($is_pending && count($doctorData) > 0)
                                     <input type="text" id="doctor_email" name="doctor_email" class="form-control" value="{{ $data->doctor->email }}" />
                                 @else
-                                    <input disabled type="text" id="doctor_email" name="doctor_email" class="form-control" value="{{ $data->doctor->email }}" />
+                                    @if(count($doctorData) > 0)
+                                        <input readonly type="text" id="doctor_email" name="doctor_email" class="form-control" value="{{ $data->doctor->email }}" />
+                                    @else
+                                        <input disabled type="text" id="doctor_email" name="doctor_email" class="form-control" value="{{ $data->doctor->email }}" />
+                                    @endif
                                 @endif
                             </div>
 
