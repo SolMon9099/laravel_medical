@@ -9,6 +9,38 @@
 <?php
     $is_pending = ($data->status == config('const.status_code.Pending') || $data->status == config('const.status_code.Draft'));
     $is_booked_status = ($data->status == config('const.status_code.Booked'));
+
+    $attorneies = [];
+    $doctors = [];
+    foreach($attorneys as $item){
+        $attorneies[$item->id] = [
+            'id' => $item->id,
+            'name' => $item->name,
+            'email' => $item->email,
+            'phone' => $item->phone,
+            'date_of_birth' => $item->date_of_birth,
+            'address' => $item->address,
+            'address_line2' => $item->address_line2,
+            'city' => $item->city,
+            'state' => $item->state,
+            'postal' => $item->postal,
+        ];
+    };
+
+    foreach($doctorData as $item){
+        $doctors[$item->id] = [
+            'id' => $item->id,
+            'name' => $item->name,
+            'email' => $item->email,
+            'phone' => $item->phone,
+            'date_of_birth' => $item->date_of_birth,
+            'address' => $item->address,
+            'address_line2' => $item->address_line2,
+            'city' => $item->city,
+            'state' => $item->state,
+            'postal' => $item->postal,
+        ];
+    };
 ?>
 @section('content')
 <section class="referralSection">
@@ -567,7 +599,21 @@
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="attorney_name">Attorney Name</label>
                                 @if($is_pending)
-                                    <input type="text" id="attorney_name" name="attorney_name" class="form-control" value="{{ $data->attorney->name }}" />
+                                    @if(count($attorneys) > 0)
+                                        <select id="attorney_name" name="attorney_name" class="form-control">
+                                            <option value=""></option>
+                                            @foreach ($attorneys as $item)
+                                                @if($item->id == $data->attorney->id)
+                                                    <option selected id={{"attorney_".$item->id}} value="{{$item->name}}">{{$item->name}}</option>
+                                                @else
+                                                    <option id={{"attorney_".$item->id}} value="{{$item->name}}">{{$item->name}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    @else
+                                        <input type="text" id="attorney_name" name="attorney_name" class="form-control" value="{{ $data->attorney->name }}" />
+                                        <span>If Not Listed</span>
+                                    @endif
                                 @else
                                     <input disabled type="text" id="attorney_name" name="attorney_name" class="form-control" value="{{ $data->attorney->name }}" />
                                 @endif
@@ -575,7 +621,7 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="attorney_email">Attorney Email</label>
-                                @if($is_pending)
+                                @if($is_pending && count($attorneys) > 0)
                                     <input type="text" id="attorney_email" name="attorney_email"  class="form-control" value="{{ $data->attorney->email }}"  />
                                 @else
                                     <input disabled type="text" id="attorney_email" name="attorney_email"  class="form-control" value="{{ $data->attorney->email }}"  />
@@ -659,16 +705,29 @@
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="vertical-twitter">Doctor Name</label>
                                 @if($is_pending)
-                                    <input type="text" id="doctor_name" name="doctor_name" class="form-control" value="{{ $data->doctor->name }}" />
+                                    @if (count($doctorData) > 0)
+                                        <select class="form-control" name="doctor_name" id="doctor_name">
+                                            <option value=""></option>
+                                            @foreach ($doctorData as $doctor_item)
+                                                @if($data->doctor->id == $doctor_item->id)
+                                                    <option selected id={{"doctor_".$doctor_item->id}} value="{{$doctor_item->name}}">{{$doctor_item->name}}</option>
+                                                @else
+                                                    <option id={{"doctor_".$doctor_item->id}} value="{{$doctor_item->name}}">{{$doctor_item->name}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    @else
+                                        <input type="text" id="doctor_name" name="doctor_name" class="form-control" value="{{ $data->doctor->name }}" />
+                                        <span>If Not Listed</span>
+                                    @endif
                                 @else
                                     <input disabled type="text" id="doctor_name" name="doctor_name" class="form-control" value="{{ $data->doctor->name }}" />
                                 @endif
-                                <span>If Not Listed</span>
                             </div>
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="vertical-twitter">Doctor Email</label>
-                                @if($is_pending)
+                                @if($is_pending && count($doctorData) > 0)
                                     <input type="text" id="doctor_email" name="doctor_email" class="form-control" value="{{ $data->doctor->email }}" />
                                 @else
                                     <input disabled type="text" id="doctor_email" name="doctor_email" class="form-control" value="{{ $data->doctor->email }}" />
@@ -945,6 +1004,13 @@
             });
             $('#referralForm').submit();
         }
+
+    var attorney_numbers = "<?php echo count($attorneies);?>";
+    var doctor_numbers = "<?php echo count($doctors);?>";
+
+    var attorneies = <?php echo json_encode($attorneies);?>;
+    var doctors = <?php echo json_encode($doctors);?>;
+
     //Referral Form
     $(document).ready(function() {
         //Date
@@ -955,6 +1021,36 @@
 
         //Birthday
         var flatpickrInstance = flatpickr(".flatpickr_dates", {
+        });
+
+        $('#doctor_name').change(function(){
+            if (parseInt(doctor_numbers) > 0){
+                if ($(this).val() != ''){
+                    var id = $(this).children(":selected").attr("id");
+                    id = id.replace("doctor_", "");
+                    id = parseInt(id);
+                    $('#doctor_email').val(doctors[id].email);
+                    $('#doctor_phone').val(doctors[id].phone);
+                }
+            }
+        });
+
+        $('#attorney_name').change(function(){
+            if (parseInt(attorney_numbers) > 0){
+                if ($(this).val() != ''){
+                    var id = $(this).children(":selected").attr("id");
+                    id = id.replace("attorney_", "");
+                    id = parseInt(id);
+
+                    $('#attorney_email').val(attorneies[id].email);
+                    $('#attorney_phone').val(attorneies[id].phone);
+                    $('#law_firm_adderss').val(attorneies[id].address);
+                    $('#law_firm_adderss_line2').val(attorneies[id].address_line2);
+                    $('#law_firm_city').val(attorneies[id].city);
+                    $('#law_firm_state').val(attorneies[id].state);
+                    $('#law_firm_postal').val(attorneies[id].postal);
+                }
+            }
         });
     });
 

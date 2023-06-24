@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Service\SmsService;
 use App\Service\MailService;
 use App\Http\Controllers\PdfController;
+use App\Models\ClinicManager;
 
 class ReferralController extends Controller
 {
@@ -48,8 +49,26 @@ class ReferralController extends Controller
     public function create()
     {
         $clinicData = Clinic::get();
+        $doctorData = array();
+        if (auth()->user()->roles[0]->name == 'office manager'){
+            $clinic_ids = ClinicManager::query()->where('manager_id', auth()->user()->id)->pluck('clinic_id');
+            $clinicData = Clinic::query()->whereIn('id', $clinic_ids)->get()->all();
+            $doctor_ids = ClinicDoctor::query()->whereIn('clinic_id', $clinic_ids)->pluck('doctor_id');
+            $doctorData = User::query()->whereIn('id', $doctor_ids)
+                ->whereHas(
+                    'roles', function($q){
+                        $q->where('name', 'doctor');
+                    }
+                )->get()->all();
+        }
 
-        return view('referral.create', compact('clinicData'));
+        $attorneys = User::whereHas(
+            'roles', function($q){
+                $q->where('name', 'attorney');
+            }
+        )->get()->all();
+
+        return view('referral.create', compact('clinicData', 'attorneys', 'doctorData'));
     }
 
     /**
@@ -447,9 +466,26 @@ class ReferralController extends Controller
     {
         $data = PatientTransaction::with(['patient', 'attorney', 'doctor', 'files', 'result_files', 'invoice_files'])->find($id);
         $clinicData = Clinic::get();
+        $doctorData = array();
+        if (auth()->user()->roles[0]->name == 'office manager'){
+            $clinic_ids = ClinicManager::query()->where('manager_id', auth()->user()->id)->pluck('clinic_id');
+            $clinicData = Clinic::query()->whereIn('id', $clinic_ids)->get()->all();
+            $doctor_ids = ClinicDoctor::query()->whereIn('clinic_id', $clinic_ids)->pluck('doctor_id');
+            $doctorData = User::query()->whereIn('id', $doctor_ids)
+                ->whereHas(
+                    'roles', function($q){
+                        $q->where('name', 'doctor');
+                    }
+                )->get()->all();
+        }
         $clinic_id = ClinicDoctor::where('doctor_id', $data->doctor_id)->value('clinic_id');
+        $attorneys = User::whereHas(
+            'roles', function($q){
+                $q->where('name', 'attorney');
+            }
+        )->get()->all();
 
-        return view ('referral.edit', compact('data', 'clinicData', 'clinic_id'));
+        return view ('referral.edit', compact('data', 'clinicData', 'clinic_id', 'attorneys', 'doctorData'));
     }
 
     /**
@@ -535,7 +571,11 @@ class ReferralController extends Controller
                     $patient_user->save();
                 }
 
-                $attorney_user = User::where('id', $patientTransactionObj->attorney_id)->first();
+                $attorney_user = User::where('email', $attorney_email)->first();
+                if ($attorney_user == null){
+                    $attorney_user = User::where('id', $patientTransactionObj->attorney_id)->first();
+                }
+
                 if ($attorney_user){
                     $attorney_user->name = $attorney_name;
                     $attorney_user->email = $attorney_email;
@@ -548,7 +588,10 @@ class ReferralController extends Controller
                     $attorney_user->save();
                 }
 
-                $doctor_user = User::where('id', $patientTransactionObj->doctor_id)->first();
+                $doctor_user = User::where('email', $doctor_email)->first();
+                if ($doctor_user == null){
+                    $doctor_user = User::where('id', $patientTransactionObj->doctor_id)->first();
+                }
                 if ($doctor_user){
                     $doctor_user->name = $doctor_name;
                     $doctor_user->email = $doctor_email;
@@ -557,6 +600,8 @@ class ReferralController extends Controller
                 }
 
                 $patientTransactionObj->referral_date = $referral_date;
+                $patientTransactionObj->doctor_id = $doctor_user->id;
+                $patientTransactionObj->attorney_id = $attorney_user->id;
                 $patientTransactionObj->office_id = auth()->user()->id;  //current logged in ID
                 $patientTransactionObj->patient_date_injury = $patient_date_injury;
                 $patientTransactionObj->reason_referral = $reason_referral;

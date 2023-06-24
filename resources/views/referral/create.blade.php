@@ -6,7 +6,40 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/plugins/forms/pickers/form-flat-pickr.css') }}">
     {{-- <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/plugins/forms/form-file-uploader.css') }}">   --}}
 @endsection
+<?php
 
+    $attorneies = [];
+    $doctors = [];
+    foreach($attorneys as $item){
+        $attorneies[$item->id] = [
+            'id' => $item->id,
+            'name' => $item->name,
+            'email' => $item->email,
+            'phone' => $item->phone,
+            'date_of_birth' => $item->date_of_birth,
+            'address' => $item->address,
+            'address_line2' => $item->address_line2,
+            'city' => $item->city,
+            'state' => $item->state,
+            'postal' => $item->postal,
+        ];
+    };
+
+    foreach($doctorData as $item){
+        $doctors[$item->id] = [
+            'id' => $item->id,
+            'name' => $item->name,
+            'email' => $item->email,
+            'phone' => $item->phone,
+            'date_of_birth' => $item->date_of_birth,
+            'address' => $item->address,
+            'address_line2' => $item->address_line2,
+            'city' => $item->city,
+            'state' => $item->state,
+            'postal' => $item->postal,
+        ];
+    };
+?>
 @section('content')
 <section class="referralSection">
     <form method="post" action="{{ route('referral.store') }}" enctype="multipart/form-data" id="referralForm">
@@ -318,16 +351,30 @@
                         <div class="row">
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="attorney_name">Attorney Name</label>
-                                <input type="text" id="attorney_name" name="attorney_name" class="form-control" />
+                                @if(count($attorneys) > 0)
+                                    <select id="attorney_name" name="attorney_name" class="form-control">
+                                        <option value=""></option>
+                                        @foreach ($attorneys as $item)
+                                            <option id={{"attorney_".$item->id}} value="{{$item->name}}">{{$item->name}}</option>
+                                        @endforeach
+                                    </select>
+                                @else
+                                    <input type="text" id="attorney_name" name="attorney_name" class="form-control" />
+                                    <span>If Not Listed</span>
+                                @endif
                             </div>
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="attorney_email">Attorney Email</label>
-                                <input type="text" id="attorney_email" name="attorney_email"  class="form-control"  />
+                                @if(count($attorneys) > 0)
+                                    <input readonly type="text" id="attorney_email" name="attorney_email"  class="form-control"  />
+                                @else
+                                    <input type="text" id="attorney_email" name="attorney_email"  class="form-control"  />
+                                @endif
                             </div>
 
                             <div class="mb-1 col-md-3">
-                                <label class="form-label" for="attorney_email">Attorney Phone</label>
+                                <label class="form-label" for="attorney_phone">Attorney Phone</label>
                                 <input type="text" id="attorney_phone" name="attorney_phone"  class="form-control phone-number-mask"  />
                             </div>
 
@@ -376,13 +423,26 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="vertical-twitter">Doctor Name</label>
-                                <input type="text" id="doctor_name" name="doctor_name" class="form-control" value="Dr. Mark Cohen" />
-                                <span>If Not Listed</span>
+                                @if (count($doctorData) > 0)
+                                    <select class="form-control" name="doctor_name" id="doctor_name">
+                                        <option value=""></option>
+                                        @foreach ($doctorData as $doctor_item)
+                                            <option id={{"doctor_".$doctor_item->id}} value="{{$doctor_item->name}}">{{$doctor_item->name}}</option>
+                                        @endforeach
+                                    </select>
+                                @else
+                                    <input type="text" id="doctor_name" name="doctor_name" class="form-control" value="Dr. Mark Cohen" />
+                                    <span>If Not Listed</span>
+                                @endif
                             </div>
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="vertical-twitter">Doctor Email</label>
-                                <input type="text" id="doctor_email" name="doctor_email" class="form-control" />
+                                @if (count($doctorData) > 0)
+                                    <input readonly type="text" id="doctor_email" name="doctor_email" class="form-control" />
+                                @else
+                                    <input type="text" id="doctor_email" name="doctor_email" class="form-control" />
+                                @endif
                             </div>
 
                             <div class="mb-1 col-md-3">
@@ -581,6 +641,12 @@
             $('#referralForm').submit();
         }
 
+        var attorney_numbers = "<?php echo count($attorneies);?>";
+        var doctor_numbers = "<?php echo count($doctors);?>";
+
+        var attorneies = <?php echo json_encode($attorneies);?>;
+        var doctors = <?php echo json_encode($doctors);?>;
+
         //Referral Form
         $(document).ready(function() {
             // Date
@@ -596,6 +662,38 @@
             var flatpickrInstance = flatpickr(".flatpickr_dates", {
                 // altInput: true,
                 // allowInput: true
+            });
+
+            $('#doctor_name').change(function(){
+                if (parseInt(doctor_numbers) > 0){
+                    if ($(this).val() != ''){
+                        var id = $(this).children(":selected").attr("id");
+                        id = id.replace("doctor_", "");
+                        id = parseInt(id);
+                        $('#doctor_email').val(doctors[id].email);
+                        $('#doctor_phone').val(doctors[id].phone);
+                    }
+
+                }
+            });
+
+            $('#attorney_name').change(function(){
+                if (parseInt(attorney_numbers) > 0){
+                    if ($(this).val() != ''){
+                        var id = $(this).children(":selected").attr("id");
+                        id = id.replace("attorney_", "");
+                        id = parseInt(id);
+
+                        $('#attorney_email').val(attorneies[id].email);
+                        $('#attorney_phone').val(attorneies[id].phone);
+                        $('#law_firm_adderss').val(attorneies[id].address);
+                        $('#law_firm_adderss_line2').val(attorneies[id].address_line2);
+                        $('#law_firm_city').val(attorneies[id].city);
+                        $('#law_firm_state').val(attorneies[id].state);
+                        $('#law_firm_postal').val(attorneies[id].postal);
+                    }
+
+                }
             });
         });
 
