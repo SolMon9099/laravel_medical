@@ -16,10 +16,10 @@ class CalendarController extends Controller
 {
     function __construct()
     {
-        // $this->middleware('permission:calendar-list|calendar-create|calendar-edit|calendar-delete', ['only' => ['index','store']]);
-        // $this->middleware('permission:calendar-create', ['only' => ['create','store']]);
-        // $this->middleware('permission:calendar-edit', ['only' => ['edit','update']]);
-        // $this->middleware('permission:calendar-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:calendar-list|calendar-create|calendar-edit|calendar-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:calendar-create', ['only' => ['create','store']]);
+        $this->middleware('permission:calendar-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:calendar-delete', ['only' => ['destroy']]);
     }
     /**
      * Display a listing of the resource.
