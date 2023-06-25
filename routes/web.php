@@ -56,9 +56,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::delete('/delete-referral-file/{id}', [ReferralController::class, 'deleteReferralFile'])->middleware('role:office manager');
 
     Route::group(['prefix' => 'calendar'], function () {
-        Route::get('/', [CalendarController::class, 'index'])->middleware('role:office manager')->name('calendar.index');
-        Route::post('/store', [CalendarController::class, 'store'])->middleware('role:office manager')->name('calendar.store');
-        Route::post('/action', [CalendarController::class, 'action'])->middleware('role:office manager')->name('calendar.action');
+        Route::get('/', [CalendarController::class, 'index'])->name('calendar.index');
+        Route::post('/store', [CalendarController::class, 'store'])->name('calendar.store');
+        Route::post('/action', [CalendarController::class, 'action'])->name('calendar.action');
     });
 
 });

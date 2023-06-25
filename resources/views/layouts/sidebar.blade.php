@@ -131,6 +131,12 @@
                     <span class="menu-title text-truncate">Dashboard</span>
                 </a>
             </li>
+            <li class="nav-item @if(request()->is('calendar*')) active @endif">
+                <a class="d-flex align-items-center" href="{{ route('calendar.index') }}">
+                    <i data-feather="calendar"></i>
+                    <span class="menu-title text-truncate">Calendar</span>
+                </a>
+            </li>
             <li class="nav-item @if(request()->is('profiles/patient_transaction')) active @endif">
                 <a class="d-flex align-items-center" href="{{ route('profiles.patient_transaction') }}">
                     <i data-feather="database"></i>

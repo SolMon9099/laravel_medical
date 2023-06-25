@@ -9,22 +9,46 @@ use App\Models\User;
 use App\Service\SmsService;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\BookAlertEmail;
+use App\Models\Clinic;
+use App\Models\ClinicDoctor;
 use Exception;
 class CalendarController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:calendar-list|calendar-create|calendar-edit|calendar-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:calendar-create', ['only' => ['create','store']]);
+        $this->middleware('permission:calendar-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:calendar-delete', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $patient_data = PatientTransaction::with(['patient'])
-            ->where('office_id', auth()->user()->id)
-            ->where('status', '!=', config('const.status_code.Draft'))
-            ->orderBy('created_at','desc')
-            ->get()->all();
+        $transaction_ids = [];
+        if (auth()->user()->roles[0]->name == 'office_manager'){
+            $patient_data = PatientTransaction::with(['patient'])
+                ->where('office_id', auth()->user()->id)
+                ->where('status', '!=', config('const.status_code.Draft'))
+                ->orderBy('created_at','desc')
+                ->get()->all();
+        } else {     //technician
+            $clinic_ids = Clinic::query()->where('technician_id', auth()->user()->id)->pluck('id');
+            $doctor_ids = ClinicDoctor::query()->whereIn('clinic_id', $clinic_ids)->pluck('doctor_id');
+            $patient_data = PatientTransaction::with(['patient'])
+                ->whereIn('doctor_id', $doctor_ids)
+                ->where('status', '!=', config('const.status_code.Draft'))
+                ->orderBy('created_at','desc')
+                ->get()->all();
+        }
+        foreach($patient_data as $item){
+            $transaction_ids[] = $item->id;
+        }
 
         $schedule_data = PatientSchedule::with(['patient', 'patient_transaction'])
-            ->where('office_id', auth()->user()->id)
+            // ->where('office_id', auth()->user()->id)
+            ->whereIn('patient_transaction_id', $transaction_ids)
             ->orderBy('created_at','desc')
             ->get()->all();
         return view('calendar.index')->with([
@@ -68,7 +92,7 @@ class CalendarController extends Controller
             if (isset($schedule_item['is_new']) && $schedule_item['is_new'] == true){
                 $new_schedule = new PatientSchedule();
                 $new_schedule->patient_id = $schedule_item['patient_id'];
-                $new_schedule->office_id = auth()->user()->id;
+                // $new_schedule->office_id = auth()->user()->id;
                 $new_schedule->start_date = date('Y-m-d H:i:s', strtotime($schedule_item['start_date']));
                 $new_schedule->end_date = date('Y-m-d H:i:s', strtotime($schedule_item['end_date']));
                 $new_schedule->title = $schedule_item['title'];
@@ -81,7 +105,7 @@ class CalendarController extends Controller
             } else {
                 $schedule_record = PatientSchedule::find((int)$schedule_item['id']);
                 $schedule_record->patient_id = $schedule_item['patient_id'];
-                $schedule_record->office_id = auth()->user()->id;
+                // $schedule_record->office_id = auth()->user()->id;
                 $schedule_record->start_date = date('Y-m-d H:i:s', strtotime($schedule_item['start_date']));
                 $schedule_record->end_date = date('Y-m-d H:i:s', strtotime($schedule_item['end_date']));
                 $schedule_record->title = $schedule_item['title'];
@@ -106,7 +130,7 @@ class CalendarController extends Controller
                     $new_schedule = new PatientSchedule();
                     $new_schedule->patient_id = $request['patient_id'];
                     $new_schedule->patient_transaction_id = $request['patient_transaction_id'];
-                    $new_schedule->office_id = auth()->user()->id;
+                    // $new_schedule->office_id = auth()->user()->id;
                     $new_schedule->start_date = date('Y-m-d H:i:s', strtotime($request['start_date']));
                     $new_schedule->end_date = date('Y-m-d H:i:s', strtotime($request['end_date']));
                     $new_schedule->title = $request['title'];
@@ -147,7 +171,7 @@ class CalendarController extends Controller
                             PatientTransaction::query()->where('id', $schedule_record->patient_transaction_id)->update(['status' => config('const.status_code.Pending')]);
                             PatientTransaction::query()->where('id', $request['patient_transaction_id'])->update(['status' => config('const.status_code.Booked')]);
                         }
-                        $schedule_record->office_id = auth()->user()->id;
+                        // $schedule_record->office_id = auth()->user()->id;
                         $schedule_record->start_date = date('Y-m-d H:i:s', strtotime($request['start_date']));
                         $schedule_record->end_date = date('Y-m-d H:i:s', strtotime($request['end_date']));
                         $schedule_record->title = $request['title'];
