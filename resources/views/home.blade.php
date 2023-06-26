@@ -41,7 +41,9 @@
 
     foreach ($data as $key => $value) {
         if (isset($value->clinic_doctor)){
-            $all_clinics[$value->clinic_doctor->clinic->name] = [];
+            if (!isset($all_clinics[$value->clinic_doctor->clinic->name])){
+                $all_clinics[$value->clinic_doctor->clinic->name] = [];
+            }
             if (strtotime($value->referral_date) >= strtotime($seven_ago)){
                 if (!isset($all_clinics[$value->clinic_doctor->clinic->name]['seven'])){
                     $all_clinics[$value->clinic_doctor->clinic->name]['seven'] = [];
