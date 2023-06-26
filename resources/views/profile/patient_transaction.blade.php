@@ -11,7 +11,7 @@
         if ($value->status == config('const.status_code')['Test Done']){
             $unpaid_data[] = $value;
         }
-        if ($value->status != config('const.status_code')['Settled'] && $value->status != config('const.status_code')['Advance Paid']){
+        if ($value->status != config('const.status_code')['Test Done'] &&  $value->status != config('const.status_code')['Settled'] && $value->status != config('const.status_code')['Advance Paid']){
             $incompleted_data[] = $value;
         }
         if ($value->status == config('const.status_code')['Advance Paid']){

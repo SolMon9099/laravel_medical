@@ -22,7 +22,7 @@ class PdfController extends Controller
 
         $patient_info = '';
         if (isset($data['patient_name'])){
-            $patient_info = '_'.$data['patient_name'];
+            $patient_info = $data['patient_name'];
         }
         $filename = $patient_info.'-'. 'Demographics-'.date('m-d-Y').'.pdf';
 
@@ -65,7 +65,7 @@ class PdfController extends Controller
         // Save the PDF to the storage directory
         $patient_info = '';
         if (isset($data['patient_name'])){
-            $patient_info = '_'.$data['patient_name'];
+            $patient_info = $data['patient_name'];
         }
         $filename = $patient_info.'-'.'invoice-'.date('m-d-Y').'.pdf';
         if (!is_dir(storage_path('app/public/invoice'))) {
