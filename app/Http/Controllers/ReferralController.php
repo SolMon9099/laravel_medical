@@ -35,8 +35,11 @@ class ReferralController extends Controller
      */
     public function index()
     {
+        $clinic_ids = ClinicManager::query()->where('manager_id', auth()->user()->id)->pluck('clinic_id');
+        $manager_ids = ClinicManager::query()->whereIn('clinic_id', $clinic_ids)->pluck('manager_id');
         $data = PatientTransaction::with(['patient', 'attorney', 'doctor'])
-            ->where('office_id', auth()->user()->id)
+            // ->where('office_id', auth()->user()->id)
+            ->whereIn('office_id', $manager_ids)
             ->orderBy('created_at','desc')
             ->get();
         return view('referral.index', compact('data'));
