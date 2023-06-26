@@ -7,6 +7,7 @@ use App\Models\PatientTransaction;
 use App\Models\User;
 use App\Models\Clinic;
 use App\Models\ClinicDoctor;
+use App\Models\ClinicManager;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -24,7 +25,11 @@ class HomeController extends Controller
         } else {
             switch(auth()->user()->roles[0] ->id){
                 case config('const.role_codes')['office manager']:
-                    $data = PatientTransaction::query()->where('office_id', auth()->user()->id)
+                    $clinic_ids = ClinicManager::query()->where('manager_id', auth()->user()->id)->pluck('clinic_id');
+                    $manager_ids = ClinicManager::query()->whereIn('clinic_id', $clinic_ids)->pluck('manager_id');
+                    $data = PatientTransaction::query()
+                        ->whereIn('office_id', $manager_ids)
+                        // ->where('office_id', auth()->user()->id)
                         // ->where('status', '!=', config('const.status_code')['Draft'])
                         ->get()->all();
                     break;
