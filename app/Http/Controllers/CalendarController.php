@@ -27,13 +27,13 @@ class CalendarController extends Controller
     public function index()
     {
         $transaction_ids = [];
-        if (auth()->user()->roles[0]->name == 'office_manager'){
+        if (auth()->user()->roles[0]->name == 'office manager'){
             $patient_data = PatientTransaction::with(['patient'])
                 ->where('office_id', auth()->user()->id)
                 ->where('status', '!=', config('const.status_code.Draft'))
                 ->orderBy('created_at','desc')
                 ->get()->all();
-                dd($patient_data);
+               
         } else {     //technician
             $clinic_ids = Clinic::query()->where('technician_id', auth()->user()->id)->pluck('id');
             $doctor_ids = ClinicDoctor::query()->whereIn('clinic_id', $clinic_ids)->pluck('doctor_id');
