@@ -33,6 +33,7 @@ class CalendarController extends Controller
                 ->where('status', '!=', config('const.status_code.Draft'))
                 ->orderBy('created_at','desc')
                 ->get()->all();
+                dd($patient_data);
         } else {     //technician
             $clinic_ids = Clinic::query()->where('technician_id', auth()->user()->id)->pluck('id');
             $doctor_ids = ClinicDoctor::query()->whereIn('clinic_id', $clinic_ids)->pluck('doctor_id');

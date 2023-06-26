@@ -132,15 +132,15 @@
                             <label for="event-guests" class="form-label">Add Patients</label>
                             <select class="select2 select-add-guests form-select w-100" id="event-guests" name="guests">
                                 @foreach ($patient_data as $patient_item)
-                                @if($patient_item->status == config('const.status_code.Pending'))
-                                    <option value={{$patient_item->patient_id.'_'.$patient_item->id}}>
-                                        {{$patient_item->patient->name. ' '. $patient_item->referral_date}}
-                                    </option>
-                                @else
-                                    <option value={{$patient_item->patient_id.'_'.$patient_item->id}} disabled>
-                                        {{$patient_item->patient->name. ' '. $patient_item->referral_date}}
-                                    </option>
-                                @endif
+                                    @if($patient_item->status == config('const.status_code.Pending'))
+                                        <option value={{$patient_item->patient_id.'_'.$patient_item->id}}>
+                                            {{$patient_item->patient->name. ' '. $patient_item->referral_date}}
+                                        </option>
+                                    @else
+                                        <option value={{$patient_item->patient_id.'_'.$patient_item->id}} disabled>
+                                            {{$patient_item->patient->name. ' '. $patient_item->referral_date}}
+                                        </option>
+                                    @endif
                                 @endforeach
                                 {{-- <option data-avatar="1-small.png" value="Jane Foster">Jane Foster</option>
                                 <option data-avatar="3-small.png" value="Donna Frank">Donna Frank</option>
