@@ -572,9 +572,9 @@ class ReferralController extends Controller
                 }
 
                 $attorney_user = User::where('email', $attorney_email)->first();
-                if ($attorney_user == null){
-                    $attorney_user = User::where('id', $patientTransactionObj->attorney_id)->first();
-                }
+                // if ($attorney_user == null){
+                //     $attorney_user = User::where('id', $patientTransactionObj->attorney_id)->first();
+                // }
 
                 if ($attorney_user){
                     $attorney_user->name = $attorney_name;
@@ -586,17 +586,43 @@ class ReferralController extends Controller
                     $attorney_user->state = $law_firm_state;
                     $attorney_user->postal = $law_firm_postal;
                     $attorney_user->save();
+                } else {
+                    $attorney_user = new User();
+                    $attorney_user->name = $attorney_name;
+                    $attorney_user->email = $attorney_email;
+                    $attorney_user->password = Hash::make('password');
+                    $attorney_user->phone = $attorney_phone;
+                    $attorney_user->address = $law_firm_adderss;
+                    $attorney_user->address_line2 = $law_firm_adderss_line2;
+                    $attorney_user->city = $law_firm_city;
+                    $attorney_user->state = $law_firm_state;
+                    $attorney_user->postal = $law_firm_postal;
+                    $attorney_user->save();
+                    $attorney_user->assignRole(['attorney']);
                 }
 
                 $doctor_user = User::where('email', $doctor_email)->first();
-                if ($doctor_user == null){
-                    $doctor_user = User::where('id', $patientTransactionObj->doctor_id)->first();
-                }
+                // if ($doctor_user == null){
+                //     $doctor_user = User::where('id', $patientTransactionObj->doctor_id)->first();
+                // }
                 if ($doctor_user){
                     $doctor_user->name = $doctor_name;
                     $doctor_user->email = $doctor_email;
                     $doctor_user->phone = $doctor_phone;
                     $doctor_user->save();
+                } else {
+                    $doctor_user = new User();
+                    $doctor_user->name = $doctor_name;
+                    $doctor_user->email = $doctor_email;
+                    $doctor_user->password = Hash::make('password');
+                    $doctor_user->phone = $doctor_phone;
+                    $doctor_user->save();
+                    $doctor_user->assignRole(['doctor']);
+
+                    $clinicDoctorObj = new ClinicDoctor();
+                    $clinicDoctorObj -> clinic_id = $clinic_name;
+                    $clinicDoctorObj -> doctor_id = $doctor_user->id;
+                    $clinicDoctorObj->save();
                 }
 
                 $patientTransactionObj->referral_date = $referral_date;

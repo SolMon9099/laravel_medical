@@ -610,10 +610,13 @@
                                                 @endif
                                             @endforeach
                                         </select>
+                                        <input style="display: none;" disabled type="text" id="attorney_name_inputbox" name="attorney_name" class="form-control" value="{{ $data->attorney->name }}" />
+                                        <input class="form-check-input" type="checkbox" id="attorney_switch_check" />
                                     @else
-                                        <input type="text" id="attorney_name" name="attorney_name" class="form-control" value="{{ $data->attorney->name }}" />
-                                        <span>If Not Listed</span>
+                                        <input id="attorney_name_inputbox" name="attorney_name" class="form-control" value="{{ $data->attorney->name }}" />
+                                        <input disabled class="form-check-input" type="checkbox" id="attorney_switch_check" />
                                     @endif
+                                    <label class="form-check-label" for="attorney_switch_check">If Not Listed</label>
                                 @else
                                     <input disabled type="text" id="attorney_name" name="attorney_name" class="form-control" value="{{ $data->attorney->name }}" />
                                 @endif
@@ -622,11 +625,7 @@
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="attorney_email">Attorney Email</label>
                                 @if($is_pending)
-                                    @if(count($attorneys) > 0)
-                                        <input readonly type="text" id="attorney_email" name="attorney_email"  class="form-control" value="{{ $data->attorney->email }}"  />
-                                    @else
-                                        <input type="text" id="attorney_email" name="attorney_email"  class="form-control" value="{{ $data->attorney->email }}"  />
-                                    @endif
+                                    <input type="text" id="attorney_email" name="attorney_email"  class="form-control" value="{{ $data->attorney->email }}" />
                                 @else
                                     <input disabled type="text" id="attorney_email" name="attorney_email"  class="form-control" value="{{ $data->attorney->email }}"  />
                                 @endif
@@ -696,7 +695,7 @@
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="vertical-twitter">Clinic Name</label>
                                 @if($is_pending)
-                                    <select class="form-control" name="clinic_name" disabled>
+                                    <select class="form-control" name="clinic_name" readonly>
                                 @else
                                     <select class="form-control" name="clinic_name" disabled>
                                 @endif
@@ -709,7 +708,7 @@
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="vertical-twitter">Doctor Name</label>
                                 @if($is_pending)
-                                    @if (count($doctorData) > 0)
+                                    @if(count($doctorData) > 0)
                                         <select class="form-control" name="doctor_name" id="doctor_name">
                                             <option value=""></option>
                                             @foreach ($doctorData as $doctor_item)
@@ -720,10 +719,13 @@
                                                 @endif
                                             @endforeach
                                         </select>
+                                        <input style="display: none;" disabled type="text" id="doctor_name_inputbox" name="doctor_name" class="form-control" value="{{ $data->doctor->name }}" />
+                                        <input class="form-check-input" type="checkbox" id="doctor_switch_check" />
                                     @else
-                                        <input type="text" id="doctor_name" name="doctor_name" class="form-control" value="{{ $data->doctor->name }}" />
-                                        <span>If Not Listed</span>
+                                        <input type="text" id="doctor_name_inputbox" name="doctor_name" class="form-control" value="{{ $data->doctor->name }}" />
+                                        <input disabled class="form-check-input" type="checkbox" id="doctor_switch_check" />
                                     @endif
+                                    <label class="form-check-label" for="doctor_switch_check">If Not Listed</label>
                                 @else
                                     <input disabled type="text" id="doctor_name" name="doctor_name" class="form-control" value="{{ $data->doctor->name }}" />
                                 @endif
@@ -732,11 +734,7 @@
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="vertical-twitter">Doctor Email</label>
                                 @if($is_pending)
-                                    @if(count($doctorData) > 0)
-                                        <input readonly type="text" id="doctor_email" name="doctor_email" class="form-control" value="{{ $data->doctor->email }}" />
-                                    @else
-                                        <input type="text" id="doctor_email" name="doctor_email" class="form-control" value="{{ $data->doctor->email }}" />
-                                    @endif
+                                    <input type="text" id="doctor_email" name="doctor_email" class="form-control" value="{{ $data->doctor->email }}" />
                                 @else
                                     <input disabled type="text" id="doctor_email" name="doctor_email" class="form-control" value="{{ $data->doctor->email }}" />
                                 @endif
@@ -1039,9 +1037,30 @@
                     id = parseInt(id);
                     $('#doctor_email').val(doctors[id].email);
                     $('#doctor_phone').val(doctors[id].phone);
+                } else {
+                    $('#doctor_email').val('');
+                    $('#doctor_phone').val('');
                 }
             }
         });
+
+        $('#doctor_switch_check').change(function(){
+                $('#doctor_name').val('');
+                $('#doctor_email').val('');
+                $('#doctor_phone').val('');
+                $('#doctor_name_inputbox').val('');
+                if (this.checked){
+                    $('#doctor_name').hide();
+                    $('#doctor_name').attr('disabled', true);
+                    $('#doctor_name_inputbox').show();
+                    $('#doctor_name_inputbox').attr('disabled', false);
+                } else {
+                    $('#doctor_name').show();
+                    $('#doctor_name').attr('disabled', false);
+                    $('#doctor_name_inputbox').hide();
+                    $('#doctor_name_inputbox').attr('disabled', true);
+                }
+            });
 
         $('#attorney_name').change(function(){
             if (parseInt(attorney_numbers) > 0){
@@ -1057,7 +1076,38 @@
                     $('#law_firm_city').val(attorneies[id].city);
                     $('#law_firm_state').val(attorneies[id].state);
                     $('#law_firm_postal').val(attorneies[id].postal);
+                } else {
+                    $('#attorney_email').val('');
+                    $('#attorney_phone').val('');
+                    $('#law_firm_adderss').val('');
+                    $('#law_firm_adderss_line2').val('');
+                    $('#law_firm_city').val('');
+                    $('#law_firm_state').val('');
+                    $('#law_firm_postal').val('');
                 }
+            }
+        });
+
+        $('#attorney_switch_check').change(function(){
+            $('#attorney_name').val('');
+            $('#attorney_name_inputbox').val('');
+            $('#attorney_email').val('');
+            $('#attorney_phone').val('');
+            $('#law_firm_adderss').val('');
+            $('#law_firm_adderss_line2').val('');
+            $('#law_firm_city').val('');
+            $('#law_firm_state').val('');
+            $('#law_firm_postal').val('');
+            if (this.checked){
+                $('#attorney_name').hide();
+                $('#attorney_name').attr('disabled', true);
+                $('#attorney_name_inputbox').show();
+                $('#attorney_name_inputbox').attr('disabled', false);
+            } else {
+                $('#attorney_name').show();
+                $('#attorney_name').attr('disabled', false);
+                $('#attorney_name_inputbox').hide();
+                $('#attorney_name_inputbox').attr('disabled', true);
             }
         });
     });

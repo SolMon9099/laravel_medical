@@ -358,19 +358,18 @@
                                             <option id={{"attorney_".$item->id}} value="{{$item->name}}">{{$item->name}}</option>
                                         @endforeach
                                     </select>
+                                    <input style="display: none;" disabled type="text" id="attorney_name_inputbox" name="attorney_name" class="form-control" value="" />
+                                    <input class="form-check-input" type="checkbox" id="attorney_switch_check" />
                                 @else
-                                    <input type="text" id="attorney_name" name="attorney_name" class="form-control" />
-                                    <span>If Not Listed</span>
+                                    <input id="attorney_name_inputbox" name="attorney_name" class="form-control" value="" />
+                                    <input disabled class="form-check-input" type="checkbox" id="attorney_switch_check" />
                                 @endif
+                                <label class="form-check-label" for="attorney_switch_check">If Not Listed</label>
                             </div>
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="attorney_email">Attorney Email</label>
-                                @if(count($attorneys) > 0)
-                                    <input readonly type="text" id="attorney_email" name="attorney_email"  class="form-control"  />
-                                @else
-                                    <input type="text" id="attorney_email" name="attorney_email"  class="form-control"  />
-                                @endif
+                                <input type="text" id="attorney_email" name="attorney_email"  class="form-control"  />
                             </div>
 
                             <div class="mb-1 col-md-3">
@@ -423,26 +422,25 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="vertical-twitter">Doctor Name</label>
-                                @if (count($doctorData) > 0)
+                                @if(count($doctorData) > 0)
                                     <select class="form-control" name="doctor_name" id="doctor_name">
                                         <option value=""></option>
-                                        @foreach ($doctorData as $doctor_item)
+                                        @foreach ($doctorData as $index => $doctor_item)
                                             <option id={{"doctor_".$doctor_item->id}} value="{{$doctor_item->name}}">{{$doctor_item->name}}</option>
                                         @endforeach
                                     </select>
+                                    <input style="display: none;" disabled type="text" id="doctor_name_inputbox" name="doctor_name" class="form-control" value="" />
+                                    <input class="form-check-input" type="checkbox" id="doctor_switch_check" />
                                 @else
-                                    <input type="text" id="doctor_name" name="doctor_name" class="form-control" value="Dr. Mark Cohen" />
-                                    <span>If Not Listed</span>
+                                    <input type="text" id="doctor_name_inputbox" name="doctor_name" class="form-control" value="" />
+                                    <input disabled class="form-check-input" type="checkbox" id="doctor_switch_check" />
                                 @endif
+                                <label class="form-check-label" for="doctor_switch_check">If Not Listed</label>
                             </div>
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="vertical-twitter">Doctor Email</label>
-                                @if (count($doctorData) > 0)
-                                    <input readonly type="text" id="doctor_email" name="doctor_email" class="form-control" />
-                                @else
-                                    <input type="text" id="doctor_email" name="doctor_email" class="form-control" />
-                                @endif
+                                <input type="text" id="doctor_email" name="doctor_email" class="form-control" />
                             </div>
 
                             <div class="mb-1 col-md-3">
@@ -672,8 +670,29 @@
                         id = parseInt(id);
                         $('#doctor_email').val(doctors[id].email);
                         $('#doctor_phone').val(doctors[id].phone);
+                    } else {
+                        $('#doctor_email').val('');
+                        $('#doctor_phone').val('');
                     }
 
+                }
+            });
+
+            $('#doctor_switch_check').change(function(){
+                $('#doctor_name').val('');
+                $('#doctor_email').val('');
+                $('#doctor_phone').val('');
+                $('#doctor_name_inputbox').val('');
+                if (this.checked){
+                    $('#doctor_name').hide();
+                    $('#doctor_name').attr('disabled', true);
+                    $('#doctor_name_inputbox').show();
+                    $('#doctor_name_inputbox').attr('disabled', false);
+                } else {
+                    $('#doctor_name').show();
+                    $('#doctor_name').attr('disabled', false);
+                    $('#doctor_name_inputbox').hide();
+                    $('#doctor_name_inputbox').attr('disabled', true);
                 }
             });
 
@@ -691,8 +710,38 @@
                         $('#law_firm_city').val(attorneies[id].city);
                         $('#law_firm_state').val(attorneies[id].state);
                         $('#law_firm_postal').val(attorneies[id].postal);
+                    } else {
+                        $('#attorney_email').val('');
+                        $('#attorney_phone').val('');
+                        $('#law_firm_adderss').val('');
+                        $('#law_firm_adderss_line2').val('');
+                        $('#law_firm_city').val('');
+                        $('#law_firm_state').val('');
+                        $('#law_firm_postal').val('');
                     }
+                }
+            });
 
+            $('#attorney_switch_check').change(function(){
+                $('#attorney_name').val('');
+                $('#attorney_name_inputbox').val('');
+                $('#attorney_email').val('');
+                $('#attorney_phone').val('');
+                $('#law_firm_adderss').val('');
+                $('#law_firm_adderss_line2').val('');
+                $('#law_firm_city').val('');
+                $('#law_firm_state').val('');
+                $('#law_firm_postal').val('');
+                if (this.checked){
+                    $('#attorney_name').hide();
+                    $('#attorney_name').attr('disabled', true);
+                    $('#attorney_name_inputbox').show();
+                    $('#attorney_name_inputbox').attr('disabled', false);
+                } else {
+                    $('#attorney_name').show();
+                    $('#attorney_name').attr('disabled', false);
+                    $('#attorney_name_inputbox').hide();
+                    $('#attorney_name_inputbox').attr('disabled', true);
                 }
             });
         });
