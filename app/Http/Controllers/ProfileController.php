@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Clinic;
 use App\Models\ClinicDoctor;
+use App\Models\ClinicManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -28,8 +29,10 @@ class ProfileController extends Controller
         $transaction_data = array();
         switch(auth()->user()->roles[0]->id){
             case config('const.role_codes')['office manager']:
+                $clinic_ids = ClinicManager::query()->where('manager_id', auth()->user()->id)->pluck('clinic_id');
+                $manager_ids = ClinicManager::query()->whereIn('clinic_id', $clinic_ids)->pluck('manager_id');
                 $transaction_data = PatientTransaction::query()->where('status', '!=', config('const.status_code')['Draft'])
-                    ->where('office_id', auth()->user()->id)->orderBy('created_at','desc')->get()->all();
+                    ->whereIn('office_id', $manager_ids)->orderBy('created_at','desc')->get()->all();
                 break;
             case config('const.role_codes')['patient']:
                 $transaction_data = PatientTransaction::query()->where('status', '!=', config('const.status_code')['Draft'])
