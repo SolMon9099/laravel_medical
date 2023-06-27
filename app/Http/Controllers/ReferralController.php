@@ -84,61 +84,62 @@ class ReferralController extends Controller
 
         $draft = $request->input('draft_flag', '');
 
-        $referral_date = $request->input('referral_date', '');
+        $referral_date = $request->input('referral_date');
         //patient info
-        $patient_name = $request->input('patient_name', '');
-        $patient_email = $request->input('patient_email', '');
-        $patient_phone = $request->input('patient_phone', '');
-        $patient_date_birth = $request->input('patient_date_birth', '');
-        $patient_street_adderss = $request->input('patient_street_adderss', '');
-        $patient_street_adderss_line2 = $request->input('patient_street_adderss_line2', '');
-        $patient_city = $request->input('patient_city', '');
-        $patient_state = $request->input('patient_state', '');
-        $patient_postal = $request->input('patient_postal', '');
-        $patient_date_injury = $request->input('patient_date_injury', '');
-        $genders = $request->input('genders', '');
+        $patient_name = $request->input('patient_name');
+        $patient_email = $request->input('patient_email');
+        $patient_phone = $request->input('patient_phone');
+        $patient_date_birth = $request->input('patient_date_birth');
+        $patient_street_adderss = $request->input('patient_street_adderss');
+        $patient_street_adderss_line2 = $request->input('patient_street_adderss_line2');
+        $patient_city = $request->input('patient_city');
+        $patient_state = $request->input('patient_state');
+        $patient_postal = $request->input('patient_postal');
+        $patient_date_injury = $request->input('patient_date_injury');
+        $genders = $request->input('genders');
         $reason_referral = $request->input('reason_referral', array());
         $reason_referral = implode(',', $reason_referral);
 
         //patient insurance
-        $patient_insurance_company = $request->input('patient_insurance_company', '');
-        $patient_insurance_policy = $request->input('patient_insurance_policy', '');
+        $patient_insurance = $request->input('patient_insurance');
+        $patient_insurance_company = $request->input('patient_insurance_company');
+        $patient_insurance_policy = $request->input('patient_insurance_policy');
         $patient_policy_limit = $request->input('patient_policy_limit');
-        $patient_insurance_street_adderss = $request->input('patient_insurance_street_adderss', '');
-        $patient_insurance_street_adderss_line2 = $request->input('patient_insurance_street_adderss_line2', '');
-        $patient_insurance_city = $request->input('patient_insurance_city', '');
-        $patient_insurance_state = $request->input('patient_insurance_state', '');
-        $patient_insurance_postal = $request->input('patient_insurance_postal', '');
+        $patient_insurance_street_adderss = $request->input('patient_insurance_street_adderss');
+        $patient_insurance_street_adderss_line2 = $request->input('patient_insurance_street_adderss_line2');
+        $patient_insurance_city = $request->input('patient_insurance_city');
+        $patient_insurance_state = $request->input('patient_insurance_state');
+        $patient_insurance_postal = $request->input('patient_insurance_postal');
 
         //defendant insuance
-        $defendant_insurance_hit = $request->input('defendant_insurance_hit', '');
-        $defendant_insure = $request->input('defendant_insure', '');
-        $defendant_insurance_company = $request->input('defendant_insurance_company', '');
-        $defendant_insurance_claim = $request->input('defendant_insurance_claim', '');
-        $defendant_policy_limit = $request->input('defendant_policy_limit', '');
-        $defendant_insurance_street_adderss = $request->input('defendant_insurance_street_adderss', '');
-        $defendant_insurance_street_adderss_line2 = $request->input('defendant_insurance_street_adderss_line2', '');
-        $defendant_insurance_city = $request->input('defendant_insurance_city', '');
-        $defendant_insurance_state = $request->input('defendant_insurance_state', '');
-        $defendant_insurance_postal = $request->input('defendant_insurance_postal', '');
+        $defendant_insurance_hit = $request->input('defendant_insurance_hit');
+        $defendant_insure = $request->input('defendant_insure');
+        $defendant_insurance_company = $request->input('defendant_insurance_company');
+        $defendant_insurance_claim = $request->input('defendant_insurance_claim');
+        $defendant_policy_limit = $request->input('defendant_policy_limit');
+        $defendant_insurance_street_adderss = $request->input('defendant_insurance_street_adderss');
+        $defendant_insurance_street_adderss_line2 = $request->input('defendant_insurance_street_adderss_line2');
+        $defendant_insurance_city = $request->input('defendant_insurance_city');
+        $defendant_insurance_state = $request->input('defendant_insurance_state');
+        $defendant_insurance_postal = $request->input('defendant_insurance_postal');
 
         //Attorney
-        $attorney_name = $request->input('attorney_name', '');
-        $attorney_email = $request->input('attorney_email', '');
-        $attorney_phone = $request->input('attorney_phone', '');
-        $law_firm_adderss = $request->input('law_firm_adderss', '');
-        $law_firm_adderss_line2 = $request->input('law_firm_adderss_line2', '');
-        $law_firm_city = $request->input('law_firm_city', '');
-        $law_firm_state = $request->input('law_firm_state', '');
-        $law_firm_postal = $request->input('law_firm_postal', '');
+        $attorney_name = $request->input('attorney_name');
+        $attorney_email = $request->input('attorney_email');
+        $attorney_phone = $request->input('attorney_phone');
+        $law_firm_adderss = $request->input('law_firm_adderss');
+        $law_firm_adderss_line2 = $request->input('law_firm_adderss_line2');
+        $law_firm_city = $request->input('law_firm_city');
+        $law_firm_state = $request->input('law_firm_state');
+        $law_firm_postal = $request->input('law_firm_postal');
 
 
         //clinic info
-        $clinic_name = $request->input('clinic_name', '');
-        $doctor_name = $request->input('doctor_name', '');
-        $doctor_email = $request->input('doctor_email', '');
-        $doctor_phone = $request->input('doctor_phone', '');
-        $doctor_notes = $request->input('doctor_notes', '');
+        $clinic_name = $request->input('clinic_name');
+        $doctor_name = $request->input('doctor_name');
+        $doctor_email = $request->input('doctor_email');
+        $doctor_phone = $request->input('doctor_phone');
+        $doctor_notes = $request->input('doctor_notes');
         if ($draft == 'draft'){
             if ($patient_email == '' || $patient_name == ''){
                 return back()->with('flash_error', 'No patient information');
@@ -227,6 +228,7 @@ class ReferralController extends Controller
                 $patientTransactionObj->patient_id = $patient_id;
                 $patientTransactionObj->patient_date_injury = $patient_date_injury;
                 $patientTransactionObj->reason_referral = $reason_referral;
+                $patientTransactionObj->patient_insurance = $patient_insurance;
                 $patientTransactionObj->patient_insurance_company = $patient_insurance_company;
                 $patientTransactionObj->patient_insurance_policy = $patient_insurance_policy;
                 $patientTransactionObj->patient_policy_limit = $patient_policy_limit;
@@ -365,6 +367,7 @@ class ReferralController extends Controller
                 $patientTransactionObj->patient_id = $patient_id;
                 $patientTransactionObj->patient_date_injury = $patient_date_injury;
                 $patientTransactionObj->reason_referral = $reason_referral;
+                $patientTransactionObj->patient_insurance = $patient_insurance;
                 $patientTransactionObj->patient_insurance_company = $patient_insurance_company;
                 $patientTransactionObj->patient_insurance_policy = $patient_insurance_policy;
                 $patientTransactionObj->patient_policy_limit = $patient_policy_limit;
@@ -412,6 +415,7 @@ class ReferralController extends Controller
                 'genders' => $request->input('genders'),
                 'reason_referral' => implode(',', $request->input('reason_referral')),
 
+                'patient_insurance' => $request->input('patient_insurance'),
                 'patient_insurance_company' => $request->input('patient_insurance_company'),
                 'patient_insurance_policy' => $request->input('patient_insurance_policy'),
                 'patient_policy_limit' => $request->input('patient_policy_limit'),
@@ -517,6 +521,7 @@ class ReferralController extends Controller
                 $reason_referral = implode(',', $reason_referral);
 
                 //patient insurance
+                $patient_insurance = $request->input('patient_insurance');
                 $patient_insurance_company = $request->input('patient_insurance_company');
                 $patient_insurance_policy = $request->input('patient_insurance_policy');
                 $patient_policy_limit = $request->input('patient_policy_limit');
@@ -634,6 +639,7 @@ class ReferralController extends Controller
                 $patientTransactionObj->office_id = auth()->user()->id;  //current logged in ID
                 $patientTransactionObj->patient_date_injury = $patient_date_injury;
                 $patientTransactionObj->reason_referral = $reason_referral;
+                $patientTransactionObj->patient_insurance = $patient_insurance;
                 $patientTransactionObj->patient_insurance_company = $patient_insurance_company;
                 $patientTransactionObj->patient_insurance_policy = $patient_insurance_policy;
                 $patientTransactionObj->patient_policy_limit = $patient_policy_limit;
@@ -675,6 +681,7 @@ class ReferralController extends Controller
                         'genders' => $request->input('genders'),
                         'reason_referral' => implode(',', $request->input('reason_referral', array())),
 
+                        'patient_insurance' => $request->input('patient_insurance'),
                         'patient_insurance_company' => $request->input('patient_insurance_company'),
                         'patient_insurance_policy' => $request->input('patient_insurance_policy'),
                         'patient_policy_limit' => $request->input('patient_policy_limit'),

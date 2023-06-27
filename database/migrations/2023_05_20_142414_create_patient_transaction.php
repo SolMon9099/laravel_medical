@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('patient_id');
             $table->string('patient_date_injury')->nullable();
             $table->text('reason_referral')->nullable();
+            $table->string('patient_insurance')->nullable();
             $table->string('patient_insurance_company')->nullable();
             $table->string('patient_insurance_policy')->nullable();
             $table->string('patient_policy_limit')->nullable();

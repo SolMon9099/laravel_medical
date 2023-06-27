@@ -390,9 +390,34 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
+                            <div class="mb-1 col-md-6">
+                                <label class="form-label" for="vertical-address">Is Patient Insured?</label>
+                                <div class="demo-inline-spacing">
+                                    <div class="form-check form-check-inline">
+                                        @if($is_pending)
+                                            <input class="form-check-input" type="radio" name="patient_insurance" id="patient_insure_yes" value="yes"
+                                        @else
+                                            <input disabled class="form-check-input" type="radio" name="patient_insurance" id="patient_insure_yes" value="yes"
+                                        @endif
+                                        @if ($data->patient_insurance == 'yes') checked @endif />
+                                        <label class="form-check-label" for="male">Yes</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        @if($is_pending)
+                                            <input class="form-check-input" type="radio" name="patient_insurance" id="patient_insure_no" value="no"
+                                        @else
+                                            <input disabled class="form-check-input" type="radio" name="patient_insurance" id="patient_insure_no" value="no"
+                                        @endif
+                                        @if ($data->patient_insurance == 'no') checked @endif />
+                                        <label class="form-check-label" for="female">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="patient_insurance_company">Patient's Insurance Company </label>
-                                @if($is_pending)
+                                @if($is_pending && $data->patient_insurance == 'yes')
                                     <input type="text" id="patient_insurance_company" name="patient_insurance_company" value="{{ $data->patient_insurance_company }}" class="form-control" />
                                 @else
                                     <input disabled type="text" id="patient_insurance_company" name="patient_insurance_company" value="{{ $data->patient_insurance_company }}" class="form-control" />
@@ -400,7 +425,7 @@
                             </div>
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="patient_insurance_policy">Patient Policy Number</label>
-                                @if($is_pending)
+                                @if($is_pending && $data->patient_insurance == 'yes')
                                     <input type="text" id="patient_insurance_policy" name="patient_insurance_policy" value="{{ $data->patient_insurance_policy }}" class="form-control"  />
                                 @else
                                     <input disabled type="text" id="patient_insurance_policy" name="patient_insurance_policy" value="{{ $data->patient_insurance_policy }}" class="form-control"  />
@@ -409,7 +434,7 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="patient_policy_limit">Patient Policy Limit</label>
-                                @if($is_pending)
+                                @if($is_pending && $data->patient_insurance == 'yes')
                                     <input type="number" id="patient_policy_limit" name="patient_policy_limit" class="form-control"
                                         value="{{ $data->patient_policy_limit }}" placeholder="N/A" />
                                 @else
@@ -420,7 +445,7 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="patient_insurance_street_adderss">Patient's Insurance Street Address</label>
-                                @if($is_pending)
+                                @if($is_pending && $data->patient_insurance == 'yes')
                                     <input type="text" id="patient_insurance_street_adderss" name="patient_insurance_street_adderss" value="{{ $data->patient_insurance_street_adderss }}"  class="form-control" />
                                 @else
                                     <input disabled type="text" id="patient_insurance_street_adderss" name="patient_insurance_street_adderss" value="{{ $data->patient_insurance_street_adderss }}"  class="form-control" />
@@ -429,7 +454,7 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="patient_insurance_street_adderss_line2">Street Address Line2</label>
-                                @if($is_pending)
+                                @if($is_pending && $data->patient_insurance == 'yes')
                                     <input type="text" id="patient_insurance_street_adderss_line2" name="patient_insurance_street_adderss_line2" value="{{ $data->patient_insurance_street_adderss_line2 }}"  class="form-control" />
                                 @else
                                     <input disabled type="text" id="patient_insurance_street_adderss_line2" name="patient_insurance_street_adderss_line2" value="{{ $data->patient_insurance_street_adderss_line2 }}"  class="form-control" />
@@ -438,7 +463,7 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="patient_insurance_city">Patient Insurance City</label>
-                                @if($is_pending)
+                                @if($is_pending && $data->patient_insurance == 'yes')
                                     <input type="text" id="patient_insurance_city" name="patient_insurance_city" value="{{ $data->patient_insurance_city }}"  class="form-control" />
                                 @else
                                     <input disabled type="text" id="patient_insurance_city" name="patient_insurance_city" value="{{ $data->patient_insurance_city }}"  class="form-control" />
@@ -447,7 +472,7 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="patient_state">Patient Insurance State/Province</label>
-                                @if($is_pending)
+                                @if($is_pending && $data->patient_insurance == 'yes')
                                     <input type="text" id="patient_insurance_state" name="patient_insurance_state" value="{{ $data->patient_insurance_state }}"  class="form-control" />
                                 @else
                                     <input disabled type="text" id="patient_insurance_state" name="patient_insurance_state" value="{{ $data->patient_insurance_state }}"  class="form-control" />
@@ -456,7 +481,7 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="patient_insurance_postal">Patient Insurance Postal/Zip Code</label>
-                                @if($is_pending)
+                                @if($is_pending && $data->patient_insurance == 'yes')
                                     <input type="text" id="patient_insurance_postal" name="patient_insurance_postal" value="{{ $data->patient_insurance_postal }}"  class="form-control" />
                                 @else
                                     <input disabled type="text" id="patient_insurance_postal" name="patient_insurance_postal" value="{{ $data->patient_insurance_postal }}"  class="form-control" />
@@ -518,7 +543,7 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="vertical-address">Defendant's Insurance Company</label>
-                                @if($is_pending)
+                                @if($is_pending && $data->defendant_insure == 'yes')
                                     <input type="text" id="defendant_insurance_company" name="defendant_insurance_company" class="form-control" value="{{ $data->defendant_insurance_company }}" />
                                 @else
                                     <input disabled type="text" id="defendant_insurance_company" name="defendant_insurance_company" class="form-control" value="{{ $data->defendant_insurance_company }}" />
@@ -526,7 +551,7 @@
                             </div>
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="vertical-address">Claim #</label>
-                                @if($is_pending)
+                                @if($is_pending && $data->defendant_insure == 'yes')
                                     <input type="text" id="defendant_insurance_claim" name="defendant_insurance_claim" class="form-control" value="{{ $data->defendant_insurance_claim }}"  />
                                 @else
                                     <input disabled type="text" id="defendant_insurance_claim" name="defendant_insurance_claim" class="form-control" value="{{ $data->defendant_insurance_claim }}"  />
@@ -535,7 +560,7 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="vertical-address">Defendant Policy Limit</label>
-                                @if($is_pending)
+                                @if($is_pending && $data->defendant_insure == 'yes')
                                     <input type="number" id="defendant_policy_limit" name="defendant_policy_limit" class="form-control"
                                         value="{{ $data->defendant_policy_limit }}" placeholder="N/A"/>
                                 @else
@@ -546,7 +571,7 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="patient_insurance_street_adderss">Defendant Insurance Address</label>
-                                @if($is_pending)
+                                @if($is_pending && $data->defendant_insure == 'yes')
                                     <input type="text" id="defendant_insurance_street_adderss" name="defendant_insurance_street_adderss" value="{{ $data->defendant_insurance_street_adderss }}" class="form-control" />
                                 @else
                                     <input disabled type="text" id="defendant_insurance_street_adderss" name="defendant_insurance_street_adderss" value="{{ $data->defendant_insurance_street_adderss }}" class="form-control" />
@@ -555,7 +580,7 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="patient_insurance_street_adderss_line2">Defendant Insurance Address Line2</label>
-                                @if($is_pending)
+                                @if($is_pending && $data->defendant_insure == 'yes')
                                     <input type="text" id="defendant_insurance_street_adderss_line2" name="defendant_insurance_street_adderss_line2" class="form-control" value="{{ $data->defendant_insurance_street_adderss_line2 }}" />
                                 @else
                                     <input disabled type="text" id="defendant_insurance_street_adderss_line2" name="defendant_insurance_street_adderss_line2" class="form-control" value="{{ $data->defendant_insurance_street_adderss_line2 }}" />
@@ -564,7 +589,7 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="patient_insurance_city">Defendant Insurance City</label>
-                                @if($is_pending)
+                                @if($is_pending && $data->defendant_insure == 'yes')
                                     <input type="text" id="defendant_insurance_city" name="defendant_insurance_city" class="form-control" value="{{ $data->defendant_insurance_city }}" />
                                 @else
                                     <input disabled type="text" id="defendant_insurance_city" name="defendant_insurance_city" class="form-control" value="{{ $data->defendant_insurance_city }}" />
@@ -573,7 +598,7 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="patient_state">Defendant Insurance State/Province</label>
-                                @if($is_pending)
+                                @if($is_pending && $data->defendant_insure == 'yes')
                                     <input type="text" id="defendant_insurance_state" name="defendant_insurance_state" class="form-control" value="{{ $data->defendant_insurance_state }}" />
                                 @else
                                     <input disabled type="text" id="defendant_insurance_state" name="defendant_insurance_state" class="form-control" value="{{ $data->defendant_insurance_state }}" />
@@ -582,7 +607,7 @@
 
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="patient_insurance_postal">Defendant Insurance Postal/Zip Code</label>
-                                @if($is_pending)
+                                @if($is_pending && $data->defendant_insure == 'yes')
                                     <input type="text" id="defendant_insurance_postal" name="defendant_insurance_postal" class="form-control" value="{{ $data->defendant_insurance_postal }}" />
                                 @else
                                     <input disabled type="text" id="defendant_insurance_postal" name="defendant_insurance_postal" class="form-control" value="{{ $data->defendant_insurance_postal }}" />
@@ -939,7 +964,7 @@
                     required: true
                     },
                     'patient_policy_limit': {
-                    required: true
+                    required: false
                     },
                     'patient_insurance_street_adderss': {
                     required: true
@@ -960,7 +985,7 @@
                     required: true
                     },
                     'defendant_policy_limit': {
-                    required: true
+                    required: false
                     },
                     'defendant_insurance_street_adderss': {
                     required: true
@@ -1108,6 +1133,70 @@
                 $('#attorney_name').attr('disabled', false);
                 $('#attorney_name_inputbox').hide();
                 $('#attorney_name_inputbox').attr('disabled', true);
+            }
+        });
+
+        $('input[type=radio][name=patient_insurance]').change(function() {
+            if (this.value == 'yes') {
+                $('#patient_insurance_company').attr('disabled', false);
+                $('#patient_insurance_policy').attr('disabled', false);
+                $('#patient_policy_limit').attr('disabled', false);
+                $('#patient_insurance_street_adderss').attr('disabled', false);
+                $('#patient_insurance_street_adderss_line2').attr('disabled', false);
+                $('#patient_insurance_city').attr('disabled', false);
+                $('#patient_insurance_state').attr('disabled', false);
+                $('#patient_insurance_postal').attr('disabled', false);
+            }
+            else if (this.value == 'no') {
+                $('#patient_insurance_company').attr('disabled', true);
+                $('#patient_insurance_policy').attr('disabled', true);
+                $('#patient_policy_limit').attr('disabled', true);
+                $('#patient_insurance_street_adderss').attr('disabled', true);
+                $('#patient_insurance_street_adderss_line2').attr('disabled', true);
+                $('#patient_insurance_city').attr('disabled', true);
+                $('#patient_insurance_state').attr('disabled', true);
+                $('#patient_insurance_postal').attr('disabled', true);
+
+                $('#patient_insurance_company').val('');
+                $('#patient_insurance_policy').val('');
+                $('#patient_policy_limit').val('');
+                $('#patient_insurance_street_adderss').val('');
+                $('#patient_insurance_street_adderss_line2').val('');
+                $('#patient_insurance_city').val('');
+                $('#patient_insurance_state').val('');
+                $('#patient_insurance_postal').val('');
+            }
+        });
+
+        $('input[type=radio][name=defendant_insure]').change(function() {
+            if (this.value == 'yes') {
+                $('#defendant_insurance_company').attr('disabled', false);
+                $('#defendant_insurance_claim').attr('disabled', false);
+                $('#defendant_policy_limit').attr('disabled', false);
+                $('#defendant_insurance_street_adderss').attr('disabled', false);
+                $('#defendant_insurance_street_adderss_line2').attr('disabled', false);
+                $('#defendant_insurance_city').attr('disabled', false);
+                $('#defendant_insurance_state').attr('disabled', false);
+                $('#defendant_insurance_postal').attr('disabled', false);
+            }
+            else if (this.value == 'no') {
+                $('#defendant_insurance_company').attr('disabled', true);
+                $('#defendant_insurance_claim').attr('disabled', true);
+                $('#defendant_policy_limit').attr('disabled', true);
+                $('#defendant_insurance_street_adderss').attr('disabled', true);
+                $('#defendant_insurance_street_adderss_line2').attr('disabled', true);
+                $('#defendant_insurance_city').attr('disabled', true);
+                $('#defendant_insurance_state').attr('disabled', true);
+                $('#defendant_insurance_postal').attr('disabled', true);
+
+                $('#defendant_insurance_company').val('');
+                $('#defendant_insurance_claim').val('');
+                $('#defendant_policy_limit').val('');
+                $('#defendant_insurance_street_adderss').val('');
+                $('#defendant_insurance_street_adderss_line2').val('');
+                $('#defendant_insurance_city').val('');
+                $('#defendant_insurance_state').val('');
+                $('#defendant_insurance_postal').val('');
             }
         });
     });

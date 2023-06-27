@@ -230,6 +230,22 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
+                            <div class="mb-1 col-md-6">
+                                <label class="form-label" for="vertical-address">Is Patient Insured?</label>
+                                <div class="demo-inline-spacing">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="patient_insurance" id="patient_insure_yes" value="yes" checked />
+                                        <label class="form-check-label" for="patient_insure_yes">Yes</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="patient_insurance" id="patient_insure_no" value="no" />
+                                        <label class="form-check-label" for="patient_insure_no">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="mb-1 col-md-3">
                                 <label class="form-label" for="patient_insurance_company">Patient's Insurance Company </label>
                                 <input type="text" id="patient_insurance_company" name="patient_insurance_company" class="form-control" />
@@ -567,7 +583,7 @@
                     required: true
                     },
                     'patient_policy_limit': {
-                    required: true
+                    required: false
                     },
                     'patient_insurance_street_adderss': {
                     required: true
@@ -588,7 +604,7 @@
                     required: true
                     },
                     'defendant_policy_limit': {
-                    required: true
+                    required: false
                     },
                     'defendant_insurance_street_adderss': {
                     required: true
@@ -742,6 +758,70 @@
                     $('#attorney_name').attr('disabled', false);
                     $('#attorney_name_inputbox').hide();
                     $('#attorney_name_inputbox').attr('disabled', true);
+                }
+            });
+
+            $('input[type=radio][name=patient_insurance]').change(function() {
+                if (this.value == 'yes') {
+                    $('#patient_insurance_company').attr('disabled', false);
+                    $('#patient_insurance_policy').attr('disabled', false);
+                    $('#patient_policy_limit').attr('disabled', false);
+                    $('#patient_insurance_street_adderss').attr('disabled', false);
+                    $('#patient_insurance_street_adderss_line2').attr('disabled', false);
+                    $('#patient_insurance_city').attr('disabled', false);
+                    $('#patient_insurance_state').attr('disabled', false);
+                    $('#patient_insurance_postal').attr('disabled', false);
+                }
+                else if (this.value == 'no') {
+                    $('#patient_insurance_company').attr('disabled', true);
+                    $('#patient_insurance_policy').attr('disabled', true);
+                    $('#patient_policy_limit').attr('disabled', true);
+                    $('#patient_insurance_street_adderss').attr('disabled', true);
+                    $('#patient_insurance_street_adderss_line2').attr('disabled', true);
+                    $('#patient_insurance_city').attr('disabled', true);
+                    $('#patient_insurance_state').attr('disabled', true);
+                    $('#patient_insurance_postal').attr('disabled', true);
+
+                    $('#patient_insurance_company').val('');
+                    $('#patient_insurance_policy').val('');
+                    $('#patient_policy_limit').val('');
+                    $('#patient_insurance_street_adderss').val('');
+                    $('#patient_insurance_street_adderss_line2').val('');
+                    $('#patient_insurance_city').val('');
+                    $('#patient_insurance_state').val('');
+                    $('#patient_insurance_postal').val('');
+                }
+            });
+
+            $('input[type=radio][name=defendant_insure]').change(function() {
+                if (this.value == 'yes') {
+                    $('#defendant_insurance_company').attr('disabled', false);
+                    $('#defendant_insurance_claim').attr('disabled', false);
+                    $('#defendant_policy_limit').attr('disabled', false);
+                    $('#defendant_insurance_street_adderss').attr('disabled', false);
+                    $('#defendant_insurance_street_adderss_line2').attr('disabled', false);
+                    $('#defendant_insurance_city').attr('disabled', false);
+                    $('#defendant_insurance_state').attr('disabled', false);
+                    $('#defendant_insurance_postal').attr('disabled', false);
+                }
+                else if (this.value == 'no') {
+                    $('#defendant_insurance_company').attr('disabled', true);
+                    $('#defendant_insurance_claim').attr('disabled', true);
+                    $('#defendant_policy_limit').attr('disabled', true);
+                    $('#defendant_insurance_street_adderss').attr('disabled', true);
+                    $('#defendant_insurance_street_adderss_line2').attr('disabled', true);
+                    $('#defendant_insurance_city').attr('disabled', true);
+                    $('#defendant_insurance_state').attr('disabled', true);
+                    $('#defendant_insurance_postal').attr('disabled', true);
+
+                    $('#defendant_insurance_company').val('');
+                    $('#defendant_insurance_claim').val('');
+                    $('#defendant_policy_limit').val('');
+                    $('#defendant_insurance_street_adderss').val('');
+                    $('#defendant_insurance_street_adderss_line2').val('');
+                    $('#defendant_insurance_city').val('');
+                    $('#defendant_insurance_state').val('');
+                    $('#defendant_insurance_postal').val('');
                 }
             });
         });
