@@ -73,7 +73,7 @@ class HomeController extends Controller
                 }
             )->get()->all();
             $schedules = PatientSchedule::query()->where('start_date', '>=', date('Y-m-d'))
-                ->whereIn('patient_transaction_id', $all_transaction_ids)->get()->all();
+                ->whereIn('patient_transaction_id', $all_transaction_ids)->orderBy('start_date')->get()->all();
             return view('home', compact('data', 'technicians', 'doctors', 'schedules'));
         }
 

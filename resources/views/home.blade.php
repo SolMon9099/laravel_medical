@@ -105,97 +105,173 @@
             }
         }
     }
+
+    $schedules_by_date = [];
+    $dates = [];
+    $first_date = '';
+    foreach ($schedules as $key => $value) {
+        $date = date('Y-m-d', strtotime($value->start_date));
+        $formated_date = date('l, F j, Y', strtotime($value->start_date));
+        if ($first_date == ''){
+            $first_date = $date;
+        }
+        if (!isset($schedules_by_date[$date])){
+            $schedules_by_date[$date] = [];
+            $dates[] = [
+                'date' => $date,
+                'formated_date' => $formated_date,
+            ];
+        }
+        $item = [
+            'patient_transaction_id' => $value->patient_transaction_id,
+            'patient_id' => $value->patient_id,
+            'start_date' => $value->start_date,
+            'start_time' => date('h:i A', strtotime($value->start_date)),
+            'end_date' => $value->end_date,
+            'end_time' => date('h:i A', strtotime($value->end_date)),
+            'title' => $value->title,
+            'description' => $value->description,
+            'patient_name' => $value->patient->name,
+            'referral_date' => date('m-d-Y', strtotime($value->patient_transaction->referral_date)),
+        ];
+        $schedules_by_date[$date][] = $item;
+    }
+    // var_dump($schedules_by_date);exit;
 ?>
 @section('content')
 <!-- Dashboard Analytics Start -->
 <section id="dashboard-analytics">
     @if($user_role !== 'attorney')
         <div class="row match-height">
-            <div class="col-lg-4 col-md-6 col-12">
-                <div class="card card-browser-states">
-                    <div class="card-body">
-                        <div class="browser-states">
-                            <div class="d-flex">
-                                {{-- <img src="../../../app-assets/images/icons/google-chrome.png" class="rounded me-1" height="30" alt="Google Chrome" /> --}}
-                                <div class="avatar bg-light-danger me-2">
-                                    <div class="avatar-content">
-                                        <i style="font-size:15px;" class="fa fa-hospital-o avatar-icon"></i>
+            @if($user_role !== 'office manager' && $user_role !== 'technician')
+                <div class="col-lg-4 col-md-6 col-12">
+                    <div class="card card-browser-states">
+                        <div class="card-body">
+                            <div class="browser-states">
+                                <div class="d-flex">
+                                    {{-- <img src="../../../app-assets/images/icons/google-chrome.png" class="rounded me-1" height="30" alt="Google Chrome" /> --}}
+                                    <div class="avatar bg-light-danger me-2">
+                                        <div class="avatar-content">
+                                            <i style="font-size:15px;" class="fa fa-hospital-o avatar-icon"></i>
+                                        </div>
                                     </div>
+                                    <h6 class="align-self-center mb-0">Clinics</h6>
                                 </div>
-                                <h6 class="align-self-center mb-0">Clinics</h6>
+                                <div class="d-flex align-items-center">
+                                    <div class="fw-bold text-body-heading me-1">{{count($all_clinics)}}</div>
+                                </div>
                             </div>
-                            <div class="d-flex align-items-center">
-                                <div class="fw-bold text-body-heading me-1">{{count($all_clinics)}}</div>
-                            </div>
-                        </div>
-                        <div class="browser-states">
-                            <div class="d-flex">
-                                <div class="avatar bg-light-warning me-2">
-                                    <div class="avatar-content">
-                                        <i data-feather="user" class="avatar-icon"></i>
+                            <div class="browser-states">
+                                <div class="d-flex">
+                                    <div class="avatar bg-light-warning me-2">
+                                        <div class="avatar-content">
+                                            <i data-feather="user" class="avatar-icon"></i>
+                                        </div>
                                     </div>
+                                    <h6 class="align-self-center mb-0">Patients</h6>
                                 </div>
-                                <h6 class="align-self-center mb-0">Patients</h6>
+                                <div class="d-flex align-items-center">
+                                    <div class="fw-bold text-body-heading me-1">{{count($all_patients)}}</div>
+                                </div>
                             </div>
-                            <div class="d-flex align-items-center">
-                                <div class="fw-bold text-body-heading me-1">{{count($all_patients)}}</div>
-                            </div>
-                        </div>
-                        <div class="browser-states">
-                            <div class="d-flex">
-                                <div class="avatar bg-light-warning me-2">
-                                    <div class="avatar-content">
-                                        <i style="font-size:15px;" class="fa fa-database avatar-icon"></i>
+                            <div class="browser-states">
+                                <div class="d-flex">
+                                    <div class="avatar bg-light-warning me-2">
+                                        <div class="avatar-content">
+                                            <i style="font-size:15px;" class="fa fa-database avatar-icon"></i>
+                                        </div>
                                     </div>
+                                    <h6 class="align-self-center mb-0">Referrals</h6>
                                 </div>
-                                <h6 class="align-self-center mb-0">Referrals</h6>
+                                <div class="d-flex align-items-center">
+                                    <div class="fw-bold text-body-heading me-1">{{count($data)}}</div>
+                                </div>
                             </div>
-                            <div class="d-flex align-items-center">
-                                <div class="fw-bold text-body-heading me-1">{{count($data)}}</div>
-                            </div>
-                        </div>
-                        <div class="browser-states">
-                            <div class="d-flex">
-                                <div class="avatar bg-light-primary me-2">
-                                    <div class="avatar-content">
-                                        <i style="font-size:15px;" class="avatar-icon fa fa-user-md"></i>
+                            <div class="browser-states">
+                                <div class="d-flex">
+                                    <div class="avatar bg-light-primary me-2">
+                                        <div class="avatar-content">
+                                            <i style="font-size:15px;" class="avatar-icon fa fa-user-md"></i>
+                                        </div>
                                     </div>
+                                    <h6 class="align-self-center mb-0">Doctors</h6>
                                 </div>
-                                <h6 class="align-self-center mb-0">Doctors</h6>
+                                <div class="d-flex align-items-center">
+                                    <div class="fw-bold text-body-heading me-1">{{count($doctors)}}</div>
+                                </div>
                             </div>
-                            <div class="d-flex align-items-center">
-                                <div class="fw-bold text-body-heading me-1">{{count($doctors)}}</div>
-                            </div>
-                        </div>
-                        <div class="browser-states">
-                            <div class="d-flex">
-                                <div class="avatar bg-light-secondary me-2">
-                                    <div class="avatar-content">
-                                        <i style="font-size:15px;" class="fa fa-wrench avatar-icon"></i>
+                            <div class="browser-states">
+                                <div class="d-flex">
+                                    <div class="avatar bg-light-secondary me-2">
+                                        <div class="avatar-content">
+                                            <i style="font-size:15px;" class="fa fa-wrench avatar-icon"></i>
+                                        </div>
                                     </div>
+                                    <h6 class="align-self-center mb-0">Technicians</h6>
                                 </div>
-                                <h6 class="align-self-center mb-0">Technicians</h6>
+                                <div class="d-flex align-items-center">
+                                    <div class="fw-bold text-body-heading me-1">{{count($technicians)}}</div>
+                                </div>
                             </div>
-                            <div class="d-flex align-items-center">
-                                <div class="fw-bold text-body-heading me-1">{{count($technicians)}}</div>
-                            </div>
-                        </div>
-                        <div class="browser-states">
-                            <div class="d-flex">
-                                <div class="avatar bg-light-secondary me-2">
-                                    <div class="avatar-content">
-                                        <i style="font-size:15px;" class="fa fa-calendar avatar-icon"></i>
+                            <div class="browser-states">
+                                <div class="d-flex">
+                                    <div class="avatar bg-light-secondary me-2">
+                                        <div class="avatar-content">
+                                            <i style="font-size:15px;" class="fa fa-calendar avatar-icon"></i>
+                                        </div>
                                     </div>
+                                    <h6 class="align-self-center mb-0">Schedule</h6>
                                 </div>
-                                <h6 class="align-self-center mb-0">Schedule</h6>
-                            </div>
-                            <div class="d-flex align-items-center">
-                                <div class="fw-bold text-body-heading me-1">{{count($schedules)}}</div>
+                                <div class="d-flex align-items-center">
+                                    <div class="fw-bold text-body-heading me-1">{{count($schedules)}}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            @else
+                <div class="col-lg-4 col-md-6 col-12">
+                    <div class="card card-browser-states">
+                        <div class="card-body">
+                            <div class="fc-button-group">
+                                <button disabled class="fc-prev-button fc-button fc-button-primary" onclick="movePrevDate()"
+                                    type="button" aria-label="prev" id="prev-btn"> < </button>
+                                <span id="date" style="margin:0px 5px;font-size:20px;">
+                                    @if (count($schedules_by_date) > 0)
+                                        {{date('l, F j, Y', strtotime($first_date))}}
+                                    @else
+                                        {{date('l, F j, Y')}}
+                                    @endif
+                                </span>
+                                @if(count($schedules_by_date) > 1)
+                                    <button class="fc-next-button fc-button fc-button-primary" onclick="moveNextDate()"
+                                        type="button" aria-label="next" id="next-btn"> > </button>
+                                @else
+                                    <button disabled class="fc-next-button fc-button fc-button-primary" onclick="moveNextDate()"
+                                        type="button" aria-label="next" id="next-btn"> > </button>
+                                @endif
+                            </div>
+                            <div id="sch-area">
+                                @if(count($schedules_by_date) > 0)
+                                    @foreach($schedules_by_date[$first_date] as $key => $item)
+                                    <div class="sch-blog">
+                                        <ul>
+                                            <li class="time part">{{date('h:i A', strtotime($item['start_date']))}} - {{date('h:i A', strtotime($item['end_date']))}}</li>
+                                            <li class="patient part">{{$item['patient_name']}} : {{$item['referral_date']}}</li>
+                                            <li class="title part text-primary">{{$item['title']}}</li>
+                                            <li class="desc part text-info">{{$item['description']}}</li>
+                                        </ul>
+
+                                    </div>
+                                    @endforeach
+                                @else
+                                <div class="no-data text-warning">No appointments</div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
             {{-- <div class="col-lg-4 col-md-6 col-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
@@ -397,6 +473,38 @@
 <!-- Dashboard Analytics end -->
 @endsection
 
+<style>
+    .fc-button{
+        display: inline-block;
+        background-color: transparent;
+        border-color: transparent;
+        font-size: 20px;
+    }
+    .no-data{
+        font-size: 20px;
+        text-align: center;
+        margin-top:30%;
+    }
+    #sch-area{
+        padding:20px 10px;
+    }
+    .sch-blog{
+        padding:5px 10px;
+        margin-bottom: 10px;
+    }
+    .part{
+        list-style-type:none;
+    }
+    .time{
+        font-size:16px;
+        list-style-type:disc;
+    }
+    .patient, .title, .desc{
+        padding-left:20px;
+    }
+
+</style>
+
 @section('page-script')
     <script>
         var result_by_doctor = "<?php echo $result_by_doctor;?>";
@@ -412,6 +520,61 @@
         var pending_number = "<?php echo count($pending_data);?>";
         var booked_number = "<?php echo count($booked_data);?>";
         var total_referral_number = parseInt(draft_number) + parseInt(pending_number) + parseInt(booked_number);
+
+        var current_index = 0;
+        var schedules_by_date = <?php echo json_encode($schedules_by_date);?>;
+        var dates = <?php echo json_encode($dates);?>;
+        function makeHtml(data){
+            res = '';
+            data.map(item => {
+                res += '<div class="sch-blog">';
+                res += '<ul>';
+                res += '<li class="time part">';
+                res += item.start_time + ' - ' + item.end_time;
+                res += '</ll>';
+                res += '<li class="patient part">';
+                res += item.patient_name + ' : ' + item.referral_date;
+                res += '</ll>';
+                res += '<li class="title part text-primary">';
+                res += item.title;
+                res += '</ll>';
+                res += '<li class="desc part text-info">';
+                res += item.description;
+                res += '</ll>';
+                res += '</ul>';
+                res += '</div>';
+            })
+            $('#sch-area').html(res);
+
+            // <div class="sch-blog">
+            //     <ul>
+            //         <li class="time part">{{date('h:i A', strtotime($item['start_date']))}} - {{date('h:i A', strtotime($item['end_date']))}}</li>
+            //         <li class="patient part">{{$item['patient_name']}} : {{$item['referral_date']}}</li>
+            //         <li class="title part text-primary">{{$item['title']}}</li>
+            //         <li class="desc part text-info">{{$item['description']}}</li>
+            //     </ul>
+            // </div>
+        }
+        function moveNextDate(){
+            current_index++;
+            if (dates[current_index] == undefined) return;
+            if (current_index == dates.length - 1){
+                $('#next-btn').attr('disabled', true);
+            }
+            $('#prev-btn').attr('disabled', false);
+            $('#date').html(dates[current_index].formated_date);
+            makeHtml(schedules_by_date[dates[current_index].date]);
+        }
+        function movePrevDate(){
+            current_index--;
+            if (current_index < 0) return;
+            if (current_index == 0){
+                $('#prev-btn').attr('disabled', true);
+            }
+            $('#next-btn').attr('disabled', false);
+            $('#date').html(dates[current_index].formated_date);
+            makeHtml(schedules_by_date[dates[current_index].date]);
+        }
     </script>
     <!-- BEGIN: Page Vendor JS-->
     <script src="{{ asset('app-assets/vendors/js/charts/apexcharts.min.js') }}"></script>
