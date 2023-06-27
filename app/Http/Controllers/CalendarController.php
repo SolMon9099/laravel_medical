@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\BookAlertEmail;
 use App\Models\Clinic;
 use App\Models\ClinicDoctor;
+use App\Models\ClinicManager;
 use Exception;
 class CalendarController extends Controller
 {
@@ -28,12 +29,14 @@ class CalendarController extends Controller
     {
         $transaction_ids = [];
         if (auth()->user()->roles[0]->name == 'office manager'){
+            $clinic_ids = ClinicManager::query()->where('manager_id', auth()->user()->id)->pluck('clinic_id');
+            $manager_ids = ClinicManager::query()->whereIn('clinic_id', $clinic_ids)->pluck('manager_id');
             $patient_data = PatientTransaction::with(['patient'])
-                ->where('office_id', auth()->user()->id)
+                // ->where('office_id', auth()->user()->id)
+                ->whereIn('office_id', $manager_ids)
                 ->where('status', '!=', config('const.status_code.Draft'))
                 ->orderBy('created_at','desc')
                 ->get()->all();
-               
         } else {     //technician
             $clinic_ids = Clinic::query()->where('technician_id', auth()->user()->id)->pluck('id');
             $doctor_ids = ClinicDoctor::query()->whereIn('clinic_id', $clinic_ids)->pluck('doctor_id');
