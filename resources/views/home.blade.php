@@ -539,7 +539,9 @@
                 res += item.title;
                 res += '</ll>';
                 res += '<li class="desc part text-info">';
-                res += item.description;
+                if (item.description != undefined && item.description != null){
+                    res += item.description;
+                }
                 res += '</ll>';
                 res += '</ul>';
                 res += '</div>';
