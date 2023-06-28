@@ -62,8 +62,14 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 <script>
-    feather.replace();
-   $('.deleteBtn').click(function (e) {
+    $(document).ready(function() {
+        $('.page-item').click(function(){
+            console.log('111');
+            feather.replace();
+        })
+    })
+
+    $('.deleteBtn').click(function (e) {
         let id = $(this).data('id');
         var url = "{{ route('referral.destroy', ':id') }}".replace(':id', id);
 
