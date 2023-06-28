@@ -46,6 +46,7 @@ class CalendarController extends Controller
                 ->orderBy('created_at','desc')
                 ->get()->all();
         }
+        
         foreach($patient_data as $item){
             $transaction_ids[] = $item->id;
         }

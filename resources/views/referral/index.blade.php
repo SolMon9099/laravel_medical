@@ -68,7 +68,8 @@
         })
     })
 
-    $('.deleteBtn').click(function (e) {
+    $(document).on('click', '.deleteBtn', function(e) {
+        console.log('clicked');
         let id = $(this).data('id');
         var url = "{{ route('referral.destroy', ':id') }}".replace(':id', id);
 
@@ -99,7 +100,8 @@
                 });
             }
         });
-
     });
+
+   
 </script>
 @endsection

@@ -547,15 +547,6 @@
                 res += '</div>';
             })
             $('#sch-area').html(res);
-
-            // <div class="sch-blog">
-            //     <ul>
-            //         <li class="time part">{{date('h:i A', strtotime($item['start_date']))}} - {{date('h:i A', strtotime($item['end_date']))}}</li>
-            //         <li class="patient part">{{$item['patient_name']}} : {{$item['referral_date']}}</li>
-            //         <li class="title part text-primary">{{$item['title']}}</li>
-            //         <li class="desc part text-info">{{$item['description']}}</li>
-            //     </ul>
-            // </div>
         }
         function moveNextDate(){
             current_index++;
