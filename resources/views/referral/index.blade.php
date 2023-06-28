@@ -64,7 +64,6 @@
 <script>
     $(document).ready(function() {
         $('.page-item').click(function(){
-            console.log('111');
             feather.replace();
         })
     })
