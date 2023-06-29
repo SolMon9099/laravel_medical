@@ -13,8 +13,8 @@
                 <td>
                     <div class="right-stick">
                         <div class="head-part">
-                            <label>Statement Number:</label>
-                            <label>CN-000013-202211</label>
+                            <label>&nbsp;&nbsp;</label>
+                            <label>&nbsp;&nbsp;</label>
                         </div>
                         <div class="right-item">
                             <table>
@@ -113,7 +113,7 @@
                     <tbody>
                         <tr>
                             <td style="text-align:left;">Limitless Regenerative, LLC</td>
-                            <td>RQ-5231783 </td>
+                            <td>&nbsp;</td>
                             <td>1</td>
                             <td>
                                 @if(isset($data['doctor_name']))
