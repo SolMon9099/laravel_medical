@@ -364,7 +364,7 @@ document.addEventListener('DOMContentLoaded', function () {
     },
     validRange:function(nowDate){
         return {
-            start:nowDate,
+            start:'1970-01-01',
             end:'9999-12-31'
         }
     },
